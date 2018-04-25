@@ -1,0 +1,111 @@
+
+<div class="row-fluid">
+	<div class="span12">
+		<div>
+			<h1 id='coidentifier'> </h1>		
+		</div>
+
+		<h3>Assign User Roles</h1>
+		<hr>
+	</div>
+</div>
+
+<div class="row-fluid profile">
+    <div class="profile-avatar">
+        <i class="icon-user"></i>
+    </div>
+</div>
+							
+<form id = "edit_single_role_form" method="post" action="/users/accounts_set_user_roles">
+
+<div class="row-fluid">
+	<div class="span4 offset3 flat-well">
+		<fieldset>		
+			<div class="row-fluid">
+				<div class="span12">
+					<select id = "userSelect" name = "userSelect"> 
+						<option id = "-1"  value=-1>Select User</option>						
+						{{#each users}}
+							<option id='{{this.id}}' value=	'{{this.data}}'>
+							{{this.lname}}, {{this.fname}} {{this.mname}}
+							</option>
+						{{/each}}						
+					</select>					
+				</div>		
+				<div class="userInfo">				
+					<div class="row-fluid">
+						<h6>User Information:</h6>
+						<div id= "divnav" title="Click to edit this user"> 
+							<label id="name" name="name"></label>
+							<label id="username" name="username"></label>
+							<label id="email" name="email"></label>
+							<label id="company" name="company"></label>
+							<label id="status" name="status"></label>
+						</div>
+					</div>
+				</div>
+				<div class="row-fluid">				
+					<div class="span11">											
+						<label id="email"> </label>						
+					</div>
+				</div> 
+			</div>			
+		</fieldset>		
+		<br>
+		<div class="row-fluid">
+			<fieldset>				
+					<div class="row-fluid">					
+						<div class="span5">
+							<h6>Assigned Roles:</h6>
+							<select id = "selAssignedRoles" name="selAssignedRoles" size="7" style="width:200px;" 
+							 title = "Double-click a role to remove it">									 
+							</select>
+						</div>						
+
+						<div class="span5">
+							<h6>Available Roles:</h6>
+							<select id = "selAvailableRoles" name="selAvailableRoles" size="7" style="width:200px;" 
+									 title = "Double-click a role to assign it">								
+									{{#each groups}}
+									<option id='{{this.id}}' value = '{{this.data}}'>{{this.name}}</option>
+									{{/each}}									
+							</select>
+						</div>							
+					</div>				
+			</fieldset>
+		</div>	
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span4 offset3 text-right">
+		<a id= "edit_role_submit" class="btn btn-wide btn-primary btn-edit-submit">Save Changes</a>
+	</div>
+</div>
+<!-- Error dialog -->
+<div class="modal fade" id="errRole" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Locked Role</h4>
+            </div>
+            <div class="modal-body">
+				<h6 id=errText> </h6>
+                <div class="span6">	
+					<div id="errMsg"></div>
+				</div>				
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ">OK</button>
+				
+            </div>
+        </div>
+    </div>
+</div><!-- end modal dialog -->
+<div id="info"> </div>
+<input type="hidden" id="id" name = "id" value = "" />
+<input type="hidden" id="assignedGroups" name = "assignedGroups" value="" /> 							
+					
+</form>
+

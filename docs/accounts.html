@@ -1,0 +1,4025 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>accounts.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="app.html">
+                  app.js
+                </a>
+              
+                
+                <a class="source" href="PrenostikUser.html">
+                  PrenostikUser.js
+                </a>
+              
+                
+                <a class="source" href="accounts.html">
+                  accounts.js
+                </a>
+              
+                
+                <a class="source" href="accountsCommon.html">
+                  accountsCommon.js
+                </a>
+              
+                
+                <a class="source" href="categories.html">
+                  categories.js
+                </a>
+              
+                
+                <a class="source" href="corpaccounts.html">
+                  corpaccounts.js
+                </a>
+              
+                
+                <a class="source" href="login.html">
+                  login.js
+                </a>
+              
+                
+                <a class="source" href="analyze.html">
+                  analyze.js
+                </a>
+              
+                
+                <a class="source" href="category.html">
+                  category.js
+                </a>
+              
+                
+                <a class="source" href="categoryUpdate.html">
+                  categoryUpdate.js
+                </a>
+              
+                
+                <a class="source" href="dataset.html">
+                  dataset.js
+                </a>
+              
+                
+                <a class="source" href="home.html">
+                  home.js
+                </a>
+              
+                
+                <a class="source" href="snapshot.html">
+                  snapshot.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>accounts.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> toast = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../lib/toast'</span>);
+<span class="hljs-keyword">var</span> PrenostikUser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./PrenostikUser'</span>);
+<span class="hljs-keyword">var</span> accountsCommon = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./accountsCommon'</span>);
+
+<span class="hljs-keyword">var</span> ctxSocket = {};
+<span class="hljs-keyword">var</span> Accounts = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(socket)</span> </span>{
+	<span class="hljs-keyword">this</span>.ctx = <span class="hljs-string">'.accounts-controller'</span>;
+	<span class="hljs-keyword">this</span>.socket = socket;
+
+	ctxSocket = socket;
+	<span class="hljs-keyword">this</span>.init();
+}
+
+Accounts.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+};
+
+<span class="hljs-built_in">module</span>.exports = Accounts;
+ 
+$(<span class="hljs-built_in">document</span>).ready(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> 
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Get the authorized user to see what they can do</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> commonLib = <span class="hljs-keyword">new</span> accountsCommon;
+	<span class="hljs-keyword">var</span> authUser = commonLib.getAuthUser();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Main index page links</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	$(<span class="hljs-string">'#add_user'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'/users/add_user'</span>);
+	$(<span class="hljs-string">'#delete_user'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'/users/delete_user'</span>);	
+	$(<span class="hljs-string">'#edit_user'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'/users/edit_user'</span>);	
+	$(<span class="hljs-string">'#edit_role'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'/users/edit_role'</span>);	
+	$(<span class="hljs-string">'#edit_all_roles'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'/users/edit_all_roles'</span>);
+	
+	<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'AP_EDIT'</span>))
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>See if an account has been chosen before during this session</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> id = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"AllUsersAccountFilter"</span>);
+        
+		<span class="hljs-keyword">var</span> $filter = $(<span class="hljs-string">"&lt;input/&gt;"</span>,{type:<span class="hljs-string">"hidden"</span>,id:<span class="hljs-string">"filter"</span>, name:<span class="hljs-string">"filter"</span>}).appendTo(<span class="hljs-string">"#info"</span>);	
+		$filter.val(id);	
+		<span class="hljs-keyword">if</span>(authUser.getAccountID() != id)
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Prenostik site manager can edit existing accounts, not add or delete.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			$(<span class="hljs-string">'#delete_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">"hidden"</span>);
+			$(<span class="hljs-string">'#add_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">"hidden"</span>);
+		}
+		<span class="hljs-keyword">else</span>
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Otherwise, enable add and delete functions when Prenostik edits Prenostik.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			$(<span class="hljs-string">'#delete_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);
+			$(<span class="hljs-string">'#add_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);			
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>If not, hide all menu buttons until an account is chosen.        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(id==<span class="hljs-literal">null</span>)
+		{
+			$(<span class="hljs-string">'#buttonbank'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">"hidden"</span>);			
+			<span class="hljs-keyword">var</span> actname = <span class="hljs-string">"All Accounts"</span>;		
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>$(“#buttonbank”).children().prop(‘disabled’,true);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">else</span>
+		{	<span class="hljs-comment">// Otherwise, show the button bank and current account name</span>
+			$(<span class="hljs-string">'#buttonbank'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);
+			<span class="hljs-keyword">var</span> actname = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"AllUsersAccountCoName"</span>);
+		}
+	}
+	<span class="hljs-keyword">else</span>	
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>User is not permitted to edit.  Simplify by removing the filter</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-built_in">window</span>.sessionStorage.removeItem(<span class="hljs-string">"AllUsersAccountFilter"</span>);
+		<span class="hljs-keyword">var</span> actname = authUser.account.name;
+		$(<span class="hljs-string">'#buttonbank'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);
+	}
+	
+	<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'CG_ASSIGN'</span>) )
+		$(<span class="hljs-string">'#edit_all_roles'</span>).css(<span class="hljs-string">"visibility"</span>,<span class="hljs-string">""</span>); 
+	<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'CU_CREATE'</span>))
+		$(<span class="hljs-string">'#add_user'</span>).css(<span class="hljs-string">"visibility"</span>,<span class="hljs-string">""</span>);
+	<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'CU_DELETE'</span>))
+		$(<span class="hljs-string">'#delete_user'</span>).css(<span class="hljs-string">"visibility"</span>,<span class="hljs-string">""</span>);
+	<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'CU_EDIT'</span>))
+		$(<span class="hljs-string">'#edit_user'</span>).css(<span class="hljs-string">"visibility"</span>,<span class="hljs-string">""</span>);
+	<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'AP_EDIT'</span>))
+	{	<span class="hljs-comment">// Set up account selection</span>
+		
+		$(<span class="hljs-string">'#btn_select_account'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);
+		$(<span class="hljs-string">'#selAccountAllUsers'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>$(‘#actgreeting’).css(“visibility”, “”);        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	}
+	<span class="hljs-keyword">else</span>{		
+		$(<span class="hljs-string">'#btn_select_account'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">"hidden"</span>);
+		$(<span class="hljs-string">"#poption"</span>).empty();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Set the account filter to the current user
+window.sessionStorage.setItem(“AllUsersAccountFilter”, authUser.getAccountID());
+actname =  authUser.account.name;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		}
+		
+	<span class="hljs-keyword">if</span>(authUser.getAccountID() != id)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Prenostik site manager can edit existing accounts, not add or delete.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		$(<span class="hljs-string">'#delete_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">"hidden"</span>);
+		$(<span class="hljs-string">'#add_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">"hidden"</span>);
+	}
+	<span class="hljs-keyword">else</span>
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Otherwise, enable add and delete functions when Prenostik edits Prenostik.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		$(<span class="hljs-string">'#delete_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);
+		$(<span class="hljs-string">'#add_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);			
+	}	
+	
+	$(<span class="hljs-string">'#coidentifier'</span>).html(actname);		
+	$(<span class="hljs-string">"#edit_roles_submit"</span>).prop(<span class="hljs-string">"disabled"</span>, <span class="hljs-literal">true</span>);
+	$(<span class="hljs-string">"#edit_submit"</span>).prop(<span class="hljs-string">"disabled"</span>, <span class="hljs-literal">true</span>);	
+	$(<span class="hljs-string">"#reset_password"</span>).prop(<span class="hljs-string">"disabled"</span>, <span class="hljs-literal">true</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>$(“#edit_role”).prop(“disabled”, true);
+$(“#mcDeleteBtn”).prop(“disabled”, true);</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Store account data for later use by filtering
+Need an array to hold the list of accounts</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> arrAccounts = [];
+	<span class="hljs-keyword">var</span> selAcc = $(<span class="hljs-string">'#selEditUser'</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Dump the list in to the array</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(selAcc != <span class="hljs-literal">null</span>){
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; selAcc.options.length; i++) 
+		{
+			<span class="hljs-keyword">var</span> opt = selAcc.options[i];
+			arrAccounts.push(opt);
+		}
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>If a role was being edited, make it current</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> roleEditGroup = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"CurrentRoleEdit"</span>);	
+	<span class="hljs-keyword">if</span>(roleEditGroup != <span class="hljs-literal">null</span>)
+	{		
+		<span class="hljs-keyword">var</span> selRoles = $(<span class="hljs-string">"#selRoles"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">if</span>(selRoles != <span class="hljs-literal">null</span>)
+		{
+			<span class="hljs-keyword">var</span> index = selRoles.options.namedItem(roleEditGroup).index
+			selRoles.selectedIndex = index;		
+			<span class="hljs-keyword">var</span> selUsers = $(<span class="hljs-string">"#selUsers"</span>).get(<span class="hljs-number">0</span>);
+			<span class="hljs-keyword">var</span> selAvUsers = $(<span class="hljs-string">"#selAvailableUsers"</span>).get(<span class="hljs-number">0</span>);				
+			roleChange(selRoles, selUsers, selAvUsers);	
+		}		
+	}	
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#btn_select_account'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+		$(<span class="hljs-string">"#dlg_selectAccount"</span>).modal({backdrop: <span class="hljs-string">'static'</span>});
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#btn_selActOK'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+	
+		<span class="hljs-keyword">var</span> selAccount = $(<span class="hljs-string">"#selAccountAllUsers"</span>).get(<span class="hljs-number">0</span>);		
+		<span class="hljs-keyword">var</span> accountData = getSelectedAccountData(selAccount);
+		<span class="hljs-keyword">if</span>(accountData != -<span class="hljs-number">1</span>)
+		{
+			<span class="hljs-built_in">window</span>.sessionStorage.setItem(<span class="hljs-string">"AllUsersAccountFilter"</span>, accountData.id);
+			<span class="hljs-built_in">window</span>.sessionStorage.setItem(<span class="hljs-string">"AllUsersAccountCoName"</span>, accountData.name);
+			$(<span class="hljs-string">'#buttonbank'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);
+			$(<span class="hljs-string">'#coidentifier'</span>).html(accountData.name);
+			<span class="hljs-keyword">if</span>(authUser.getAccountID() != accountData.id)
+			{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Prenostik site manager can edit existing accounts, not add or delete.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				$(<span class="hljs-string">'#delete_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">"hidden"</span>);
+				$(<span class="hljs-string">'#add_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">"hidden"</span>);
+			}
+			<span class="hljs-keyword">else</span>
+			{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Otherwise, enable add and delete functions when Prenostik edits Prenostik.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				$(<span class="hljs-string">'#delete_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);
+				$(<span class="hljs-string">'#add_user'</span>).css(<span class="hljs-string">"visibility"</span>, <span class="hljs-string">""</span>);			
+			}	
+		}
+	});
+
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#add_user'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Menu function
+Get the id of the account to work with</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> id = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"AllUsersAccountFilter"</span>);
+		
+		<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'AP_EDIT'</span>))
+		{	
+			$(<span class="hljs-string">'#add_user'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'add_user/'</span>+id);
+		}
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#edit_user'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Menu function
+Get the id of the account to work with</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> id = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"AllUsersAccountFilter"</span>);
+		
+		<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'AP_EDIT'</span>))
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>$(‘#edit_user’).attr(‘href’, ‘edit_user/?accountID=’+id+’&amp;maggie=78’);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			$(<span class="hljs-string">'#edit_user'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'/users/edit_user/'</span>+id);
+		}
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#yesDeleteUser'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Remove the deleted item from the list.  Assumes the delete succeeded.
+Forcing a page refresh could be problematic because of concurrency issues.
+So this is the next best solution….</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"accounts_delete_user"</span>).submit();
+		<span class="hljs-keyword">var</span> sel = $(<span class="hljs-string">'#selEditUser'</span>).get(<span class="hljs-number">0</span>);
+				
+		<span class="hljs-comment">/*
+		window.sessionStorage.setItem("CurrentID", "-1");
+</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>var id = $(‘#selEditUser’).children(“:selected”).attr(“id”);<br>var index = sel.options.namedItem(id).index;<br>sel.options.remove(index);            </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> x = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"selEditUser"</span>);
+		x.remove(x.selectedIndex);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>sel.selectedIndex = 0;        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		var opt = sel.options.namedItem("-1");		
+		
+		if(opt != null)
+		{			
+			opt.selected = true;		
+			$( "#selEditUser" ).trigger( "change" );
+		}
+		*/
+	});
+	
+	$('body').on('click', '#delete_user', function() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Menu function
+Get the id of the account to work with</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> id = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"AllUsersAccountFilter"</span>);
+		
+		<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'AP_EDIT'</span>))
+		{	
+			$(<span class="hljs-string">'#delete_user'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'delete_user/'</span>+id);
+		}
+	});
+
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#edit_all_roles'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Menu function
+Get the id of the account to work with</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> id = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"AllUsersAccountFilter"</span>);
+		<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'AP_EDIT'</span>))
+		{	
+			$(<span class="hljs-string">'#edit_all_roles'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'/users/edit_all_roles/'</span>+id);
+		}
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'change'</span>, <span class="hljs-string">'#status'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{				
+		<span class="hljs-keyword">var</span> selected = <span class="hljs-keyword">this</span>.options.item(<span class="hljs-keyword">this</span>.selectedIndex);
+		$(<span class="hljs-string">'#lblStatus'</span>).text(selected.text);
+		<span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.selectedIndex == <span class="hljs-number">0</span>)
+			setLockIconLocked(<span class="hljs-literal">false</span>);
+		<span class="hljs-keyword">else</span>
+			setLockIconLocked(<span class="hljs-literal">true</span>);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Handle filter changes in edit accounts</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'change'</span>, <span class="hljs-string">'#selFilter'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Get the index of the currently selected filter</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> index = <span class="hljs-keyword">this</span>.options.selectedIndex;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Use the index to get the option selected</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> selected = <span class="hljs-keyword">this</span>.options.item(index);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Get the filter from the option        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> filter = selected.value;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Store the currently selected account</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> current = $(<span class="hljs-string">"#selAccountEdit option:selected"</span>).text();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Apply the filter.        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		filterAccounts(filter);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>If the filter causes the selected account to change, clear error indicators</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(current != $(<span class="hljs-string">"#selAccountEdit option:selected"</span>).text())
+		{
+			resetBorders();		
+			clearFields();
+		}
+	});
+
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'change'</span>, <span class="hljs-string">'#selEditUser'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>This is the “select user” on the “edit a single user” page
+This function is called when the user selected for editing has changed
+Get the selected user data from the option in the select</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+		<span class="hljs-keyword">var</span> selUser = $(<span class="hljs-string">"#selEditUser"</span>).get(<span class="hljs-number">0</span>);				
+		<span class="hljs-keyword">var</span> userData = getSelectedUserData(selUser); <span class="hljs-comment">// Note this is the user object, not the web page hybrid</span>
+		
+		<span class="hljs-keyword">var</span> selEnabled = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"status"</span>);		
+		
+ 		<span class="hljs-keyword">if</span>(userData != -<span class="hljs-number">1</span>)
+		{
+			<span class="hljs-keyword">var</span> pUser = <span class="hljs-keyword">new</span> PrenostikUser(userData);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Display the currently selected user data
+console.log(“Username”, userData);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+			<span class="hljs-built_in">window</span>.sessionStorage.setItem(<span class="hljs-string">"CurrentID"</span>, userData.id);	
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"id"</span>).value = userData.id;			
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"firstname"</span>).value = userData.firstname;			
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"middlename"</span>).value = userData.middlename;			
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"lastname"</span>).value = userData.lastname;	
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"username"</span>).value = userData.username;			
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"email"</span>).value = userData.email;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>This one isn’t on the page if it’s the delete user page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"emailc"</span>) != <span class="hljs-literal">null</span>)
+				<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"emailc"</span>).value = userData.email;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Set the account enabled status.
+Translate the boolean to a nice UI text indicator</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(selEnabled != <span class="hljs-literal">null</span>)
+			{
+				$(<span class="hljs-string">'#lblStatus'</span>).text(pUser.getStatusString());</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>Now make sure a user isn’t changing their own status to locked:</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span>(userData.id == authUser.id)
+				{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>The auth user is obviously in active status, so just lock the change.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					$(<span class="hljs-string">"#status"</span>).append(<span class="hljs-string">'&lt;option value=-1 id="immutable"&gt;Status cannot be changed&lt;/option&gt;'</span>);					
+					$(<span class="hljs-string">'#status'</span>).prop(<span class="hljs-string">'disabled'</span>, <span class="hljs-string">'true'</span>);											
+					selEnabled.selectedIndex = <span class="hljs-number">0</span>;
+					setLockIconLocked(<span class="hljs-literal">false</span>);					
+				}<span class="hljs-keyword">else</span>{
+					<span class="hljs-keyword">if</span>(userData.status == <span class="hljs-number">0</span>)
+					{	<span class="hljs-comment">// Account is active</span>
+						$(<span class="hljs-string">'#status'</span>).prop(<span class="hljs-string">'disabled'</span>, <span class="hljs-string">''</span>);
+						$(<span class="hljs-string">"#status option[value='-1']"</span>).remove();					
+						selEnabled.selectedIndex = <span class="hljs-number">0</span>;
+						setLockIconLocked(<span class="hljs-literal">false</span>);					
+					}
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(userData.status == <span class="hljs-number">2</span>)
+					{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>Account is locked, but status can be changed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						$(<span class="hljs-string">'#status'</span>).prop(<span class="hljs-string">'disabled'</span>, <span class="hljs-string">''</span>);
+						$(<span class="hljs-string">"#status option[value='-1']"</span>).remove();					
+						selEnabled.selectedIndex = <span class="hljs-number">1</span>;
+						setLockIconLocked(<span class="hljs-literal">true</span>);										
+					}
+					<span class="hljs-keyword">else</span>
+					{	<span class="hljs-comment">// Any other value is some sort of disabled account.</span>
+						$(<span class="hljs-string">"#status"</span>).append(<span class="hljs-string">'&lt;option value=-1 id="immutable"&gt;Status cannot be changed&lt;/option&gt;'</span>);					
+						$(<span class="hljs-string">'#status'</span>).prop(<span class="hljs-string">'disabled'</span>, <span class="hljs-string">'true'</span>);											
+						selEnabled.selectedIndex = <span class="hljs-number">2</span>;
+						setLockIconLocked(<span class="hljs-literal">true</span>);
+					}
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>Update the user’s list of roles</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				$(<span class="hljs-string">"#lstRoles"</span>).empty();
+				<span class="hljs-keyword">var</span> items = userData.groups;
+				$.each(items, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(i, item)</span> </span>{
+					$(<span class="hljs-string">'#lstRoles'</span>).append($(<span class="hljs-string">'&lt;li&gt;'</span>, { 
+						value: item.id,
+						text : item.name 
+					}));
+				});				
+			}
+			
+			
+			$(<span class="hljs-string">"#edit_submit"</span>).prop(<span class="hljs-string">"disabled"</span>, <span class="hljs-literal">false</span>);		
+			$(<span class="hljs-string">"#reset_password"</span>).prop(<span class="hljs-string">"disabled"</span>, <span class="hljs-literal">false</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>$(“#edit_role”).prop(“disabled”, false);
+$(“#mcDeleteBtn”).prop(“disabled”, false);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+		}
+		<span class="hljs-keyword">else</span>
+		{
+			<span class="hljs-built_in">window</span>.sessionStorage.setItem(<span class="hljs-string">"CurrentID"</span>, <span class="hljs-string">"-1"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>Clear all data fields - no user selected.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"id"</span>).value = -<span class="hljs-number">1</span>
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"firstname"</span>).value = <span class="hljs-string">""</span>;
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"middlename"</span>).value = <span class="hljs-string">""</span>;
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"lastname"</span>).value = <span class="hljs-string">""</span>;
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"username"</span>).value = <span class="hljs-string">""</span>;
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"email"</span>).value = <span class="hljs-string">""</span>;
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"emailc"</span>).value = <span class="hljs-string">""</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>Set the account enabled status.            </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(selEnabled !== <span class="hljs-literal">null</span>)
+			{
+				$(<span class="hljs-string">'#lblStatus'</span>).text(<span class="hljs-string">"Unknown"</span>);
+				$(<span class="hljs-string">"#status"</span>).append(<span class="hljs-string">'&lt;option value=-1 id="immutable"&gt;Status cannot be changed&lt;/option&gt;'</span>);					
+				$(<span class="hljs-string">'#status'</span>).prop(<span class="hljs-string">'disabled'</span>, <span class="hljs-string">'true'</span>);											
+				selEnabled.selectedIndex = <span class="hljs-number">2</span>;
+				setLockIconLocked(<span class="hljs-literal">true</span>);
+			}
+			$(<span class="hljs-string">"#lstRoles"</span>).empty();
+			$(<span class="hljs-string">'#lstRoles'</span>).append($(<span class="hljs-string">'&lt;li&gt;'</span>, { 
+					value: <span class="hljs-number">0</span>,
+					text : <span class="hljs-string">"(Unknown)"</span> 
+				}));		
+
+			$(<span class="hljs-string">"#edit_submit"</span>).prop(<span class="hljs-string">"disabled"</span>, <span class="hljs-literal">true</span>);
+			$(<span class="hljs-string">"#reset_password"</span>).prop(<span class="hljs-string">"disabled"</span>, <span class="hljs-literal">true</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>$(“#edit_role”).prop(“disabled”, true);
+$(“#mcDeleteBtn”).prop(“disabled”, true);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			
+		}
+	});	
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'change'</span>, <span class="hljs-string">'#userSelect'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>Happens when the user name is changed in edit_role    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> selUser = $(<span class="hljs-string">"#userSelect"</span>).get(<span class="hljs-number">0</span>);		
+		userChange(selUser);
+		synchronizeGroupList();		
+	});	
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'dblclick'</span>, <span class="hljs-string">'#selAssignedRoles'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>Handle a double click on the list of available roles in edit role        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> selAs = $(<span class="hljs-string">"#selAssignedRoles"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> selAv = $(<span class="hljs-string">"#selAvailableRoles"</span>).get(<span class="hljs-number">0</span>);	
+		<span class="hljs-keyword">if</span>(CanRemoveRole(selAs))
+		{
+			swapListItem( selAs, selAv);
+			synchronizeGroupList();
+		}
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'change'</span>, <span class="hljs-string">'#selRoles'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>Happens when the group/role being viewed is changed in edit all roles        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> selRoles = $(<span class="hljs-string">"#selRoles"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> selUsers = $(<span class="hljs-string">"#selUsers"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> selAvUsers = $(<span class="hljs-string">"#selAvailableUsers"</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p>TODO: If edits have been made, confirm the change so edits are not lost.            </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		roleChange(selRoles, selUsers, selAvUsers);		
+	});
+		
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#selAvailableUsers'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>Handle a click on the list of available users in edit all roles
+Pass the clicked select to the role edit page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		displayUserInfo(<span class="hljs-keyword">this</span>);					
+	});	
+
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'dblclick'</span>, <span class="hljs-string">'#selAvailableRoles'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>Handle a double click on the list of assigned roles in edit role        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> selAs = $(<span class="hljs-string">"#selAssignedRoles"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> selAv = $(<span class="hljs-string">"#selAvailableRoles"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">if</span>(CanRemoveRole(selAv))
+		{
+			swapListItem( selAv, selAs);		
+			synchronizeGroupList();		
+		}
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'dblclick'</span>, <span class="hljs-string">'#selAvailableUsers'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>Handle a double click on the list of available users in edit all roles        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> selAvUsers = $(<span class="hljs-string">"#selAvailableUsers"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> selAsUsers = $(<span class="hljs-string">"#selUsers"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> selRoles = $(<span class="hljs-string">"#selRoles"</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>TODO: if(isAssignmentAllowed()) // Business rules</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		swapListItem( selAvUsers, selAsUsers);		
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#btnOKSiteMgr'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>User has selected a site manager from the “no site manager”
+error dialog.  Synch the available users list in the main
+page with the dialog, then do the swap.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> selAvUsers = $(<span class="hljs-string">"#selAvailableUsers"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> index = $(<span class="hljs-string">"#selUserList"</span>).get(<span class="hljs-number">0</span>).selectedIndex;
+		selAvUsers.selectedIndex = index;
+		<span class="hljs-keyword">var</span> selAsUsers = $(<span class="hljs-string">"#selUsers"</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>TODO: if(isAssignmentAllowed()) // Business rules</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		swapListItem( selAvUsers, selAsUsers);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>Make sure save is enabled.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		$(<span class="hljs-string">"#edit_roles_submit"</span>).prop(<span class="hljs-string">"disabled"</span>,<span class="hljs-string">""</span>);
+
+	});
+
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#btnCancelSiteMgr'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>If the user cancels site manager assignment from the
+no site manager error box, just reassign the previously
+selected on.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> selAvUsers = $(<span class="hljs-string">"#selAvailableUsers"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> selAsUsers = $(<span class="hljs-string">"#selUsers"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> selRoles = $(<span class="hljs-string">"#selRoles"</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>TODO: if(isAssignmentAllowed()) // Business rules</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		swapListItem( selAvUsers, selAsUsers);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <p>Make sure save is enabled.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		$(<span class="hljs-string">"#edit_roles_submit"</span>).prop(<span class="hljs-string">"disabled"</span>,<span class="hljs-string">""</span>);
+		
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#selUsers'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>Handle a click on the list of available users in edit all roles
+Pass the clicked select to the role edit page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		displayUserInfo(<span class="hljs-keyword">this</span>);					
+	});	
+
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'dblclick'</span>, <span class="hljs-string">'#selUsers'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-62">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-62">&#182;</a>
+              </div>
+              <p>Handle a double click on the list of assigned users in edit all roles        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> selAvUsers = $(<span class="hljs-string">"#selAvailableUsers"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> selAsUsers = $(<span class="hljs-string">"#selUsers"</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> selRoles = $(<span class="hljs-string">"#selRoles"</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-63">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-63">&#182;</a>
+              </div>
+              <p>Make the change in role membership, but check for trouble after</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		swapListItem( selAsUsers, selAvUsers);
+		<span class="hljs-keyword">var</span> index = selRoles.selectedIndex;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-64">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-64">&#182;</a>
+              </div>
+              <p>IF the list is empty, AND there’s a role selected, check for site manager</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>((selAsUsers.length == <span class="hljs-number">0</span>) &amp;&amp; (index != <span class="hljs-string">"-1"</span>) )
+		{
+			<span class="hljs-keyword">if</span>(selRoles.options[index].id == <span class="hljs-string">"1"</span>)<span class="hljs-comment">// Is "site manager" currently role selected?</span>
+			{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-65">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-65">&#182;</a>
+              </div>
+              <p>Empty site manager not allowed. Disable save and warn the user.            </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				$(<span class="hljs-string">"#edit_roles_submit"</span>).prop(<span class="hljs-string">"disabled"</span>, <span class="hljs-literal">true</span>);
+				$(<span class="hljs-string">'#errText'</span>).text(<span class="hljs-string">"Site Manager is a required role for all sites.  You will not be able to save your changes to this role until you assign a Site Manager.  Please select a user from the list below, or cancel your changes."</span>);
+				$(<span class="hljs-string">"#theList"</span>).empty();	
+				$(<span class="hljs-string">'#selAvailableUsers'</span>).clone(<span class="hljs-literal">false</span>)
+				.attr(<span class="hljs-string">'id'</span>, <span class="hljs-string">'selUserList'</span>)	
+				.attr(<span class="hljs-string">'size'</span>, <span class="hljs-string">'7'</span>)				
+				.appendTo(<span class="hljs-string">"#theList"</span>);				
+				
+				$(<span class="hljs-string">"#errRole"</span>).modal({backdrop: <span class="hljs-string">'static'</span>});
+			}
+			<span class="hljs-keyword">else</span>
+			{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-66">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-66">&#182;</a>
+              </div>
+              <p>Make sure save is enabled.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				$(<span class="hljs-string">"#edit_roles_submit"</span>).prop(<span class="hljs-string">"disabled"</span>,<span class="hljs-string">""</span>);
+			}
+		}
+		
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#reset_password'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-67">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-67">&#182;</a>
+              </div>
+              <p>Get the account data for the selected user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> selUsers = $(<span class="hljs-string">'#selEditUser'</span>).get(<span class="hljs-number">0</span>);
+		<span class="hljs-keyword">var</span> user = getSelectedUserData(selUsers);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-68">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-68">&#182;</a>
+              </div>
+              <p>Make sure we got one.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(user != -<span class="hljs-number">1</span>)
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-69">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-69">&#182;</a>
+              </div>
+              <p>Pass the selected user to the password reset gatekeeper</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">var</span> id = user.id;			
+			<span class="hljs-keyword">if</span>(id != <span class="hljs-number">0</span>) <span class="hljs-comment">// Don't do anything if no user is selected.</span>
+			{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-70">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-70">&#182;</a>
+              </div>
+              <p>Collect user data for the user to be reset</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">var</span> fullname = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"firstname"</span>).value +  <span class="hljs-string">" "</span> +
+						 <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"middlename"</span>).value + <span class="hljs-string">" "</span> +
+						 <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"lastname"</span>).value; 
+				<span class="hljs-keyword">var</span> username = $(<span class="hljs-string">'#username'</span>).val();				
+				<span class="hljs-keyword">var</span> email = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"email"</span>).value;				
+				<span class="hljs-keyword">var</span> status = <span class="hljs-string">'Active'</span>;
+				<span class="hljs-keyword">if</span>(user.status != <span class="hljs-number">0</span>)
+					status = <span class="hljs-string">'Disabled'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-71">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-71">&#182;</a>
+              </div>
+              <p>Set up the confirmation dialog</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				$(<span class="hljs-string">'#fullname'</span>).text( <span class="hljs-string">"Name: "</span> + fullname);
+				$(<span class="hljs-string">'#rusername'</span>).text(<span class="hljs-string">"Username: "</span> + username);
+				$(<span class="hljs-string">'#remail'</span>).text(   <span class="hljs-string">"Email: "</span> + email);
+				$(<span class="hljs-string">'#rstatus'</span>).text(  <span class="hljs-string">"Account status: "</span> + status);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-72">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-72">&#182;</a>
+              </div>
+              <p>Prompt to confirm or cancel the reset</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				$(<span class="hljs-string">"#confirmReset"</span>).modal({backdrop: <span class="hljs-string">'static'</span>});				
+			}
+		}
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#resOK'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-73">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-73">&#182;</a>
+              </div>
+              <p>Build the url for the router</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> href = <span class="hljs-string">'/users/pw_reset_admin'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-74">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-74">&#182;</a>
+              </div>
+              <p>Put the url for the REST call together with the data    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> body={<span class="hljs-string">'url'</span>:href, <span class="hljs-string">'username'</span>: $(<span class="hljs-string">'#username'</span>).val()}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-75">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-75">&#182;</a>
+              </div>
+              <p>Use AJAX to post the account reset.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		$.ajax({
+				url: href,
+				data: body,
+				async: <span class="hljs-literal">true</span>, 
+				method: <span class="hljs-string">'POST'</span>,			
+				dataType: <span class="hljs-string">'json'</span>,
+				success: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(response)</span> </span>{
+					<span class="hljs-keyword">if</span> (response.success) 
+					{
+						toast.notifySuccess(<span class="hljs-string">'Success'</span>, <span class="hljs-string">'User password has been reset'</span>);						
+					} 
+					<span class="hljs-keyword">else</span> 
+					{
+						toast.notifyError(<span class="hljs-string">'Error'</span>, <span class="hljs-string">'Error: '</span>+response.error.code+<span class="hljs-string">' - '</span>+response.error.message);
+					}
+				},
+			error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span></span>{
+			toast.notifyError(<span class="hljs-string">'Error'</span>, <span class="hljs-string">'User password NOT reset'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-76">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-76">&#182;</a>
+              </div>
+              <p>TODO: handle error condition gracefully</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			}
+		});		
+	});	
+
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#divnav'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-77">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-77">&#182;</a>
+              </div>
+              <p>Get the id of the account to work with</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> id = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"AllUsersAccountFilter"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-78">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-78">&#182;</a>
+              </div>
+              <p>$(‘<input/>‘,{type:’hidden’, id:’filter’, name:’filter’, value:id}).appendTo(‘#info’);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'AP_EDIT'</span>))
+		{				
+			<span class="hljs-built_in">window</span>.location.href = <span class="hljs-string">'/users/edit_user/'</span>+id;
+		}
+		<span class="hljs-keyword">else</span>
+			<span class="hljs-built_in">window</span>.location.href = <span class="hljs-string">'/users/edit_user'</span>;	
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#edit_role'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-79">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-79">&#182;</a>
+              </div>
+              <p>Handle a click on the “Edit Role” button in Edit User
+Pass the selected user to the role edit page        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> userid = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"id"</span>).value;
+		
+		<span class="hljs-built_in">window</span>.sessionStorage.setItem(<span class="hljs-string">"CurrentID"</span>,userid);
+		<span class="hljs-keyword">var</span> id = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"AllUsersAccountFilter"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-80">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-80">&#182;</a>
+              </div>
+              <p>$(‘<input/>‘,{type:’hidden’, id:’filter’, name:’filter’, value:id}).appendTo(‘#info’);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(authUser.canDo(<span class="hljs-string">'AP_EDIT'</span>))
+		{	
+			$(<span class="hljs-string">'#edit_role'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'/users/edit_role/'</span>+id);
+		}		
+	});
+		
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#edit_role_submit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-81">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-81">&#182;</a>
+              </div>
+              <p>Stub for validation on single role edit</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"edit_single_role_form"</span>).submit();
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#edit_submit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-82">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-82">&#182;</a>
+              </div>
+              <p>Handle a click on the “Save Changes” button in Edit User<br>Make sure there are no required fields that are space filled</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		trimAllFields();	
+		<span class="hljs-keyword">var</span> profile = {fname:$(<span class="hljs-string">'#firstname'</span>).get(<span class="hljs-number">0</span>),
+					   lname:$(<span class="hljs-string">'#lastname'</span>).get(<span class="hljs-number">0</span>),
+					   username:$(<span class="hljs-string">'#username'</span>).get(<span class="hljs-number">0</span>),
+					   email:$(<span class="hljs-string">'#email'</span>).get(<span class="hljs-number">0</span>),
+					   emailc:$(<span class="hljs-string">'#emailc'</span>).get(<span class="hljs-number">0</span>)
+					   }		
+		<span class="hljs-keyword">var</span> audit = commonLib.isValidEdit(profile);		
+		<span class="hljs-keyword">if</span>(audit.valid == <span class="hljs-literal">true</span>){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-83">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-83">&#182;</a>
+              </div>
+              <p>Save data and submit page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">var</span> edituser = commitEdit();
+			<span class="hljs-keyword">if</span>(edituser !=<span class="hljs-literal">null</span>)
+			{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-84">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-84">&#182;</a>
+              </div>
+              <p>Update the hidden data field in the web page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">var</span> $editedUser = 
+				$(<span class="hljs-string">'&lt;input/&gt;'</span>,{type:<span class="hljs-string">'hidden'</span>,id:<span class="hljs-string">'edited_user'</span>, name:<span class="hljs-string">'edited_user'</span>})
+				.appendTo(<span class="hljs-string">'#info'</span>);	
+				$editedUser.val(<span class="hljs-built_in">JSON</span>.stringify(edituser));	
+				
+				<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"edit_user_form"</span>).submit();				
+			}
+			<span class="hljs-keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-85">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-85">&#182;</a>
+              </div>
+              <p>big trouble.  never happen</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				alert(<span class="hljs-string">"An unspecified error has occurred."</span>);
+		}
+		<span class="hljs-keyword">else</span>
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-86">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-86">&#182;</a>
+              </div>
+              <p>Oops.  Validation failed.  Inform the user of the problem.            </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			displayErrors(audit); 			
+		}
+	});
+
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#new_profile_submit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-87">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-87">&#182;</a>
+              </div>
+              <p>Handle a click on “add profile” in user account management</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		trimAllFields();
+		<span class="hljs-keyword">var</span> profile = {fname:$(<span class="hljs-string">'#firstname'</span>).get(<span class="hljs-number">0</span>),
+					   lname:$(<span class="hljs-string">'#lastname'</span>).get(<span class="hljs-number">0</span>),
+					   username:$(<span class="hljs-string">'#username'</span>).get(<span class="hljs-number">0</span>),
+					   email:$(<span class="hljs-string">'#email'</span>).get(<span class="hljs-number">0</span>),
+					   emailc:$(<span class="hljs-string">'#emailc'</span>).get(<span class="hljs-number">0</span>)
+					   }		
+
+		<span class="hljs-keyword">var</span> audit = commonLib.isValidEdit(profile);
+		
+		<span class="hljs-keyword">if</span>(audit.valid == <span class="hljs-literal">true</span>)
+		{
+			<span class="hljs-keyword">var</span> newuser = commitNewProfile();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-88">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-88">&#182;</a>
+              </div>
+              <p>Update the hidden data field in the web page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">var</span> $editedUser = 
+			$(<span class="hljs-string">'&lt;input/&gt;'</span>,{type:<span class="hljs-string">'hidden'</span>,id:<span class="hljs-string">'edited_user'</span>, name:<span class="hljs-string">'edited_user'</span>})
+			.appendTo(<span class="hljs-string">'#info'</span>);	
+			$editedUser.val(<span class="hljs-built_in">JSON</span>.stringify(newuser));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-89">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-89">&#182;</a>
+              </div>
+              <p>Submit page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"add_user_form"</span>).submit();			
+		}
+		<span class="hljs-keyword">else</span>
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-90">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-90">&#182;</a>
+              </div>
+              <p>Oops.  Validation failed.  Inform the user of the problem.            </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			displayErrors(audit); 			
+		}		
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#edit_roles_submit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-91">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-91">&#182;</a>
+              </div>
+              <p>Handle a click on the “Save Changes” button in Edit All Roles</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-92">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-92">&#182;</a>
+              </div>
+              <p>Save data and submit page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		commitRoleEdit();		
+		<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"edit_roles_form"</span>).submit();			
+ 
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-93">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-93">&#182;</a>
+              </div>
+              <p>Preload functions    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	$(<span class="hljs-string">'#userSelect'</span>).load(loadRoleEdit).load(); 
+	$(<span class="hljs-string">'#selEditUser'</span>).load(preloadUserEdit).load();
+	$(<span class="hljs-string">'#selRoles'</span>).load(loadRoleListAll).load();
+	$(<span class="hljs-string">'#selAvailableRoles'</span>).load(loadRoleListUser).load();
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clearFields</span><span class="hljs-params">()</span>
+</span>{
+	$(<span class="hljs-string">":text"</span>).val(<span class="hljs-string">""</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-94">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-94">&#182;</a>
+              </div>
+              <p>TODO: Database fields here</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CanRemoveRole</span><span class="hljs-params">(selRoles)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-95">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-95">&#182;</a>
+              </div>
+              <p>Returns true if the role can be removed from the user’s assigned roles.
+Prevents the site manager role from being removed if no other user has
+the role.
+Returns true if it’s okay.
+Deref for clarity    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> index = selRoles.selectedIndex;
+	<span class="hljs-keyword">var</span> opt = selRoles.options[index];
+	<span class="hljs-keyword">if</span>(opt != <span class="hljs-literal">null</span>)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-96">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-96">&#182;</a>
+              </div>
+              <p>If the group selected is not a site manager, it’s automatically okay.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(opt.id == <span class="hljs-string">'1'</span>)
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-97">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-97">&#182;</a>
+              </div>
+              <p>Site manager role cannot be edited from the single role edit screen.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			$(<span class="hljs-string">'#errText'</span>).text(<span class="hljs-string">"Site Manager assignment cannot be changed from this screen.  Please use the \"Manage User Roles\" menu option."</span>);
+			$(<span class="hljs-string">"#errRole"</span>).modal();
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+		}
+	}
+	
+	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">filterAccounts</span><span class="hljs-params">(filter)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-98">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-98">&#182;</a>
+              </div>
+              <p>This function uses the global accounts array arrAccounts
+Get the accounts select</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> accSel = $(<span class="hljs-string">'#selEditUser'</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-99">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-99">&#182;</a>
+              </div>
+              <p>Empty it</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	$(<span class="hljs-string">"#selEditUser"</span>).empty();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-100">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-100">&#182;</a>
+              </div>
+              <p>Rebuild the accounts list from the global array
+filtering as it loops through the list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; arrAccounts.length; i++)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-101">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-101">&#182;</a>
+              </div>
+              <p>Get an option</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> opt = arrAccounts[i];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-102">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-102">&#182;</a>
+              </div>
+              <p>Filter it and (maybe) add it back to the list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(filter == <span class="hljs-string">'all'</span>)
+			accSel.options.add( arrAccounts[i]);
+		<span class="hljs-keyword">else</span>
+		{
+			<span class="hljs-keyword">if</span>(!isFiltered(opt, filter))
+				accSel.options.add( arrAccounts[i]);
+		}
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-103">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-103">&#182;</a>
+              </div>
+              <p>When the “all accounts” is chosen, add back the “create account” selection</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(filter == <span class="hljs-string">'all'</span>)
+	{
+		arrAccounts[<span class="hljs-number">0</span>].selected = <span class="hljs-literal">true</span>;
+		accSel.options.add(arrAccounts[<span class="hljs-number">0</span>],<span class="hljs-number">0</span>);
+	}
+	<span class="hljs-keyword">if</span>(accSel.options.length == <span class="hljs-number">0</span>)
+	{
+		arrAccounts[<span class="hljs-number">0</span>].selected = <span class="hljs-literal">true</span>;
+		<span class="hljs-keyword">var</span> option = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"option"</span>);
+		option.text = <span class="hljs-string">"(No matches)"</span>;
+		option.value = <span class="hljs-string">"-1"</span>;
+		accSel.options.add(option,<span class="hljs-number">0</span>);		
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-104">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-104">&#182;</a>
+              </div>
+              <p>Force the refresh of the page through the select    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	$(<span class="hljs-string">'#selEditUser'</span>).change();	
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-105">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-105">&#182;</a>
+              </div>
+              <p>Returns true if the option passed in is allowed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isFiltered</span><span class="hljs-params">(opt, filter)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-106">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-106">&#182;</a>
+              </div>
+              <p>Establish the list of status types available</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> statusTypes = authUser.getStatusDescriptions();
+	
+	<span class="hljs-keyword">var</span> filterID = <span class="hljs-number">0</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-107">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-107">&#182;</a>
+              </div>
+              <p>Get the ID of the status type as a filter</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;statusTypes.length; i++)
+	{
+		<span class="hljs-keyword">if</span>(filter == statusTypes[i]){
+			filterID = i;
+			<span class="hljs-keyword">break</span>;
+		}
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-108">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-108">&#182;</a>
+              </div>
+              <p>If the filter is not found on the list, default to no filter.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(i==statusTypes.length)
+		filterID = <span class="hljs-number">0</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-109">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-109">&#182;</a>
+              </div>
+              <p>Get the data from the option</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(opt != <span class="hljs-literal">null</span>)
+		<span class="hljs-keyword">var</span> data = opt.value;
+	
+	<span class="hljs-keyword">if</span>(data != <span class="hljs-literal">null</span>)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-110">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-110">&#182;</a>
+              </div>
+              <p>Reconstitute the account object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> accountData = <span class="hljs-built_in">JSON</span>.parse(data);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-111">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-111">&#182;</a>
+              </div>
+              <p>console.log(“Status: “, accountData.status);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(accountData.status == filterID)
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-112">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-112">&#182;</a>
+              </div>
+              <p>If the loop drops out, the filter never matched
+an actual status.  No accounts with the status exist.    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	
+	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;		
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadRoleListAll</span><span class="hljs-params">()</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-113">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-113">&#182;</a>
+              </div>
+              <p>Find out what account is being edited</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> act = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"AllUsersAccountFilter"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-114">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-114">&#182;</a>
+              </div>
+              <p>Remove Prenostik Admin when editing a non-prenostik account</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(act != <span class="hljs-literal">null</span>) <span class="hljs-comment">// Will be null when user is non prenostik</span>
+	{
+		<span class="hljs-keyword">if</span> (authUser.getAccountID() != act) <span class="hljs-comment">// When prenostik admin edits other accounts</span>
+		{
+			<span class="hljs-keyword">if</span>(selRoles.options.namedItem(<span class="hljs-string">"2"</span>) != <span class="hljs-literal">null</span>) <span class="hljs-comment">// never happen.</span>
+			{
+				<span class="hljs-keyword">var</span> index = selRoles.options.namedItem(<span class="hljs-string">"2"</span>).index		
+				selRoles.options.remove(index);	
+			}
+			
+		}
+	}
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadRoleListUser</span><span class="hljs-params">()</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-115">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-115">&#182;</a>
+              </div>
+              <p>Find out what account is being edited</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> act = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"AllUsersAccountFilter"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-116">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-116">&#182;</a>
+              </div>
+              <p>Remove Prenostik Admin when editing a non-prenostik account        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span> (authUser.getAccountID() != act)
+	{
+		<span class="hljs-keyword">var</span> index = selAvailableRoles.options.namedItem(<span class="hljs-string">"2"</span>).index		
+		selAvailableRoles.options.remove(index);	
+		
+	}
+}
+
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setLockIconLocked</span><span class="hljs-params">(status)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-117">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-117">&#182;</a>
+              </div>
+              <p>Sets the lock icon to display open or closed </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(status == <span class="hljs-literal">true</span>)
+	{
+		$(<span class="hljs-string">"#statusPic"</span>).removeClass(<span class="hljs-string">"icon-unlock"</span>);
+		$(<span class="hljs-string">"#statusPic"</span>).addClass(<span class="hljs-string">"icon-lock"</span>);			
+	}
+	<span class="hljs-keyword">else</span>
+	{			
+		$(<span class="hljs-string">"#statusPic"</span>).removeClass(<span class="hljs-string">"icon-lock"</span>);
+		$(<span class="hljs-string">"#statusPic"</span>).addClass(<span class="hljs-string">"icon-unlock"</span>);			
+	}
+}	
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">displayUserInfo</span><span class="hljs-params">(selCurrent)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-118">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-118">&#182;</a>
+              </div>
+              <p>This function takes the select passed in
+and displays the user info for it.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> user = getSelectedUserData(selCurrent);
+	<span class="hljs-keyword">var</span> puser = <span class="hljs-keyword">new</span> PrenostikUser(user);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-119">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-119">&#182;</a>
+              </div>
+              <p>If a user was selected, update the user object with the edits</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(user != -<span class="hljs-number">1</span>)
+	{
+		$(<span class="hljs-string">'#name'</span>).text(user.firstname + <span class="hljs-string">' '</span> + user.middlename + <span class="hljs-string">' '</span> + user.lastname);		
+		$(<span class="hljs-string">'#username'</span>).text(user.username);
+		$(<span class="hljs-string">'#email'</span>).text(user.email);
+		$(<span class="hljs-string">'#emailc'</span>).text(user.email);
+		$(<span class="hljs-string">'#company'</span>).text(user.account.name);
+		
+		<span class="hljs-keyword">var</span> status = <span class="hljs-string">'Account status: '</span> + puser.getStatusString();
+		<span class="hljs-keyword">if</span>(user.status == <span class="hljs-number">0</span>)
+		{
+			setLockIconLocked(<span class="hljs-literal">false</span>);			
+		}
+		<span class="hljs-keyword">else</span>
+		{			
+			setLockIconLocked(<span class="hljs-literal">true</span>);			
+		}
+		
+		$(<span class="hljs-string">'#status'</span>).text(status);
+		<span class="hljs-built_in">window</span>.sessionStorage.setItem(<span class="hljs-string">"CurrentID"</span>,user.id);
+	}
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">displayErrors</span><span class="hljs-params">(audit)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-120">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-120">&#182;</a>
+              </div>
+              <p>Add the list to be modified to the dialog</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	$(<span class="hljs-string">"#errList"</span>).empty();
+	$(<span class="hljs-string">'#errList'</span>).append(<span class="hljs-string">"&lt;ul id='lstList' style='list-style-type:disc'&gt;&lt;/ul&gt;"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-121">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-121">&#182;</a>
+              </div>
+              <p>Populate the error messages</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>; i&lt;audit.errList.length; i++) 			
+		$(<span class="hljs-string">"#lstList"</span>).append(<span class="hljs-string">"&lt;li&gt;"</span>+audit.errList[i].text+<span class="hljs-string">"&lt;/li&gt;"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-122">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-122">&#182;</a>
+              </div>
+              <p>Tell the user what happened</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(audit.errList.length &gt; <span class="hljs-number">1</span>)
+		$(<span class="hljs-string">'#errText'</span>).text(<span class="hljs-string">"The following errors have occurred:"</span>);
+	<span class="hljs-keyword">else</span>
+		$(<span class="hljs-string">'#errText'</span>).text(<span class="hljs-string">"The following error has occurred:"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-123">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-123">&#182;</a>
+              </div>
+              <p>Display</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	$(<span class="hljs-string">"#errAudit"</span>).modal(); 	
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">trimAllFields</span><span class="hljs-params">()</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-124">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-124">&#182;</a>
+              </div>
+              <p>Condition the user data fields for robustness    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> t = $(<span class="hljs-string">":text"</span>);
+	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;t.length; i++)	
+		t[i].value = t[i].value.trim();	
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-125">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-125">&#182;</a>
+              </div>
+              <p>Update the selected user object and save the data for the post
+Assumes the edit has been validated.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">commitEdit</span><span class="hljs-params">()</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-126">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-126">&#182;</a>
+              </div>
+              <p>NOTE: fields are assigned explicitly rather than with a 
+regex jquery like $(‘:text’)
+to avoid maintenance problems.  Enforces tighter control for
+future field additions and special validations.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	
+	<span class="hljs-keyword">var</span> selUsers = $(<span class="hljs-string">"#selEditUser"</span>).get(<span class="hljs-number">0</span>);
+	<span class="hljs-keyword">var</span> user = getSelectedUserData(selUsers);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-127">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-127">&#182;</a>
+              </div>
+              <p>If a user was selected, update the user object with the edits</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(user != -<span class="hljs-number">1</span>)
+	{
+		user.firstname = $(<span class="hljs-string">"#firstname"</span>).val();
+		user.middlename = $(<span class="hljs-string">'#middlename'</span>).val();
+		user.lastname =  $(<span class="hljs-string">'#lastname'</span>).val();
+		user.username = $(<span class="hljs-string">'#username'</span>).val();
+		user.email = $(<span class="hljs-string">'#email'</span>).val();		
+		user.active = $(<span class="hljs-string">'#status'</span>).val();
+	}
+	<span class="hljs-keyword">else</span>
+		<span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+		
+	<span class="hljs-keyword">return</span> user;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-128">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-128">&#182;</a>
+              </div>
+              <p>Function assembles all data for the new record
+Uses the global PrenostikUser “authUser” established
+at the top of the file.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">commitNewProfile</span><span class="hljs-params">()</span>
+</span>{	
+	<span class="hljs-keyword">var</span> user = 
+	{	
+		account: authUser.account,
+		firstname: $(<span class="hljs-string">"#firstname"</span>).val(),
+		middlename: $(<span class="hljs-string">'#middlename'</span>).val(),
+		lastname: $(<span class="hljs-string">'#lastname'</span>).val(),
+		username: $(<span class="hljs-string">'#username'</span>).val(),
+		email: $(<span class="hljs-string">'#email'</span>).val(),		
+		active: <span class="hljs-number">0</span>,
+		password: <span class="hljs-string">"prenostik"</span>,
+		groups: [{<span class="hljs-string">"id"</span>:<span class="hljs-string">"5"</span>}]  <span class="hljs-comment">// Add the user to the Executive group by default</span>
+	};	
+	<span class="hljs-keyword">return</span> user;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-129">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-129">&#182;</a>
+              </div>
+              <p>Commits the currently visible group assignment on the web page
+assumes data has been validated.  None required for now.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">commitRoleEdit</span><span class="hljs-params">()</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-130">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-130">&#182;</a>
+              </div>
+              <p>Get the “assignedUsers” hidden text box and keep it up to date</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> pass = $(<span class="hljs-string">"#assignedUsers"</span>).get(<span class="hljs-number">0</span>);
+	<span class="hljs-keyword">var</span> passID = $(<span class="hljs-string">"#id"</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-131">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-131">&#182;</a>
+              </div>
+              <p>Get the list of all groups</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> groups = $(<span class="hljs-string">"#selRoles"</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-132">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-132">&#182;</a>
+              </div>
+              <p>Get the currently selected group from the list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> group = getSelectedGroupData(groups);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-133">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-133">&#182;</a>
+              </div>
+              <p>Get the list of users that have been assigned to the current group</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> selAsU = $(<span class="hljs-string">"#selUsers"</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-134">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-134">&#182;</a>
+              </div>
+              <p>Don’t do anything if no group is selected</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(group != -<span class="hljs-number">1</span>)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-135">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-135">&#182;</a>
+              </div>
+              <p>Read the list of users assigned to the current group</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> users = [];		<span class="hljs-comment">// selAsU == "select assigned users" dumb name needs an explanation.</span>
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; selAsU.options.length; i++)
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-136">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-136">&#182;</a>
+              </div>
+              <p>Get a user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">var</span> strUser = selAsU.options.item(i).value;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-137">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-137">&#182;</a>
+              </div>
+              <p>Convert the user string data to a user object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">var</span> objUser = <span class="hljs-built_in">JSON</span>.parse(strUser);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-138">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-138">&#182;</a>
+              </div>
+              <p>Build a list of user IDs as simple ID objects for the server</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			userID = {<span class="hljs-string">"id"</span> : objUser.id}
+			users.push(userID);			
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-139">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-139">&#182;</a>
+              </div>
+              <p>Now build a group object for the server</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> newGroup = {<span class="hljs-string">"id"</span>: group.id, 
+						<span class="hljs-string">"users"</span>: users
+						};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-140">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-140">&#182;</a>
+              </div>
+              <p>Pass new group list to the web page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		pass.value = <span class="hljs-built_in">JSON</span>.stringify(newGroup);
+		passID.value = <span class="hljs-built_in">JSON</span>.stringify(group.id);
+	}	
+	<span class="hljs-keyword">else</span>
+	pass.value = <span class="hljs-string">""</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getSelectedAccountData</span><span class="hljs-params">(selList)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-141">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-141">&#182;</a>
+              </div>
+              <p>Broken into steps for clarity
+Get the index of the currently selected user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> index = selList.options.selectedIndex;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-142">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-142">&#182;</a>
+              </div>
+              <p>Use the index to get the user option object    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> selected = selList.options.item(index);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-143">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-143">&#182;</a>
+              </div>
+              <p>Get the data from the option</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(selected !=<span class="hljs-literal">null</span>)
+		<span class="hljs-keyword">var</span> data = selected.value;
+	<span class="hljs-keyword">else</span>
+		data = -<span class="hljs-number">1</span>;
+	<span class="hljs-keyword">if</span>(data != -<span class="hljs-number">1</span>)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-144">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-144">&#182;</a>
+              </div>
+              <p>Reconstitute the account object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> accountData = <span class="hljs-built_in">JSON</span>.parse(data);		
+		<span class="hljs-keyword">return</span> accountData;
+	}
+	<span class="hljs-keyword">else</span>
+		<span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>; <span class="hljs-comment">// No selected user	</span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadRoleEdit</span><span class="hljs-params">()</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-145">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-145">&#182;</a>
+              </div>
+              <p>Load the current user when the “edit role” button is clicked in edit user    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> id = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"CurrentID"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-146">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-146">&#182;</a>
+              </div>
+              <p>Set the select to the current user id.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> selUser = $(<span class="hljs-string">"#userSelect"</span>).get(<span class="hljs-number">0</span>);	
+	<span class="hljs-keyword">var</span> opt = selUser.options.namedItem(id);	
+	<span class="hljs-keyword">if</span>(opt != <span class="hljs-literal">null</span>)
+	{
+		opt.selected = <span class="hljs-literal">true</span>;
+		userChange(selUser);
+	}
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">preloadUserEdit</span><span class="hljs-params">()</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-147">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-147">&#182;</a>
+              </div>
+              <p>Load the current user when the user info is clicked in edit all roles</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> id = <span class="hljs-built_in">window</span>.sessionStorage.getItem(<span class="hljs-string">"CurrentID"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-148">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-148">&#182;</a>
+              </div>
+              <p>Set the select to the current user id.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> selUser = $(<span class="hljs-string">"#selEditUser"</span>).get(<span class="hljs-number">0</span>);	
+	<span class="hljs-keyword">var</span> opt = selUser.options.namedItem(id);	
+	<span class="hljs-keyword">if</span>(opt != <span class="hljs-literal">null</span>)
+	{
+		opt.selected = <span class="hljs-literal">true</span>;
+		$( <span class="hljs-string">"#selEditUser"</span> ).trigger( <span class="hljs-string">"change"</span> );
+	}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-149">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-149">&#182;</a>
+              </div>
+              <p>This function keeps the hidden text box on the page up to date
+with the current user’s assigned groups.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">synchronizeGroupList</span><span class="hljs-params">()</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-150">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-150">&#182;</a>
+              </div>
+              <p>Get the user that is being edited</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> userData = getSelectedUserData($(<span class="hljs-string">"#userSelect"</span>).get(<span class="hljs-number">0</span>));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-151">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-151">&#182;</a>
+              </div>
+              <p>Get the “pass” hidden text box and keep it up to date</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> selAsR = $(<span class="hljs-string">"#selAssignedRoles"</span>).get(<span class="hljs-number">0</span>);
+	<span class="hljs-keyword">var</span> pass = $(<span class="hljs-string">"#assignedGroups"</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-152">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-152">&#182;</a>
+              </div>
+              <p>If a user is not selected, don’t bother.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(userData != -<span class="hljs-number">1</span>)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-153">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-153">&#182;</a>
+              </div>
+              <p>Read the IDs of the groups to which the user is assigned</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> groups = [];	
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; selAsR.options.length; i++)
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-154">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-154">&#182;</a>
+              </div>
+              <p>for each group id on the list, get the group data off the from list
+stringify and build it 
+assign it all to the pass field.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-155">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-155">&#182;</a>
+              </div>
+              <p>Build the list of groups to which this user is now assigned</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(selAsR.options.item(i) != <span class="hljs-literal">null</span>)
+			{	
+				<span class="hljs-keyword">var</span> group = selAsR.options.item(i).value;
+				groups.push(<span class="hljs-built_in">JSON</span>.parse(group));				
+			}
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-156">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-156">&#182;</a>
+              </div>
+              <p>Set the list to the user object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		userData.groups = groups;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-157">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-157">&#182;</a>
+              </div>
+              <p>Stringify the user object list and pass it to the web page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		pass.value = <span class="hljs-built_in">JSON</span>.stringify(userData);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-158">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-158">&#182;</a>
+              </div>
+              <p>console.log(“pass data: “ + pass.value);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	}
+	<span class="hljs-keyword">else</span>
+		pass.value = <span class="hljs-string">""</span>;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-159">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-159">&#182;</a>
+              </div>
+              <p>Returns the user object from the select passed in
+assumes the select is a “standard” (for this program) user select</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getSelectedUserData</span><span class="hljs-params">(selList)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-160">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-160">&#182;</a>
+              </div>
+              <p>If there are no users on the list passed in, there can be none selected.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(selList.options == <span class="hljs-literal">null</span>)
+		<span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-161">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-161">&#182;</a>
+              </div>
+              <p>Broken in to steps for clarity
+Get the index of the currently selected user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> index = selList.options.selectedIndex;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-162">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-162">&#182;</a>
+              </div>
+              <p>Use the index to get the user option object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> selected = selList.options.item(index);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-163">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-163">&#182;</a>
+              </div>
+              <p>Get the data from the option</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> data = selected.value;
+	
+	<span class="hljs-keyword">if</span>(data != -<span class="hljs-number">1</span>)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-164">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-164">&#182;</a>
+              </div>
+              <p>Reconstitute the user object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> userData = <span class="hljs-built_in">JSON</span>.parse(data);
+		<span class="hljs-keyword">return</span> userData;
+	}
+	<span class="hljs-keyword">else</span>
+		<span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>; <span class="hljs-comment">// No selected user	</span>
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-165">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-165">&#182;</a>
+              </div>
+              <p>Returns the group object from the select passed in.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getSelectedGroupData</span><span class="hljs-params">(selList)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-166">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-166">&#182;</a>
+              </div>
+              <p>Broken in to steps for clarity
+Get the index of the currently selected user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> index = selList.options.selectedIndex;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-167">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-167">&#182;</a>
+              </div>
+              <p>Use the index to get the user option object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> selected = selList.options.item(index);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-168">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-168">&#182;</a>
+              </div>
+              <p>Get the data from the option</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> data = selected.value;
+	<span class="hljs-keyword">if</span>(data != -<span class="hljs-number">1</span>)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-169">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-169">&#182;</a>
+              </div>
+              <p>Reconstitute the user object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> group = <span class="hljs-built_in">JSON</span>.parse(data);
+		<span class="hljs-keyword">return</span> group;
+	}
+	<span class="hljs-keyword">else</span>
+		<span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>; <span class="hljs-comment">// No selected group	</span>
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-170">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-170">&#182;</a>
+              </div>
+              <p>This function resets the list boxes to the way they were when the page loaded.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">resetLists</span><span class="hljs-params">(selTo, selFrom)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-171">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-171">&#182;</a>
+              </div>
+              <p>Move all items from the to list back to the from list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i <span class="hljs-keyword">in</span> selTo.options)
+	{
+		<span class="hljs-keyword">var</span> opt = selTo.options[<span class="hljs-number">0</span>];				
+		<span class="hljs-keyword">if</span>(opt != <span class="hljs-literal">null</span>)
+			selFrom.add(opt);
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-172">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-172">&#182;</a>
+              </div>
+              <p>Sort the list that received the new names.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> commonLib = <span class="hljs-keyword">new</span> accountsCommon;
+	
+	commonLib.sortSelect(selFrom);
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-173">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-173">&#182;</a>
+              </div>
+              <p>This function extracts the list of member groups from the user’s data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extractGroupList</span><span class="hljs-params">(user)</span>
+</span>{		
+	<span class="hljs-keyword">var</span> memberGroups =[];
+	<span class="hljs-keyword">var</span> groupList = user.groups;
+	<span class="hljs-keyword">for</span>(i <span class="hljs-keyword">in</span> groupList)
+	{
+		memberGroups.push(groupList[i].id);
+	}
+	<span class="hljs-keyword">return</span> memberGroups;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-174">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-174">&#182;</a>
+              </div>
+              <p>This function synchronizes the list boxes passed in with the list of IDs passed in.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">synchronizeLists</span><span class="hljs-params">(idList, selTo, selFrom)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-175">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-175">&#182;</a>
+              </div>
+              <p>For example, if a list of 3 user IDs are passed in, each user will be 
+moved from the FROM list to the TO list.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-176">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-176">&#182;</a>
+              </div>
+              <p>Loop through the list of IDs passed in</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; idList.length; i++)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-177">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-177">&#182;</a>
+              </div>
+              <p>Use an ID from the list to find the option on the FROM list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> opt = selFrom.options.namedItem(idList[i]);
+		<span class="hljs-keyword">if</span>(opt != <span class="hljs-literal">null</span>)
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-178">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-178">&#182;</a>
+              </div>
+              <p>Remove the item from the FROM list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			selFrom.remove(opt.index);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-179">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-179">&#182;</a>
+              </div>
+              <p>Add the item to the TO list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			selTo.add(opt);
+		}
+		<span class="hljs-keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-180">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-180">&#182;</a>
+              </div>
+              <p>The user data contains an ID not provided by the server with the group list.
+This warning should not be commented out.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Warning: Unrecognized ID = "</span> + idList[i]);
+		
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-181">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-181">&#182;</a>
+              </div>
+              <p>Sort the list that acquired a new item</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> commonLib = <span class="hljs-keyword">new</span> accountsCommon;
+	commonLib.sortSelect(selTo);	
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-182">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-182">&#182;</a>
+              </div>
+              <p>This function moves an item from the “from” selection box to the “to” selection box</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">swapListItem</span><span class="hljs-params">(selFrom, selTo)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-183">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-183">&#182;</a>
+              </div>
+              <p>Deref for clarity    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> index = selFrom.selectedIndex;
+	<span class="hljs-keyword">var</span> opt = selFrom.options[index];
+	
+	selTo.add(opt);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-184">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-184">&#182;</a>
+              </div>
+              <p>Sort the list that acquired a new item</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> commonLib = <span class="hljs-keyword">new</span> accountsCommon;
+	commonLib.sortSelect(selTo);			
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-185">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-185">&#182;</a>
+              </div>
+              <p>Support for change of user in Edit Role page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">userChange</span><span class="hljs-params">(selUser)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-186">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-186">&#182;</a>
+              </div>
+              <p>Get the selected user data from the option in the select        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> userData = getSelectedUserData(selUser);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-187">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-187">&#182;</a>
+              </div>
+              <p>Update the currently selected user data
+This is the hidden value storing the ID</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"id"</span>).value = userData.id;				
+	<span class="hljs-built_in">window</span>.sessionStorage.setItem(<span class="hljs-string">"CurrentID"</span>,userData.id);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-188">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-188">&#182;</a>
+              </div>
+              <p>Get pointers to the list boxes of roles. (Better known as groups)    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> assigned = $(<span class="hljs-string">"#selAssignedRoles"</span>).get(<span class="hljs-number">0</span>);
+	<span class="hljs-keyword">var</span> available = $(<span class="hljs-string">"#selAvailableRoles"</span>).get(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-189">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-189">&#182;</a>
+              </div>
+              <p>Clear the previously displayed user’s assignments to prepare for the next one    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	resetLists(assigned, available);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-190">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-190">&#182;</a>
+              </div>
+              <p>If a user was selected</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(userData != -<span class="hljs-number">1</span>)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-191">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-191">&#182;</a>
+              </div>
+              <p>Display the currently selected user data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		displayUserInfo(selUser);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-192">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-192">&#182;</a>
+              </div>
+              <p>Extract the list of member groups to which the user belongs        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> memberGroups = extractGroupList(userData);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-193">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-193">&#182;</a>
+              </div>
+              <p>Now loop through the list of assigned groups and make the 
+lists on the web page match.        </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		synchronizeLists(memberGroups, assigned, available);
+	}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-194">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-194">&#182;</a>
+              </div>
+              <p>Support for change of role in edit_all_roles page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">roleChange</span><span class="hljs-params">(selRoles, selUsers, selAvailableUsers)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-195">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-195">&#182;</a>
+              </div>
+              <p>Get the selected group from the list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> group = getSelectedGroupData(selRoles);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-196">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-196">&#182;</a>
+              </div>
+              <p>Reset the membership lists</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	resetLists(selUsers, selAvailableUsers);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-197">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-197">&#182;</a>
+              </div>
+              <p>If a group has been selected</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(group != -<span class="hljs-number">1</span>)
+	{
+		<span class="hljs-keyword">var</span> index = selRoles.options.selectedIndex;
+		<span class="hljs-keyword">var</span> selected = selRoles.options.item(index);
+		<span class="hljs-built_in">window</span>.sessionStorage.setItem(<span class="hljs-string">"CurrentRoleEdit"</span>, selected.id);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-198">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-198">&#182;</a>
+              </div>
+              <p>Extract the list of members that belong to the selected group</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> groupMembers = extractMemberList(group, selAvailableUsers);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-199">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-199">&#182;</a>
+              </div>
+              <p>And move the members from the Available list to the Assigned list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		synchronizeLists(groupMembers, selUsers, selAvailableUsers);
+		$(<span class="hljs-string">'#edit_roles_submit'</span>).prop(<span class="hljs-string">'disabled'</span>, <span class="hljs-literal">false</span>);
+	}
+	<span class="hljs-keyword">else</span>
+	{
+		<span class="hljs-built_in">window</span>.sessionStorage.setItem(<span class="hljs-string">"CurrentRoleEdit"</span>, <span class="hljs-string">"-1"</span>);
+		$(<span class="hljs-string">'#edit_roles_submit'</span>).prop(<span class="hljs-string">'disabled'</span>, <span class="hljs-literal">true</span>);
+	}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-200">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-200">&#182;</a>
+              </div>
+              <p>This function takes the group ID passed in and returns a list
+of all users that are part of that group.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extractMemberList</span><span class="hljs-params">(group, selAll)</span>
+</span>{		
+	<span class="hljs-keyword">var</span> memberIDList = [];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-201">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-201">&#182;</a>
+              </div>
+              <p>Loop through the list of all users and check the list of roles each has.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; selAll.options.length; i++)
+	{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-202">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-202">&#182;</a>
+              </div>
+              <p>Get a single user’s data from the user list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> opt = selAll.options.item(i);
+		<span class="hljs-keyword">var</span> data = opt.value;
+		<span class="hljs-keyword">var</span> user = <span class="hljs-built_in">JSON</span>.parse(data);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-203">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-203">&#182;</a>
+              </div>
+              <p>Is the user a member of the current group?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(isMember(group, user))
+		{
+			memberIDList.push(user.id);
+		}
+	}
+	<span class="hljs-keyword">return</span> memberIDList;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-204">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-204">&#182;</a>
+              </div>
+              <p>Returns true if the user data passed in represents a user that is a member of the 
+group ID passed in.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isMember</span><span class="hljs-params">(group, userData)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-205">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-205">&#182;</a>
+              </div>
+              <p>Extract the user’s group membership list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> membershipList = userData.groups;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-206">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-206">&#182;</a>
+              </div>
+              <p>Parse the user’s membership list for the group concerned</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i&lt;membershipList.length; i++)
+	{
+		<span class="hljs-keyword">if</span>(group.id == membershipList[i].id)
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; <span class="hljs-comment">// Found it.</span>
+	}
+	<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <span class="hljs-comment">// Not a member.</span>
+}
+<span class="hljs-comment">/*
+function getMembershipCount(group)
+{ // This function returns the count of members in the group passed in
+	
+}
+*/</span>
+
+}) <span class="hljs-comment">// end of document ready function</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

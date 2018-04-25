@@ -1,0 +1,65 @@
+.worksheets-controller {
+    .text-right {
+        text-align: right;
+    }
+
+    td {
+        small {
+            color: @lightgray;
+        }
+    }
+
+    h4 {
+        .icon-stack {
+            font-size: 16px;
+        }
+    }
+
+  .dataTables_wrapper {
+    .DTTT_container {
+      float: left;
+    }
+    div.dataTables_filter label input {
+      width: 70%;
+    }
+  }
+
+  table.worksheets {
+    thead tr th#column-action {
+      min-width: 120px;
+    }
+    label.checkbox {
+      margin-left: 0px;
+      padding-left: 6px;
+    }
+    thead.affix {
+      position: fixed;
+      top: 116px;
+      width: (@fluidGridColumnWidth * 9) + (@fluidGridGutterWidth * (8)) - (9 / @gridRowWidth * 100 * 1%);
+      background-color: white;
+      z-index: 5;
+    }
+    /*thead.tr {
+        background-color: white;
+    }*/
+  }
+
+  .dropHover {
+    background-color: #B0BED9;
+  }
+
+  .tool-pane.affix {
+    position: fixed;
+    top: 70px;
+    width: (@fluidGridColumnWidth * 3) + (@fluidGridGutterWidth * (2)) - (3 / @gridRowWidth * 100 * 1%);
+  }
+
+  .tabletool-pane.affix {
+    position: fixed;
+    top: 50px;
+    width: (@fluidGridColumnWidth * 9) + (@fluidGridGutterWidth * (8)) - (9 / @gridRowWidth * 100 * 1%);
+    background-color: white;
+    padding-top: 20px;
+    z-index: 5;
+  }
+}

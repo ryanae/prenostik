@@ -1,0 +1,9 @@
+@media print {
+
+  #analyzeToolbar {display:none;}
+  body{padding-top:0; }
+  .navbar-fixed-top {display:none;}
+  .correlation-table, .table-striped{display:block;}
+  .analyze-controller .tab-toolbar{ display: none !important;}
+  li:not([class="active"]){display: none !important;}
+}

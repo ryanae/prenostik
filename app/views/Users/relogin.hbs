@@ -1,0 +1,65 @@
+<form id='relogin' method="post" action="">
+	<div class="row-fluid">
+		<div class="span4 offset4">
+			<div class="login-screen">
+				<div class="login-logo">
+					<p><img src="/img/prenostik_logo_black_on_white_teal.png" width="300" height="59"/></p>
+				</div>
+				<div class="login-form">
+					<div class="control-group">
+						<legend>1.  Enter your username and temporary password</legend>
+						<input type="text" name="username" placeholder="Username" id="username" class="login-field"/>
+						<label class="login-field-icon fui-user" for="username"></label>						
+						<input type="password" name="tempass" placeholder="Temporary password" id="tempass" class="login-field"/>
+						<br><br>			
+						<legend>2.  Choose a new password</legend>						
+						<div class="row-fluid">
+							<div class="span12">								
+								<input class="login-field" id="password" type="password" name="password"placeholder="New password"/>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<div class="span8">								
+							<label>Quality:</label>
+							<input class="text" id="qualityMeter"  name="qualityMeter" />
+						</div>				
+						<div class="row-fluid">
+							<div class="span12">								
+								<input class="login-field" id="passwordConfirm" type="password" name="passwordConfirm"placeholder="Re-enter new password"/>
+							</div>
+						</div>			
+					</div>
+					<a id= "init_pass" class="btn btn-primary btn-large btn-block">Reset Password</a>					
+				</div>				
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">		
+		<div class="span4 offset4 text-center">
+			<div class="login-version">Version: {{AppVersion}}</div>
+		</div>
+	</div>
+	<div id='info'></div>
+
+<!-- Audit Error dialog -->
+<div class="modal fade" id="errAudit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Password Error</h4>
+            </div>
+            <div class="modal-body">
+				<h6 id=errText> </h6>
+                <div class="span6">	
+					<div id="errList"></div>
+				</div>	 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                
+            </div>
+        </div>
+    </div>
+</div><!-- end modal dialog -->
+</form>

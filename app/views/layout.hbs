@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" class="{{__controller}}-controller {{__template}}-template">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<title>{{AppTitle}}</title>
+		<link rel="stylesheet" href="/css/app.css"/>
+		<link rel="stylesheet" href="/css/app2.css"/>
+	</head>
+	<body>
+        {{#if user}}
+
+			<div class="navbar navbar-inverse navbar-fixed-top">
+				<div class="navbar-inner">
+					<div class="container-fluid">
+						<a class="brand" href="/"><img src="/img/prenostik_logo_white_on_black_trans.png" alt="{{AppTitle}}"></a>
+						<ul class="nav">
+                            {{#each Sitemap.primary}}
+								<li class="{{#if children}}dropdown{{/if}}{{#if active}} active{{/if}}">
+                                    {{#if children}}
+										<a id="manage-dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#">{{name}}
+											<b class="caret"></b></a>
+
+										<ul class="dropdown-menu">
+                                            {{#each children}}
+												<li class="{{#if active}}active{{/if}}">
+													<a href="{{url}}">{{name}}</a>
+												</li>
+                                            {{/each}}
+										</ul>
+                                    {{else}}
+										<a href="{{url}}">{{name}}</a>
+                                    {{/if}}
+								</li>
+                            {{/each}}
+						</ul>
+
+						<ul class="nav pull-right">
+                            {{#each Sitemap.account}}
+
+                                {{#if label}}
+									<li class="nav-header">{{label}}</li>
+                                {{/if}}
+								<li class="{{state}} {{#if children}}dropdown{{/if}}{{#if active}} active{{/if}}">
+                                    {{#if children}}
+										<a id="account-dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#">{{{name}}}</a>
+
+										<ul class="dropdown-menu">
+                                            {{#if label}}{{/if}}
+                                            {{#each children}}
+                                                {{#if label}}
+													<li class="nav-header">{{label}}</li>
+                                                {{/if}}
+												<li class="{{#if active}}active{{/if}}">
+													<a href="{{url}}" id="{{id}}">{{{name}}}</a>
+												</li>
+                                            {{/each}}
+										</ul>
+                                    {{else}}
+										<a href="{{url}}">{{{name}}}</a>
+                                    {{/if}}
+								</li>
+                            {{/each}}
+						</ul>
+
+					</div>
+				</div>
+			</div>
+        {{/if}}
+
+		<div class="container">
+			<div id="flashContainer">
+                {{#if flashMessages}}
+					<div class="row-fluid">
+						<div class="span12 flashMessages">
+                            {{#each flashMessages}}
+								<div class="alert {{type}}">{{message}}</div>
+                            {{/each}}
+						</div>
+					</div>
+                {{/if}}
+			</div>
+
+			<div id="toastContainer">
+                {{#if toastMessages}}
+					<div class="row-fluid">
+						<div class="span12 toastMessages">
+                            {{#each toastMessages}}
+								<div class="toast {{type}}">{{message}}</div>
+                            {{/each}}
+						</div>
+					</div>
+                {{/if}}
+			</div>
+
+			<div id="container">
+                {{{body}}}
+			</div>
+		</div>
+
+    <script src="/js/lib/jstat/core.js"></script>
+    <script src="/js/lib/jstat/distribution.js"></script>
+    <script src="/js/lib/jstat/linearalgebra.js"></script>
+    <script src="/js/lib/jstat/special.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+<!--         {{#each clientTemplates}}
+            <script id="{{id}}" type="text/x-handlebars-template">
+                {{{template}}}
+            </script>
+        {{/each}}
+ -->
+
+    <script src="/js/app.min.js"></script>
+	</body>
+</html>

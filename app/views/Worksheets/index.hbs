@@ -1,0 +1,179 @@
+<div class="row-fluid">
+	<div class="span12">
+		<h1>Snapshots
+		</h1>
+		<hr>
+	</div>
+</div>
+
+
+<div class="modal fade" id="categorizeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Categorize Multiple Snapshots</h4>
+            </div>
+            <div class="modal-body">
+                    <div id="categoryListContainer" class="row-container">
+                        <label>Category</label>
+                        {{!--select list provided dynamically--}}
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="categorizeSubmit" type="button" class="btn btn-primary">Continue</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<form>
+	<div class="row-fluid">
+        <div class="span3">
+            <div id="category-pane" class="tool-pane wk-category-pane" data-spy="affix" data-offset-top="80">
+                <ul class="nav nav-list nav-list-vivid">
+                    <li class="nav-header"><a href="/manage/snapshots">Categories<span class="nav-counter">All</span></a></li>
+                    {{#each categories}}
+                        {{#if active}}
+                        <li class="active">
+                        {{else}}
+                        <li>
+                        {{/if}}
+                        <a class="ui-droppable" href="/manage/snapshots/{{id}}">
+                            {{name}}
+                            <span class="nav-counter">{{count}}</span>
+                        </a>
+                    </li>
+                    {{/each}}
+                </ul>
+                <br>
+                <a id="category_add" href="/manage/categories/add#snapshot" class="btn btn-block"><i class="icon-plus-sign"></i> Add Category</a>
+            </div>
+        </div>
+		<div class="span9">
+      {{#each categories}}
+        {{#if active}}
+          <div class="flat-well well-small header-pane" data-spy="affix" data-offset-top="80">
+            <h4 style="margin:0">{{name}}
+              {{#if modify}}
+                &nbsp; <a href="/manage/categories/update/{{id}}" class="btn-edit"><i class="icon-cog"></i></a>&nbsp;
+                <a href="/manage/categories/delete/{{id}}?type=snapshot" class="btn-delete-category"><i class="icon-trash"></i></a>
+              {{/if}}
+            </h4>
+          </div>
+        {{/if}}
+      {{/each}}
+
+			<div class="table-top">
+				<div class="row-fluid">
+					<div class="span8">
+						<div class="btn-group">
+							<a class="btn btn-primary btn-categorize"><i class="icon-edit"></i> Categorize</a>
+							<a class="btn btn-danger btn-multidelete"><i class="icon-remove-sign"></i> Delete</a>
+							<a class="btn btn-primary btn-select-all"><i class="icon-plus-sign"></i> Select All</a>
+							</div>
+					</div>
+					<div class="span4" style="float:right;text-align:right;">
+						<label>
+							Search:
+							<input style="width:70%;" class="search" type="text">
+						</label>
+					</div>
+				</div>
+			</div>
+
+      {{#if worksheets}}
+				<table id="myTable" class="table table-striped-depreacted table-condensed worksheets header-fixed">
+					<thead>
+						<tr>
+							<th class="col1">&nbsp;Name
+								<span class="sort-arrows">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+									&nbsp;
+								</span>
+							</th>
+							<th class="col2">&nbsp;Owner
+								<span class="sort-arrows">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+									&nbsp;
+								</span>
+							</th>
+							<th class="col3">&nbsp;Created
+								<span class="sort-arrows">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+									&nbsp;
+								</span>
+							</th>
+							<th class="col4">&nbsp;Modified By
+								<span class="sort-arrows">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+									&nbsp;
+								</span>
+							</th>
+							<th class="col5">&nbsp;Modified
+								<span class="sort-arrows">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+									&nbsp;
+								</span>
+							</th>
+							<th class="col7">&nbsp;Actions
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+            {{#each worksheets}}
+							<tr class="ui-draggable" id="{{id}}">
+								<td class="col1 name">{{name}}
+									{{#if assignedDatasets.length}}
+									<br/>
+									<span class="label label-primary dataset-dropdown">Linked Datasets</span>
+									<ul class="assigned-dataset-list">
+										{{#each assignedDatasets}}
+											<li>{{this}}</li>
+										{{/each}}
+									</ul>
+									{{/if}}
+								</td>
+								<td class="col2">{{createdBy.lastname}}, {{createdBy.firstname}}</td>
+								<td class="col3">{{createdFormatted}}</td>
+								{{#if modifiedBy}}
+									<td class="col4">{{modifiedBy.lastname}}, {{modifiedBy.firstname}}</td>
+								{{else}}
+									<td class="col4"></td>
+								{{/if}}
+								<td class="col5">{{modifiedDate}}</td>
+								<td class="col7">
+									<a href="/analyze/trending#{{id}}" class="btn btn-mini btn-primary btn-open"><i class="icon-folder-open" rel="tooltip" title="Open" data-original-title="..." data-toggle="tooltip"></i></a>
+									<a href="/manage/snapshots/delete/{{id}}" class="btn btn-mini btn-danger"><i class="icon-remove-sign" rel="tooltip" title="Delete" data-original-title="..." data-toggle="tooltip"></i></a>
+								</td>
+							</tr>
+                        {{/each}}
+					</tbody>
+				</table>
+            {{else}}
+                <p>You have not saved any snapshots yet.</p>
+            {{/if}}
+		</div>
+	</div>
+</form>

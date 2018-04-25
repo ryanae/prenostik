@@ -1,0 +1,51 @@
+<div class="row-fluid">
+	<div class="span12">
+		<h1>
+			<a href="javascript:history.go(-1);" data-original-title="Back to Datasets" data-toggle="tooltip"><i class="icon-chevron-sign-left"></i></a> Update Data Set
+		</h1>
+		<hr>
+	</div>
+</div>
+
+<form method="POST" action="/manage/datasets/update/{{dataset.id}}" id="updateDatasetForm">
+	<div class="rows">
+		<div class="row-fluid row-container">
+			<div class="span7">
+				<label>Name</label>
+				<!--<div class="lead" >{{dataset.name}}</div>-->
+                <input id="datasetName" type="text" name="datasetName" value="{{dataset.name}}"/>
+                <input id="datasetId" type="hidden" name="datasetId" value="{{dataset.id}}"/>
+			</div>
+			<div class="span5">
+                <label>Category</label>
+                <select name="categoryId" class="select2 field-reference-data" data-placeholder="-- Choose Category --">
+                    <!--<option value="0">-- Choose Category --</option> -->
+                    {{#each categories}}
+                        {{#if selectedReference}}
+                            <option selected value="{{id}}">{{name}}</option>
+                        {{else}}
+                            <option value="{{id}}">{{name}}</option>
+                        {{/if}}
+                    {{/each}}
+                </select>
+			</div>
+			<!--<div class="span2 text-right">
+                <div>
+                 <label class="checkbox">Force Append<input id="appendForce" type="checkbox" name="appendForce" checked="checked"></label> 
+                 </div>
+                <label>&nbsp;</label>
+				<a class="btn-add" href="#"><i class="icon-plus-sign yes icon-3x"></i></a>
+			</div>-->
+		</div>
+	</div>
+
+	<hr>
+    <div class="navbar navbar-inverse navbar-fixed-bottom">
+        <div class="navbar-inner" style="padding-bottom: 5px; padding-right: 5px;">
+            <div class="btn-group pull-right">
+                <button type="button" style="width: 220px;" id="btn-cancel" class="btn btn-default">Cancel</button>
+                <button type="submit" style="width: 220px;" id="btn-continue" class="btn btn-default btn-primary">Continue</button>
+            </div>
+        </div>
+    </div>
+</form>

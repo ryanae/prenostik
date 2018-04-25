@@ -1,0 +1,66 @@
+<div class="row-fluid">
+	<div class="span12">
+		<h1>
+			<a href="javascript: history.go(-1);"><i class="icon-chevron-sign-left"></i></a> Data Sets
+		</h1>
+		<hr>
+	</div>
+</div>
+
+<form method="POST" action="/manage/datasets/add" enctype="multipart/form-data" id="addDatasetForm">
+	<div class="rows">
+		<div class="row-fluid row-container">
+			<div class="span6">
+				<label>Name</label>
+				<input id="nameInput" type="text" name="name[0]" minlength="1" required/>
+			</div>
+			<div class="span5">
+				<label>File</label>
+				<input type="text" name="file_clone" disabled="disabled" class="disabled"/>
+				<button class="btn btn-choose-file">Choose File</button>
+				<input type="file" class="input-file" name="file[0]" value=""/>
+			</div>
+			<div class="span1 text-right">
+				<label>&nbsp;</label>
+				<a class="btn-add" href="#"><i class="icon-plus-sign yes icon-3x"></i></a>
+			</div>
+		</div>
+
+		<div class="row-fluid row-container" id="source" style="display: none;">
+			<div class="row-fluid">
+				<div class="span12">
+					<hr>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span6">
+					<label>Name</label>
+					<input type="text" name="_name"/>
+				</div>
+				<div class="span5">
+					<label>File</label>
+					<input type="text" name="file_clone" disabled="disabled" class="disabled"/>
+					<button class="btn btn-choose-file">Choose File</button>
+					<input type="file" class="input-file" name="_file" value=""/>
+				</div>
+				<div class="span1 text-right">
+					<label>&nbsp;</label>
+					<a class="btn-remove" href="#"><i class="icon-minus-sign no icon-3x"></i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr>
+    <div class="navbar navbar-inverse navbar-fixed-bottom">
+        <div class="navbar-inner" style="padding-bottom: 5px; padding-right: 5px;">
+            <div class="btn-group pull-right">
+                <button type="button" style="width: 220px;" id="btn-cancel" class="btn btn-default">Cancel</button>
+                <button type="submit" style="width: 220px;" id="btn-continue" class="btn btn-default btn-primary">Continue</button>
+            </div>
+        </div>
+    </div>
+    <div id="datasetLoader" class="well">
+        <img src="/img/ajax-loader-circle.gif"/>&nbsp; Uploading Data...
+    </div>    
+</form>

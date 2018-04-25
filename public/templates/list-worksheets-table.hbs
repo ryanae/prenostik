@@ -1,0 +1,22 @@
+{{#if worksheets}}
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Created</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+        {{#each worksheets}}
+			<tr>
+				<td>{{name}}</td>
+				<td>{{createdFormatted}}</td>
+				<td><a href="/analyze/trending/{{id}}" class="btn btn-mini btn-primary btn-open" data-worksheetid="{{id}}"><i class="icon-folder-open"></i> Open</a></td>
+			</tr>
+        {{/each}}
+	</tbody>
+</table>
+{{else}}
+    <p>You have not saved any snapshots yet.</p>
+{{/if}}

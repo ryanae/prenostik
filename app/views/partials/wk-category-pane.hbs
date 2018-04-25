@@ -1,0 +1,15 @@
+<ul class="nav nav-list nav-list-vivid">
+    <li class="nav-header"><a href="/manage/snapshots">Categories<span class="nav-counter">Show All</span></a></li>
+    {{#each categories}}
+        {{#if active}}
+        <li class="active">
+        {{else}}
+        <li>
+        {{/if}}
+        <a class="ui-droppable" href="/manage/snapshots/{{id}}">
+            {{name}}
+            <span class="nav-counter">{{count}}</span>
+        </a>
+    </li>
+    {{/each}}
+</ul>

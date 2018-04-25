@@ -1,0 +1,112 @@
+
+<div class="row-fluid">
+	<div class="span12">
+		<div>
+			<h1 id='coidentifier'> </h1>	
+			<h3>All User Groups</h3>
+		</div>
+		<hr>
+	</div>
+</div>
+
+<div class="row-fluid profile">
+    <div class="profile-avatar-triple">
+		<div class="span12">
+			<i class="icon-user"></i><i class="icon-random"></i><i class="icon-user"></i>
+		</div>
+    </div> 
+</div>
+
+<form id = "edit_roles_form" method="post" action="/users/accounts_update_role_membership">
+
+<style>
+p.box {border-style:double; padding:10px}
+</style>
+<div class="row-fluid">
+	<div class="span6 offset3 flat-well">
+		<fieldset>
+			<div class="row-fluid">
+				<div class="span12">
+					<legend>Select Role:</legend>
+					<select id = "selRoles" name="selRoles"  style="width:200px;" 
+						title = "Select a role to view role assignments"> 
+						<option id = "-1" value=-1>Select</option>
+						{{#each groups}}
+							<option id="{{this.id}}" value="{{this.data}}">
+							{{this.name}}</option>
+						{{/each}}					
+					</select>
+				</div>									
+			</div>		
+		</fieldset>
+		<br>
+		<div class="row-fluid">
+			<fieldset>				
+					<div class="row-fluid">				
+						<div class="span4">
+							<h6>Assigned Users:</h6>
+							<select id = "selUsers" name="selUsers" size="15" style="width:200px;" 
+							 title = "Double-click to remove a user from the role">							
+							</select>
+						</div>					
+						<div class="span4"> 
+							<h6>Available Users:</h6>
+							<select id = "selAvailableUsers" name="selAvailableUsers" size="15" style="width:200px;"  
+									 title = "Double-click a user to assign the current role" >							
+									{{#each users}}
+										<option id='{{this.id}}' value=	'{{this.data}}'>
+										{{this.lname}}, {{this.fname}} {{this.mname}}
+										</option>
+									{{/each}}	
+							</select>	
+						</div>
+						<div class="row-fluid">
+							<div class="span4">					
+								<h6>User Information:</h6>
+								<div id= "divnav" title="Click to edit this user"> 
+									<label id="name" name="name"></label>
+									<label id="username" name="username"></label>
+									<label id="email" name="email"></label>
+									<label id="company" name="company"></label>
+									<label id="status" name="status"></label>
+								</div>
+							</div>				
+						</div>													
+					</div>			
+			</fieldset>
+		</div>	
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span6 offset3 text-right">
+		<a id= "edit_roles_submit" class="btn btn-wide btn-primary btn-edit-submit">Save Changes</a>		
+	</div>
+</div>
+<!-- Error dialog -->
+<div class="modal fade" id="errRole" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Error - No Site Manager</h4>
+            </div>
+            <div class="modal-body">
+				<h6 id=errText> </h6>
+                <div class="span6">	
+					<div id="errMsg"></div>
+				</div>
+				<div id="theList"> </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnOKSiteMgr">OK</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" id="btnCancelSiteMgr">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div><!-- end modal dialog -->
+<div id="info"> </div>
+<input type="hidden" id="id" name = "id" value=""/>
+<input type="hidden" id="assignedUsers" name = "assignedUsers" value="" />
+</form>
+

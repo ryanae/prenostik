@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>dataset.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="app.html">
+                  app.js
+                </a>
+              
+                
+                <a class="source" href="PrenostikUser.html">
+                  PrenostikUser.js
+                </a>
+              
+                
+                <a class="source" href="accounts.html">
+                  accounts.js
+                </a>
+              
+                
+                <a class="source" href="accountsCommon.html">
+                  accountsCommon.js
+                </a>
+              
+                
+                <a class="source" href="categories.html">
+                  categories.js
+                </a>
+              
+                
+                <a class="source" href="corpaccounts.html">
+                  corpaccounts.js
+                </a>
+              
+                
+                <a class="source" href="login.html">
+                  login.js
+                </a>
+              
+                
+                <a class="source" href="analyze.html">
+                  analyze.js
+                </a>
+              
+                
+                <a class="source" href="category.html">
+                  category.js
+                </a>
+              
+                
+                <a class="source" href="categoryUpdate.html">
+                  categoryUpdate.js
+                </a>
+              
+                
+                <a class="source" href="dataset.html">
+                  dataset.js
+                </a>
+              
+                
+                <a class="source" href="home.html">
+                  home.js
+                </a>
+              
+                
+                <a class="source" href="snapshot.html">
+                  snapshot.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>dataset.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> toast = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../lib/toast'</span>),
+    hbs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'hbsfy/runtime'</span>),
+    _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'underscore'</span>),
+    Backbone = <span class="hljs-built_in">require</span>(<span class="hljs-string">'backbone'</span>);
+
+Backbone.$ = $;
+
+<span class="hljs-keyword">var</span> Categories = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../collections/categories'</span>);
+<span class="hljs-keyword">var</span> Datasets = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../collections/datasets'</span>);
+
+<span class="hljs-keyword">var</span> datasets = <span class="hljs-keyword">new</span> Datasets();
+<span class="hljs-keyword">var</span> categories = <span class="hljs-keyword">new</span> Categories();
+
+<span class="hljs-keyword">var</span> _mcEnabled = <span class="hljs-literal">false</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>templates</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> datasetsTpl = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../../templates/datasets.hbs'</span>);
+<span class="hljs-keyword">var</span> categoryPane = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../../templates/category-pane.hbs'</span>);
+
+<span class="hljs-keyword">var</span> DatasetView = Backbone.View.extend({
+  el: $(<span class="hljs-string">'#container'</span>),
+
+  template: datasetsTpl,
+
+  events: {
+    <span class="hljs-string">'click .btn-delete'</span>: <span class="hljs-string">'onDeleteClick'</span>,
+    <span class="hljs-string">'click .btn-categorize'</span>: <span class="hljs-string">'assignCategory'</span>,
+    <span class="hljs-string">'click .btn-multidelete'</span>: <span class="hljs-string">'multiDelete'</span>,
+    <span class="hljs-string">'click .btn-select-all'</span>: <span class="hljs-string">'toggleSelectAll'</span>,
+    <span class="hljs-string">'click .btn-delete-category'</span>: <span class="hljs-string">'onCategoryDeleteClick'</span>,
+    <span class="hljs-string">'click .btn-choose-file'</span>: <span class="hljs-string">'onChooseFileClick'</span>,
+    <span class="hljs-string">'change input.input-file'</span> : <span class="hljs-string">'onFileChange'</span>,
+    <span class="hljs-string">'click #btn-continue'</span>: <span class="hljs-string">'onContinueClicked'</span>,
+    <span class="hljs-string">'click #btn-cancel'</span>: <span class="hljs-string">'onCancelClick'</span>,
+    <span class="hljs-string">'click #mc-submit'</span> : <span class="hljs-string">'onUploadMC'</span>,
+    <span class="hljs-string">'click #categorizeSubmit'</span> : <span class="hljs-string">'onCategorySelect'</span>,
+    <span class="hljs-string">'click .btn-add'</span>: <span class="hljs-string">'addDataset'</span>,
+    <span class="hljs-string">'click .btn-remove'</span>: <span class="hljs-string">'removeDataset'</span>,
+    <span class="hljs-string">'click #checkboxLabel'</span>: <span class="hljs-string">'checkForceAction'</span>,
+    <span class="hljs-string">'click #mcUploadButton'</span>: <span class="hljs-string">'openUploadModal'</span>,
+    <span class="hljs-string">'click .snapshot-dropdown'</span>: <span class="hljs-string">'toggleLinkedSnapshots'</span>,
+    <span class="hljs-string">'click .btn-edit'</span>:<span class="hljs-string">'onCategoryEditClick'</span>
+  },
+
+  initialize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(socket, filterId)</span> </span>{
+    _.bindAll(<span class="hljs-keyword">this</span>, <span class="hljs-string">'render'</span>, <span class="hljs-string">'addAll'</span>);
+    <span class="hljs-keyword">this</span>.socket = socket;
+    <span class="hljs-keyword">this</span>.fileCount = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">this</span>.filterId = filterId
+    <span class="hljs-keyword">this</span>.render();
+
+  },
+
+  remove: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">this</span>.$el.empty().off(); <span class="hljs-comment">/* off to unbind the events */</span>
+      <span class="hljs-keyword">this</span>.stopListening();
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  },
+
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    $.isLoading({ text: <span class="hljs-string">"Loading Data Set List View"</span>});
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+
+    <span class="hljs-keyword">var</span> opts = {
+      reset: <span class="hljs-literal">true</span>,
+      success: self.addAll
+    }
+
+    <span class="hljs-keyword">var</span> categoryOpts = {
+      data: {type: <span class="hljs-number">0</span>},
+      reset: <span class="hljs-literal">true</span>,
+    };
+
+    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.filterId){
+      opts.data = $.param({id: self.filterId});
+      categoryOpts.data.activeId = self.filterId;
+    }
+
+    self.initializeDatasets(opts.data, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(datasetData)</span></span>{
+      self.initializeCategories(categoryOpts.data, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(categoryData)</span></span>{
+        categories.reset(categoryData.categories);
+        datasets.reset(datasetData);
+        self.addAll();
+        $.isLoading(<span class="hljs-string">'hide'</span>);
+      });
+    });
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  },
+
+  initializeCategories: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data, cb)</span></span>{
+    $.ajax({
+      url: <span class="hljs-string">'/api/categories'</span>,
+      dataType: <span class="hljs-string">'json'</span>,
+      data: data,
+      success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+        cb(response);
+      }
+    })
+
+  },
+
+  initializeDatasets: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data, cb)</span></span>{
+    $.ajax({
+      url: <span class="hljs-string">'/api/datasets'</span>,
+      dataType: <span class="hljs-string">'json'</span>,
+      data: data,
+      success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+        cb(response);
+      }
+    })
+  },
+
+  addAll: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> datasetData = datasets.toJSON()
+    <span class="hljs-keyword">var</span> categoryData = categories.toJSON()
+    <span class="hljs-keyword">var</span> data = {
+      <span class="hljs-string">'datasets'</span>: datasetData,
+      <span class="hljs-string">'categories'</span>: categoryData
+    };
+    <span class="hljs-keyword">var</span> html = <span class="hljs-keyword">this</span>.template(data);
+    $(<span class="hljs-string">'#container'</span>).html(html);
+    $(<span class="hljs-string">'html'</span>).attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'datasets-controller'</span>);
+    <span class="hljs-keyword">var</span> activeElem = $(<span class="hljs-string">'#category-pane .active'</span>);
+    <span class="hljs-keyword">var</span> headerPane = $(<span class="hljs-string">'.header-pane'</span>);
+
+    <span class="hljs-keyword">if</span>(activeElem.length === <span class="hljs-number">0</span>){
+      $(<span class="hljs-string">'li.nav-header'</span>).addClass(<span class="hljs-string">'active'</span>);
+    }
+
+    <span class="hljs-keyword">if</span>(headerPane.length === <span class="hljs-number">0</span>) {
+      $(<span class="hljs-string">'.span9'</span>).prepend(<span class="hljs-string">'&lt;div class="flat-well well-small header-pane"&gt;&lt;h4 style="margin:0"&gt;All Categories&lt;/h4&gt;&lt;/div&gt;'</span>);
+    }
+    <span class="hljs-keyword">this</span>.setupTable();
+    <span class="hljs-keyword">this</span>.delegateEvents(<span class="hljs-keyword">this</span>.events);
+
+  },
+
+  applyRowEvent: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    $(<span class="hljs-string">'.header-fixed &gt; tbody &gt; tr'</span>).off().on(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        <span class="hljs-keyword">if</span>($(<span class="hljs-keyword">this</span>).hasClass(<span class="hljs-string">'selected-rows'</span>)){
+          $(<span class="hljs-keyword">this</span>).removeClass(<span class="hljs-string">'selected-rows'</span>);
+        } <span class="hljs-keyword">else</span> {
+          $(<span class="hljs-keyword">this</span>).addClass(<span class="hljs-string">'selected-rows'</span>);
+        }
+        $(<span class="hljs-string">'.selected-rows'</span>).draggable({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>option: { disabled: false },</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          helper: self.onDragCategory,
+          cursorAt: {
+            left: -<span class="hljs-number">5</span>,
+            bottom: <span class="hljs-number">5</span>
+          },
+          cursor: <span class="hljs-string">'move'</span>,
+          distance: <span class="hljs-number">10</span>,
+          delay: <span class="hljs-number">100</span>,
+          scope: <span class="hljs-string">'category'</span>,
+          revert: <span class="hljs-string">'invalid'</span>
+        });
+
+    });
+  },
+
+  setupTable: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+
+    $(<span class="hljs-string">'div#category-pane .ui-droppable'</span>).droppable({
+      scope: <span class="hljs-string">'category'</span>,
+      activeClass: <span class="hljs-string">'active'</span>,
+      hoverClass: <span class="hljs-string">'dropHover'</span>, <span class="hljs-comment">//icon-plus-sign</span>
+      tolerance: <span class="hljs-string">'pointer'</span>,
+      drop: self.onDropCategory
+    });
+
+    $(<span class="hljs-string">'div#category-pane .ui-droppable'</span>).removeData(<span class="hljs-string">'backbone-view'</span>);
+    $(<span class="hljs-string">'div#category-pane .ui-droppable'</span>).data(<span class="hljs-string">'backbone-view'</span>, self);
+
+    $(<span class="hljs-string">'.table.no.datasets'</span>).dataTable({
+      <span class="hljs-string">"bPaginate"</span>: <span class="hljs-literal">false</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>“sScrollY”: “300px”,</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-string">"bLengthChange"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-string">"bFilter"</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-string">"bSort"</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-string">"bInfo"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-string">"bAutoWidth"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-string">"aoColumns"</span>: [
+        <span class="hljs-comment">/* Name */</span> <span class="hljs-literal">null</span>,
+        <span class="hljs-comment">/* #Points */</span> <span class="hljs-literal">null</span>,
+        <span class="hljs-comment">/* Actions */</span> {
+          <span class="hljs-string">"bSearchable"</span>: <span class="hljs-literal">false</span>,
+          <span class="hljs-string">"bSortable"</span>: <span class="hljs-literal">false</span>
+        }
+      ],
+      <span class="hljs-string">"sDom"</span>: <span class="hljs-string">"&lt;'row-fluid tabletool-pane'&lt;'span8'T&gt;&lt;'span4'f&gt;r&gt;t&lt;'row-fluid'&lt;'span6'i&gt;&lt;'span6'p&gt;&gt;"</span>, <span class="hljs-comment">//"sDom": 'T&lt;"clear"&gt;lfrtip',</span>
+      <span class="hljs-string">"oTableTools"</span>: {
+        <span class="hljs-string">"sRowSelect"</span>: <span class="hljs-string">"multi"</span>,
+        <span class="hljs-string">"sSwfPath"</span>: <span class="hljs-string">"/img/tabletools/copy_csv_xls_pdf.swf"</span>,
+        <span class="hljs-string">"aButtons"</span>: [ <span class="hljs-comment">//"select_all", "select_none",</span>
+          <span class="hljs-comment">/*{
+           "sExtends":    "text",
+           "sButtonText": "&lt;i class='icon-edit'&gt;&lt;/i&gt; Categorize",
+           "sButtonClass": "btn btn-primary",
+           "fnInit": function ( nButton, oConfig ) {
+           $(nButton).removeClass('DTTT_button');
+           },
+           "fnClick": multiCategorize
+           },*/</span>
+          {
+            <span class="hljs-string">"sExtends"</span>: <span class="hljs-string">"text"</span>,
+            <span class="hljs-string">"sButtonText"</span>: <span class="hljs-string">"&lt;i class='icon-edit'&gt;&lt;/i&gt; Categorize"</span>,
+            <span class="hljs-string">"sButtonClass"</span>: <span class="hljs-string">"btn btn-primary"</span>,
+            <span class="hljs-string">"fnInit"</span>: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(nButton, oConfig)</span> </span>{
+              $(nButton).removeClass(<span class="hljs-string">'DTTT_button'</span>);
+            },
+            <span class="hljs-string">"fnClick"</span>: self.assignCategory
+          },
+          {
+            <span class="hljs-string">"sExtends"</span>: <span class="hljs-string">"text"</span>,
+            <span class="hljs-string">"sButtonText"</span>: <span class="hljs-string">"&lt;i class='icon-remove-sign'&gt;&lt;/i&gt; Delete"</span>,
+            <span class="hljs-string">"sButtonClass"</span>: <span class="hljs-string">"btn btn-danger"</span>,
+            <span class="hljs-string">"fnInit"</span>: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(nButton, oConfig)</span> </span>{
+              $(nButton).removeClass(<span class="hljs-string">'DTTT_button'</span>);
+            },
+            <span class="hljs-string">"fnClick"</span>: self.multiDelete
+          },
+          {
+            <span class="hljs-string">"sExtends"</span>: <span class="hljs-string">"text"</span>,
+            <span class="hljs-string">"sButtonText"</span>: <span class="hljs-string">"&lt;i class='icon-plus-sign'&gt;&lt;/i&gt; Select All"</span>,
+            <span class="hljs-string">"sButtonClass"</span>: <span class="hljs-string">"btn btn-primary"</span>,
+            <span class="hljs-string">"fnInit"</span>: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(nButton, oConfig)</span> </span>{
+              $(nButton).removeClass(<span class="hljs-string">'DTTT_button'</span>);
+            },
+            <span class="hljs-string">"fnClick"</span>: self.toggleSelectAll,
+            <span class="hljs-string">"fnSelect"</span>: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(nButton, oConfig, nRow)</span> </span>{
+              $(<span class="hljs-string">"tbody tr:not('.DTTT_selected')"</span>).draggable(<span class="hljs-string">"disable"</span>);
+              $(<span class="hljs-string">"tbody tr.DTTT_selected"</span>).draggable(<span class="hljs-string">"enable"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>refreshDraggable();</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            }
+          }
+        ]
+      }
+    });
+
+    $(<span class="hljs-string">'.dataTables_wrapper .DTTT_container'</span>).addClass(<span class="hljs-string">'btn-group'</span>);
+
+    $(<span class="hljs-string">'.header-fixed'</span>).tablesorter({
+      textExtraction: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(node)</span></span>{
+        <span class="hljs-keyword">return</span> $(node).clone().children().remove().end().text();
+      }
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>utilize bootstrap affix plugin to keep tools at hand</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-comment">/*$('.tool-pane,.tabletool-pane,table.datasets thead').affix({
+      offset: {
+        top: 100
+      }
+    });*/</span>
+
+    <span class="hljs-keyword">var</span> previewTable = $(<span class="hljs-string">'.table.datasets-preview'</span>).dataTable({
+      <span class="hljs-string">"bPaginate"</span>: <span class="hljs-literal">false</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>“sScrollY”: “300px”,</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-string">"bLengthChange"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-string">"bFilter"</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-string">"bSort"</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-string">"bInfo"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-string">"bAutoWidth"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-string">"aoColumnDefs"</span>: [
+        {
+          <span class="hljs-string">"bSearchable"</span>: <span class="hljs-literal">false</span>,
+          <span class="hljs-string">"bSortable"</span>: <span class="hljs-literal">false</span>,
+          <span class="hljs-string">"aTargets"</span>: [<span class="hljs-number">2</span>]
+        }
+      ],
+      <span class="hljs-string">"sDom"</span>: <span class="hljs-string">"&lt;'row-fluid'&lt;'span8'&gt;&lt;'span4'f&gt;r&gt;t&lt;'row-fluid'&lt;'span6'i&gt;&lt;'span6'p&gt;&gt;"</span> <span class="hljs-comment">//"sDom": 'T&lt;"clear"&gt;lfrtip',</span>
+    });
+
+    $(<span class="hljs-built_in">document</span>).scroll(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> _top = $(<span class="hljs-built_in">document</span>).scrollTop();
+      <span class="hljs-keyword">if</span> (_top &gt; <span class="hljs-number">100</span>) {
+        self.adjustColumnHeaders();
+      }
+    });
+
+    $(<span class="hljs-built_in">window</span>).resize(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      self.adjustColumnHeaders();
+    });
+
+    <span class="hljs-keyword">var</span> test = $(<span class="hljs-string">'input[name=dataset_name]'</span>);
+    <span class="hljs-keyword">if</span> (test.length &gt; <span class="hljs-number">0</span>) {
+      $(<span class="hljs-string">".dataOptions"</span>).hide();
+      $.ajax({
+        url: <span class="hljs-string">'/manage/datasets/get'</span>,
+        dataType: <span class="hljs-string">'json'</span>,
+        success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+          buildInputs(response);
+        }
+      });
+    }
+    <span class="hljs-keyword">var</span> buildInputs = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(datasets)</span> </span>{
+      <span class="hljs-keyword">var</span> datasetNames = [];
+      <span class="hljs-keyword">var</span> datasetMap = {};
+      <span class="hljs-keyword">if</span> (datasets.length &gt; <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; datasets.length; j++) {
+          <span class="hljs-keyword">var</span> obj1 = datasets[j];
+          datasetNames.push(obj1.name);
+          datasetMap[obj1.name] = obj1.id;
+        }
+      }
+
+      <span class="hljs-keyword">var</span> test = $(<span class="hljs-string">'input[name=dataset_name]'</span>);
+      <span class="hljs-keyword">var</span> form = $(<span class="hljs-string">'#addMCDatasetForm'</span>);
+
+      $.noConflict();
+      <span class="hljs-keyword">var</span> dId;
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; test.length; i++) {
+        <span class="hljs-keyword">var</span> obj = test[i];
+        obj.count = i + <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">if</span> (form) {
+          dId = $(<span class="hljs-string">'&lt;input&gt;'</span>).attr({
+            type: <span class="hljs-string">'hidden'</span>,
+            id: <span class="hljs-string">'#datasetId'</span> + obj.count,
+            name: <span class="hljs-string">'datasetId'</span>
+          }).appendTo(<span class="hljs-string">'form'</span>);
+        }
+        <span class="hljs-keyword">var</span> inputObject = $(<span class="hljs-string">"#dataset_name"</span> + obj.count);
+        <span class="hljs-keyword">if</span> (_.contains(datasetNames, inputObject.val())) {
+          $(<span class="hljs-string">"#col"</span> + obj.count + <span class="hljs-string">" .dataOptions"</span>).show();
+          dId.val(datasetMap[inputObject.val()]);
+        }
+
+        inputObject.autocomplete(
+        {
+          source: datasetNames
+        });
+        inputObject.on(<span class="hljs-string">"input"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+          <span class="hljs-keyword">if</span> (_.contains(datasetNames, $(e.target).val())) {
+            $(e.target).parent().find(<span class="hljs-string">".dataOptions"</span>).show();
+            $(<span class="hljs-string">'input[id=#datasetId'</span> + e.target.count + <span class="hljs-string">']'</span>).val(datasetMap[$(e.target).val()]);
+          } <span class="hljs-keyword">else</span> {
+            $(e.target).parent().find(<span class="hljs-string">".dataOptions"</span>).hide();
+            $(<span class="hljs-string">'input[id=#datasetId'</span> + e.target.count + <span class="hljs-string">']'</span>).val(<span class="hljs-literal">null</span>);
+          }
+          <span class="hljs-keyword">if</span> ($(e.target).hasClass(<span class="hljs-string">'error'</span>)) {
+            $(e.target).removeClass(<span class="hljs-string">'error'</span>).parent().find(<span class="hljs-string">'.error-message'</span>).remove();
+          }
+        });
+        inputObject.on(<span class="hljs-string">"autocompleteselect"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e, ui)</span> </span>{
+          <span class="hljs-keyword">if</span> (_.contains(datasetNames, ui.item.value)) {
+            $(e.target).parent().find(<span class="hljs-string">".dataOptions"</span>).show();
+            $(<span class="hljs-string">'input[id=#datasetId'</span> + e.target.count + <span class="hljs-string">']'</span>).val(datasetMap[ui.item.value]);
+          } <span class="hljs-keyword">else</span> {
+            $(e.target).parent().find(<span class="hljs-string">".dataOptions"</span>).hide();
+            $(<span class="hljs-string">'input[id=#datasetId'</span> + e.target.count + <span class="hljs-string">']'</span>).val(<span class="hljs-literal">null</span>);
+          }
+        });
+      }
+    };
+
+    $.expr[<span class="hljs-string">':'</span>].Contains = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(a,i,m)</span></span>{
+      <span class="hljs-keyword">return</span> (a.textContent || a.innerText || <span class="hljs-string">""</span>).toUpperCase().indexOf(m[<span class="hljs-number">3</span>].toUpperCase())&gt;=<span class="hljs-number">0</span>;
+    };
+
+
+
+    $(<span class="hljs-string">'.search'</span>).change(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> filter = $(<span class="hljs-keyword">this</span>).val();
+        <span class="hljs-built_in">console</span>.log(filter);
+        <span class="hljs-keyword">if</span> (filter) {
+          $(<span class="hljs-string">'table.datasets &gt; tbody &gt; tr'</span>).find(<span class="hljs-string">"td:not(:Contains("</span> + filter + <span class="hljs-string">"))"</span>).parent().hide();
+          $(<span class="hljs-string">'table.datasets &gt; tbody &gt; tr'</span>).find(<span class="hljs-string">"td:Contains("</span> + filter + <span class="hljs-string">")"</span>).parent().show();
+        } <span class="hljs-keyword">else</span> {
+          $(<span class="hljs-string">'table.datasets &gt; tbody'</span>).find(<span class="hljs-string">"tr"</span>).show();
+        }
+    }).keyup(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      $(<span class="hljs-keyword">this</span>).change();
+    });
+
+    self.applyRowEvent();
+  },
+
+  adjustColumnHeaders: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    $(<span class="hljs-string">"table.datasets thead.affix th"</span>).each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(index)</span> </span>{
+      $(<span class="hljs-keyword">this</span>).css(<span class="hljs-string">'width'</span>, $(<span class="hljs-string">"table.datasets tbody tr:first-child td"</span>).eq(index).css(<span class="hljs-string">"width"</span>));
+    });
+  },
+
+  toggleSelectAll: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    e.preventDefault();
+    <span class="hljs-keyword">if</span>($(<span class="hljs-string">'.btn-select-all'</span>).find(<span class="hljs-string">'i'</span>).hasClass(<span class="hljs-string">'icon-plus-sign'</span>)) {
+      $(<span class="hljs-string">'table &gt; tbody &gt; tr'</span>).each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(i, elem)</span> </span>{
+          <span class="hljs-keyword">if</span>($(elem).is(<span class="hljs-string">':visible'</span>)) {
+            $(elem).addClass(<span class="hljs-string">'selected-rows'</span>);
+          }
+      });
+      $(<span class="hljs-string">'.btn-select-all'</span>).html(<span class="hljs-string">"&lt;i class='icon-minus-sign'&gt;&lt;/i&gt; Deselect All"</span>);
+    } <span class="hljs-keyword">else</span> {
+      $(<span class="hljs-string">'table &gt; tbody &gt; tr'</span>).each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(i, elem)</span> </span>{
+          <span class="hljs-keyword">if</span>($(elem).is(<span class="hljs-string">':visible'</span>)) {
+            $(elem).removeClass(<span class="hljs-string">'selected-rows'</span>);
+          }
+       });
+      $(<span class="hljs-string">'.btn-select-all'</span>).html(<span class="hljs-string">"&lt;i class='icon-plus-sign'&gt;&lt;/i&gt; Select All"</span>);
+    }
+  },
+
+  assignCategory: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    e.preventDefault();
+    <span class="hljs-keyword">var</span> categories = $(<span class="hljs-string">'div#category-pane  ul li a.ui-droppable'</span>);
+    <span class="hljs-keyword">var</span> selectList = _.reduce(categories, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(memo, value)</span> </span>{
+      <span class="hljs-keyword">var</span> categoryId = value.href.substring(value.href.lastIndexOf(<span class="hljs-string">'/'</span>) + <span class="hljs-number">1</span>);
+      <span class="hljs-keyword">return</span> memo + <span class="hljs-string">"&lt;option value='"</span> + categoryId + <span class="hljs-string">"'&gt;"</span> + value.firstChild.nodeValue + <span class="hljs-string">"&lt;/option&gt;"</span>;
+    }, <span class="hljs-string">''</span>);
+    selectList = <span class="hljs-string">"&lt;select id='categorySelect'&gt;&lt;option value=''&gt;select category...&lt;/option&gt;"</span> + selectList + <span class="hljs-string">"&lt;/select&gt;"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>append select list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ($(<span class="hljs-string">'#categoryListContainer select'</span>)) {
+      $(<span class="hljs-string">'#categoryListContainer'</span>).replaceWith(selectList);
+    } <span class="hljs-keyword">else</span> {
+      $(<span class="hljs-string">'#categoryListContainer'</span>).append(selectList);
+    }
+    $(<span class="hljs-string">'#categorizeModal'</span>).modal(<span class="hljs-string">'show'</span>);
+  },
+
+  onCategorySelect: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> selectedRows = $(<span class="hljs-string">'.selected-rows'</span>);
+    <span class="hljs-comment">/* perform operations on TR elements in the aSelectedTrs array */</span>
+    <span class="hljs-keyword">var</span> dataList = _.reduce(selectedRows, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(memo, value)</span> </span>{
+      <span class="hljs-keyword">return</span> memo + <span class="hljs-string">"&lt;li id='"</span> + value.id + <span class="hljs-string">"'&gt;"</span> + value.children[<span class="hljs-number">0</span>].firstChild.nodeValue + <span class="hljs-string">"&lt;/li&gt;"</span>;
+    }, <span class="hljs-string">''</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>return $(“&lt;ul class=’alert’’ id=’’ data-datasetids=’’&gt;”+datalist+”</ul>“);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    dataList = <span class="hljs-string">"&lt;ul class='alert'' id='' data-datasetids=''&gt;"</span> + dataList + <span class="hljs-string">"&lt;/ul&gt;"</span>;
+
+    <span class="hljs-keyword">var</span> categoryId = $(<span class="hljs-string">'#categorySelect'</span>).val();
+    <span class="hljs-keyword">var</span> datasets = _.map(selectedRows, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span> </span>{
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'id'</span>: <span class="hljs-built_in">parseInt</span>(value.id),
+        <span class="hljs-string">'categoryId'</span>: <span class="hljs-built_in">parseInt</span>(categoryId)
+      };
+    });
+
+    <span class="hljs-keyword">var</span> categoryName = $(<span class="hljs-string">"#categorySelect option:selected"</span>).text();
+    <span class="hljs-keyword">var</span> html = <span class="hljs-string">'&lt;p class="lead text-center"&gt;Are you sure you want to re-categorize the following data sets as "'</span> + categoryName + <span class="hljs-string">'"?&lt;/p&gt;&lt;ul&gt;'</span> + dataList + <span class="hljs-string">'&lt;/ul&gt;'</span>;
+    bootbox.confirm(html, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(result)</span> </span>{
+        <span class="hljs-keyword">if</span> (result) {
+            $(<span class="hljs-string">'#categorizeModal'</span>).modal(<span class="hljs-string">'hide'</span>);
+            self.multiCategorizeSend(datasets);
+            setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+              <span class="hljs-built_in">window</span>.location.reload();
+            }, <span class="hljs-number">500</span>);
+        } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>show the select dialog</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+        }
+    });
+  },
+
+  openUploadModal: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'called'</span>);
+    e.preventDefault();
+    $(<span class="hljs-string">'#myModal'</span>).modal();
+  },
+
+  multiCategorizeSend: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(datasets)</span> </span>{
+    <span class="hljs-keyword">var</span> href = <span class="hljs-string">"/api/datasets/multiupdate"</span>;
+    datasets = <span class="hljs-built_in">JSON</span>.stringify(datasets);
+    $.ajax({
+      url: href,
+      data: {
+        <span class="hljs-string">"datasets"</span>: datasets
+      },
+      method: <span class="hljs-string">'post'</span>,
+      dataType: <span class="hljs-string">'json'</span>,
+      success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+        <span class="hljs-keyword">if</span> (response.success) {
+          toast.notifySuccess(<span class="hljs-string">'Success'</span>, <span class="hljs-string">'Datasets updated successfully.'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>update the category list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">var</span> html = categoryPane(response);
+          $(<span class="hljs-string">"#category-pane"</span>).html(html);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>todo: duplicated - encapsulate</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          $(<span class="hljs-string">'div#category-pane .ui-droppable'</span>).droppable({
+            scope: <span class="hljs-string">'category'</span>,
+            activeClass: <span class="hljs-string">'active'</span>,
+            hoverClass: <span class="hljs-string">'dropHover'</span>, <span class="hljs-comment">//icon-plus-sign</span>
+            tolerance: <span class="hljs-string">'pointer'</span>,
+            drop: onDropCategory
+          });
+        } <span class="hljs-keyword">else</span> {
+          toast.notifyError(<span class="hljs-string">'Error'</span>, <span class="hljs-string">'Error: '</span> + response.error.code + <span class="hljs-string">' - '</span> + response.error.message);
+        }
+      },
+      error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>todo: handle error condition gracefully</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      }
+    });
+  },
+
+  onDropCategory: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(event, ui)</span> </span>{
+
+    <span class="hljs-keyword">var</span> categoryId = <span class="hljs-keyword">this</span>.href.substring(<span class="hljs-keyword">this</span>.href.lastIndexOf(<span class="hljs-string">'/'</span>) + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">var</span> datasets = _.map(ui.helper.find(<span class="hljs-string">'li'</span>), <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span> </span>{
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'id'</span>: <span class="hljs-built_in">parseInt</span>(value.id),
+        <span class="hljs-string">'categoryId'</span>: <span class="hljs-built_in">parseInt</span>(categoryId)
+      };
+    });
+
+    <span class="hljs-keyword">var</span> datasetsView = $(<span class="hljs-string">'div#category-pane .ui-droppable'</span>).data(<span class="hljs-string">'backbone-view'</span>);
+
+    <span class="hljs-keyword">if</span> (datasets.length &gt; <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">var</span> html = <span class="hljs-string">'&lt;p class="lead text-center"&gt;Are you sure you want to re-categorize the following data sets?&lt;/p&gt;&lt;ul class="dataset-list"&gt;'</span> + ui.helper.html() + <span class="hljs-string">'&lt;/ul&gt;'</span>;
+      bootbox.confirm(html, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(result)</span> </span>{
+          <span class="hljs-keyword">if</span> (result) {
+              datasetsView.multiCategorizeSend(datasets);
+              setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+                <span class="hljs-built_in">window</span>.location.reload();
+              }, <span class="hljs-number">500</span>);
+          }
+      });
+    }
+  },
+
+  onDragCategory: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(event)</span> </span>{
+    <span class="hljs-keyword">var</span> selectedRows = $(<span class="hljs-string">'.selected-rows'</span>);
+    <span class="hljs-keyword">var</span> datalist = _.reduce(selectedRows, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(memo, value)</span> </span>{
+      <span class="hljs-keyword">return</span> memo + <span class="hljs-string">"&lt;li id='"</span> + value.id + <span class="hljs-string">"'&gt;"</span> + value.children[<span class="hljs-number">0</span>].firstChild.nodeValue + <span class="hljs-string">"&lt;/li&gt;"</span>;
+    }, <span class="hljs-string">''</span>);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Data list"</span>, datalist);
+    <span class="hljs-keyword">return</span> $(<span class="hljs-string">"&lt;ul class='alert'' id='' data-datasetids=''&gt;"</span> + datalist + <span class="hljs-string">"&lt;/ul&gt;"</span>);  
+  },
+
+  onCancelClick: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-built_in">window</span>.location = <span class="hljs-string">"/manage/datasets"</span>;
+  },
+
+  onContinueClicked: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    e.preventDefault();
+    <span class="hljs-keyword">var</span> $checkbox = $(<span class="hljs-string">'#checkboxLabel'</span>);
+    <span class="hljs-keyword">if</span>($checkbox.hasClass(<span class="hljs-string">'checked'</span>) &amp;&amp; !$(<span class="hljs-string">'#appendForce'</span>).prop(<span class="hljs-string">'checked'</span>)){
+      $(<span class="hljs-string">'#appendForce'</span>).prop(<span class="hljs-string">'checked'</span>, <span class="hljs-literal">true</span>);
+    }
+
+    <span class="hljs-keyword">var</span> form = $(<span class="hljs-string">'#addMCDatasetForm'</span>);
+    <span class="hljs-keyword">if</span> (form) {
+      <span class="hljs-keyword">var</span> abort = <span class="hljs-literal">false</span>;
+      <span class="hljs-keyword">var</span> inputComponents = $(<span class="hljs-string">'input[name=dataset_name]'</span>);
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; inputComponents.length; i++) {
+        <span class="hljs-keyword">var</span> obj = inputComponents[i];
+        <span class="hljs-keyword">if</span> (obj.value === <span class="hljs-string">""</span>) {
+          <span class="hljs-keyword">if</span> (!$(obj).hasClass(<span class="hljs-string">'error'</span>)) {
+            $(obj).addClass(<span class="hljs-string">'error'</span>).after(<span class="hljs-string">'&lt;small class="label input-label-important error error-message"&gt;&lt;i class="icon-warning-sign"&gt;&lt;/i&gt;Please enter a name.&lt;/small&gt;'</span>);
+          }
+          abort = <span class="hljs-literal">true</span>;
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">if</span> ($(obj).hasClass(<span class="hljs-string">'error'</span>)) {
+            $(obj).removeClass(<span class="hljs-string">'error'</span>).parent().find(<span class="hljs-string">'.error-message'</span>).remove();
+          }
+        }
+      }
+      <span class="hljs-keyword">if</span> (abort) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+      } <span class="hljs-keyword">else</span> {
+        $(<span class="hljs-string">'#datasetLoader'</span>).show();
+      }
+    }
+    e.target.form.submit();
+  },
+
+  onChooseFileClick: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    e.preventDefault();
+    <span class="hljs-keyword">var</span> inputFile = $(<span class="hljs-string">'input.input-file'</span>);
+    <span class="hljs-built_in">console</span>.log(inputFile.length);
+    $(inputFile[<span class="hljs-number">0</span>]).show();
+    $(inputFile[<span class="hljs-number">0</span>]).css(<span class="hljs-string">'visibility'</span>, <span class="hljs-string">'hidden'</span>);
+    $(inputFile[<span class="hljs-number">0</span>]).trigger(<span class="hljs-string">'click'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>$(this).closest(‘.row-container’).find(‘input.input-file’).trigger(‘click’);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'click triggered'</span>);
+  },
+
+  onFileChange: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-keyword">var</span> filename = $(e.target).val().replace(<span class="hljs-regexp">/^.*[\\\/]/</span>, <span class="hljs-string">''</span>);
+    $(e.target).closest(<span class="hljs-string">'.row-container'</span>).find(<span class="hljs-string">'input[name=file_clone]'</span>).val(filename);
+  },
+
+  onCategoryDeleteClick: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-keyword">var</span> col1 = $(e.currentTarget).closest(<span class="hljs-string">'h4'</span>).text();
+    <span class="hljs-keyword">var</span> href = $(e.currentTarget).attr(<span class="hljs-string">'href'</span>);
+    <span class="hljs-built_in">console</span>.log(href);
+
+    <span class="hljs-keyword">var</span> html = <span class="hljs-string">'&lt;p class="lead text-center"&gt;Are you sure you want to delete the following category?&lt;/p&gt;'</span>;
+    html += <span class="hljs-string">'&lt;dl class="dl-horizontal"&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dt&gt;Name&lt;/dt&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dd&gt;'</span> + col1 + <span class="hljs-string">'&lt;/dd&gt;'</span>;
+    html += <span class="hljs-string">'&lt;/dl&gt;'</span>;
+
+    bootbox.confirm(html, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(result)</span> </span>{
+    	<span class="hljs-keyword">if</span> (result) {
+    		<span class="hljs-built_in">window</span>.location = href;
+    	}
+    });
+
+    e.preventDefault();
+  },
+
+  onDeleteClick: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    e.preventDefault();
+    <span class="hljs-keyword">var</span> col1 = $(e.target).closest(<span class="hljs-string">'tr'</span>).find(<span class="hljs-string">'td:nth-child(1)'</span>).text();
+    <span class="hljs-keyword">var</span> col2 = $(e.target).closest(<span class="hljs-string">'tr'</span>).find(<span class="hljs-string">'td:nth-child(2)'</span>).text();
+    <span class="hljs-keyword">var</span> href = $(e.target).attr(<span class="hljs-string">'href'</span>);
+
+    <span class="hljs-keyword">var</span> linkedSnapshots = $(e.target).closest(<span class="hljs-string">'tr'</span>).find(<span class="hljs-string">'.snapshot-dropdown'</span>);
+
+    <span class="hljs-keyword">if</span>(linkedSnapshots.length &gt; <span class="hljs-number">0</span>){
+        toast.notifyWarning(<span class="hljs-string">'Warning'</span>, <span class="hljs-string">"Dataset cannot be deleted because of linked Snapshots."</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+
+    <span class="hljs-keyword">var</span> splitText = <span class="hljs-string">"Date Range:"</span>;
+    <span class="hljs-keyword">var</span> html = <span class="hljs-string">'&lt;p class="lead text-center"&gt;Are you sure you want to delete the following data set?&lt;/p&gt;'</span>;
+    html += <span class="hljs-string">'&lt;dl class="dl-horizontal"&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dt&gt;Name&lt;/dt&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dd&gt;'</span> + col1.substring(<span class="hljs-number">0</span>, col1.search(splitText)) + <span class="hljs-string">'&lt;/dd&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dt&gt;Date Range&lt;/dd&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dd&gt;'</span> + col1.substring(col1.search(splitText) + splitText.length) + <span class="hljs-string">'&lt;/dd&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dt&gt;# of Data Points&lt;/dt&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dd&gt;'</span> + col2 + <span class="hljs-string">'&lt;/dd&gt;'</span>;
+    html += <span class="hljs-string">'&lt;/dl&gt;'</span>;
+
+    bootbox.confirm(html, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(result)</span> </span>{
+    	<span class="hljs-keyword">if</span> (result) {
+        <span class="hljs-keyword">var</span> datasetId = $(e.target).closest(<span class="hljs-string">'tr'</span>).attr(<span class="hljs-string">'id'</span>); 
+        $.ajax({
+          url: <span class="hljs-string">'/api/datasets/'</span>+datasetId,
+          method: <span class="hljs-string">'get'</span>,
+          dataType: <span class="hljs-string">'json'</span>,
+          success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+            toast.notifySuccess(<span class="hljs-string">'Success'</span>, response.message);
+            $(<span class="hljs-string">'#'</span>+datasetId).remove();
+          },
+
+          error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(res)</span> </span>{
+            <span class="hljs-built_in">console</span>.error(res);
+          }
+
+        });
+    	}
+    });
+
+    e.preventDefault();
+  },
+
+  onUploadMC: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    e.preventDefault();
+    $(<span class="hljs-string">'#addDatasetForm'</span>).submit();
+  },
+
+  onxCategorySelect: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-keyword">var</span> datasetsTable = TableTools.fnGetInstance($(<span class="hljs-string">'.table.datasets'</span>).attr(<span class="hljs-string">'id'</span>));
+    <span class="hljs-keyword">var</span> selectedRows = datasetsTable.fnGetSelected();
+    <span class="hljs-comment">/* perform operations on TR elements in the aSelectedTrs array */</span>
+    <span class="hljs-keyword">var</span> dataList = _.reduce(selectedRows, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(memo, value)</span> </span>{
+      <span class="hljs-keyword">return</span> memo + <span class="hljs-string">"&lt;li id='"</span> + value.id + <span class="hljs-string">"'&gt;"</span> + value.children[<span class="hljs-number">0</span>].firstChild.nodeValue + <span class="hljs-string">"&lt;/li&gt;"</span>;
+    }, <span class="hljs-string">''</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>return $(“&lt;ul class=’alert’’ id=’’ data-datasetids=’’&gt;”+datalist+”</ul>“);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    dataList = <span class="hljs-string">"&lt;ul class='alert'' id='' data-datasetids=''&gt;"</span> + dataList + <span class="hljs-string">"&lt;/ul&gt;"</span>;
+
+    <span class="hljs-keyword">var</span> categories = $(<span class="hljs-string">'div#category-pane  ul li a.ui-droppable'</span>);
+    <span class="hljs-keyword">var</span> selectList = _.reduce(categories, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(memo, value)</span> </span>{
+      <span class="hljs-keyword">var</span> categoryId = value.href.substring(value.href.lastIndexOf(<span class="hljs-string">'/'</span>) + <span class="hljs-number">1</span>);
+      <span class="hljs-keyword">return</span> memo + <span class="hljs-string">"&lt;option value='"</span> + categoryId + <span class="hljs-string">"'&gt;"</span> + value.firstChild.nodeValue + <span class="hljs-string">"&lt;/option&gt;"</span>;
+    }, <span class="hljs-string">''</span>);
+    selectList = <span class="hljs-string">"&lt;select&gt;&lt;option value=''&gt;select category...&lt;/option&gt;"</span> + selectList + <span class="hljs-string">"&lt;/select&gt;"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>var categoryId = this.href.substring(this.href.lastIndexOf(‘/‘)+1);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> categoryId = <span class="hljs-string">""</span>;
+    <span class="hljs-keyword">var</span> categoryName = <span class="hljs-string">""</span>;
+    <span class="hljs-keyword">var</span> html = <span class="hljs-string">'&lt;p class="lead text-center"&gt;Are you sure you want to re-categorize the test following data sets as'</span> + categoryName + <span class="hljs-string">'?&lt;/p&gt;&lt;ul&gt;'</span> + dataList + <span class="hljs-string">'&lt;/ul&gt;'</span>;
+    bootbox.confirm(html, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(result)</span> </span>{
+      <span class="hljs-keyword">if</span> (result) {
+        $(<span class="hljs-string">'#categorizeModal'</span>).modal(<span class="hljs-string">'hide'</span>);
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'multiCategorizeSend'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>multiCategorizeSend(datasets);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>show the select dialog</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+      }
+    });
+  },
+
+  addDataset: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-keyword">this</span>.fileCount++;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>e.preventDefault();</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> $source = $(<span class="hljs-string">'#source'</span>).clone();
+    $(<span class="hljs-string">'.rows'</span>).append($source);
+
+    $source.find(<span class="hljs-string">'input[name=_name]'</span>).attr(<span class="hljs-string">'name'</span>, <span class="hljs-string">'name['</span> + <span class="hljs-keyword">this</span>.fileCount + <span class="hljs-string">']'</span>);
+    $source.find(<span class="hljs-string">'input[name=_file]'</span>).attr(<span class="hljs-string">'name'</span>, <span class="hljs-string">'file['</span> + <span class="hljs-keyword">this</span>.fileCount + <span class="hljs-string">']'</span>);
+    $source.slideDown(<span class="hljs-string">'fast'</span>);
+  },
+
+  removeDataset: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    e.preventDefault();
+    $(e.target).closest(<span class="hljs-string">'.row-container'</span>).slideUp(<span class="hljs-string">'fast'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      $(e.target).remove();
+    });
+  },
+
+  checkForceAction: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span>($(<span class="hljs-keyword">this</span>).hasClass(<span class="hljs-string">'checked'</span>)){
+      $(<span class="hljs-keyword">this</span>).removeClass(<span class="hljs-string">'checked'</span>);
+    } <span class="hljs-keyword">else</span> {
+      $(<span class="hljs-keyword">this</span>).addClass(<span class="hljs-string">'checked'</span>);
+    }
+  },
+
+  toggleLinkedSnapshots: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+      e.stopImmediatePropagation();
+      $(e.target).siblings(<span class="hljs-string">'.assigned-snapshot-list'</span>).toggle();
+  },
+
+  onCategoryEditClick: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    e.preventDefault();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>TODO permissions check</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> href = $(e.currentTarget).attr(<span class="hljs-string">'href'</span>);
+    <span class="hljs-built_in">window</span>.location = href;
+  }
+});
+
+<span class="hljs-built_in">module</span>.exports = DatasetView;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

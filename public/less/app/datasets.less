@@ -1,0 +1,171 @@
+.datasets-controller {
+    td:nth-child(2), td:nth-child(3) {
+        /*white-space: nowrap;*/
+    }
+
+    td {
+        small {
+            color: @lightgray;
+        }
+    }
+
+    h4 {
+        .icon-stack {
+            font-size: 16px;
+        }
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    input.error {
+      border-color: @danger;
+    }
+
+    select.error {
+      border-color: @danger;
+    }
+
+    .label-important {
+      margin-top: -15px;
+      display: block;
+      box-sizing: border-box;
+      padding-top: 5px;
+      margin-bottom: 10px;
+      margin-right: 0;
+      width:220px;
+      color: white;
+    }
+
+    .input-label-important {
+        margin-top: -15px;
+        display: block;
+        box-sizing: border-box;
+        padding-top: 15px;
+        margin-bottom: 10px;
+        margin-right: 0;
+        width:220px;
+        background-color: #e74c3c;
+        color: white;
+    }
+    input {
+        width: 220px;
+    }
+
+
+    #addDatasetForm, #appendDatasetForm, #addMCDatasetForm {
+        input {
+            height: auto !important;
+            box-sizing: border-box;
+            margin: 5px 0px 5px 0px;
+        }
+
+        input[name=name] {
+            width: 100%;
+
+        }
+
+        input.input-file {
+            display: none;
+        }
+
+        input[name=file_clone] {
+            width: 71%;
+            margin-right: 5px;
+            color: @lightgray;
+        }
+
+        button.btn-choose-file {
+            margin-top: 5px;
+            margin-bottom:5px;
+        }
+
+        .radio {
+            margin-left: 0px;
+        }
+
+        .dataOptions {
+          margin-top: 3px;
+        }
+
+        #datasetLoader {
+            display: none;
+        }
+    }
+
+  .dataTables_wrapper {
+    .DTTT_container {
+      float: left;
+    }
+    div.dataTables_filter label input {
+      width: 70%;
+    }
+  }
+  table.datasets {
+    thead tr th#column-action {
+      min-width: 120px;
+    }
+    label.checkbox {
+      margin-left: 0px;
+      padding-left: 6px;
+    }
+    thead.affix {
+      position: fixed;
+      top: 116px;
+      width: (@fluidGridColumnWidth * 9) + (@fluidGridGutterWidth * (8)) - (9 / @gridRowWidth * 100 * 1%);
+      background-color: white;
+      z-index: 5;
+    }
+    /*thead.tr {
+        background-color: white;
+    }*/
+  }
+
+  .dropHover {
+    background-color: #B0BED9;
+  }
+
+  .tool-pane.affix {
+    position: fixed;
+    top: 70px;
+    width: (@fluidGridColumnWidth * 3) + (@fluidGridGutterWidth * (2)) - (3 / @gridRowWidth * 100 * 1%);
+  }
+
+  //.header-pane.affix,
+  .tabletool-pane.affix {
+    position: fixed;
+    top: 50px;
+    width: (@fluidGridColumnWidth * 9) + (@fluidGridGutterWidth * (8)) - (9 / @gridRowWidth * 100 * 1%);
+    background-color: white;
+    padding-top: 20px;
+    z-index: 5;
+  }
+
+  #btn-appendForce {
+    width:80px;
+  }
+
+  .icons {
+    margin-top:5px;
+  }
+
+  label.checkbox {
+    height: 20px;
+  }
+
+  #datasets-h1 {
+    float: left;
+  }
+
+  hr {
+    width: 100%;
+  }
+
+
+}
+
+/* override for vendor\flat-ui\modules\select2.less
+form .select2-container .select2-choice {
+  height: 33px; //making select2 the same height as other form elements
+} */

@@ -1,0 +1,26 @@
+<form id='forgot' method="post" action="">
+	<div class="row-fluid">
+		<div class="span4 offset4">
+			<div class="login-screen">
+				<div class="login-logo">
+					<p><img src="/img/prenostik_logo_black_on_white_teal.png" width="300" height="59"/></p>
+				</div>
+
+				<div class="login-form">
+					<label>Enter your username below and press "Reset Password."</label>
+					<div class="control-group">												
+						<input type="text" name="username" placeholder="Username" id="username" class="login-field"/>
+						<label class="login-field-icon fui-user" for="username"></label>						
+					</div>
+
+					<input type="submit" class="btn btn-primary btn-large btn-block" value="Reset Password"/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">		
+		<div class="span4 offset4 text-center">
+			<div class="login-version">Version: {{AppVersion}}</div>
+		</div>
+	</div>
+</form>

@@ -1,0 +1,35 @@
+<div class="row-fluid">
+	<div class="span12">
+		<h1>
+      {{#if category.categoryType}}
+			<a href="/manage/snapshots/{{category.id}}" data-original-title="Back to Snapshots" data-toggle="tooltip">
+      {{else}}
+			<a href="/manage/datasets/{{category.id}}" data-original-title="Back to Datasets" data-toggle="tooltip">
+      {{/if}}
+      <i class="icon-chevron-sign-left"></i></a> Update Category
+		</h1>
+		<hr>
+	</div>
+</div>
+<form method="POST" action="/manage/categories/update" id="updateCategoryForm">
+	<div class="rows">
+		<div class="row-fluid row-container">
+			<div class="span6">
+				<label> Category Name</label>
+                <input type="text" autocomplete="off" name="name" value="{{category.name}}"/>
+                <input type="hidden" name="id" value="{{category.id}}"/>
+                <input type="hidden" name="type" value="{{category.categoryType}}"/>
+			</div>
+		</div>
+	</div>
+
+	<hr>
+    <div class="navbar navbar-inverse navbar-fixed-bottom">
+        <div class="navbar-inner" style="padding-bottom: 5px; padding-right: 5px;">
+            <div class="btn-group pull-right">
+                <button type="button" style="width: 220px;" id="btn-cancel" class="btn btn-default">Cancel</button>
+                <button type="button" style="width: 220px;" id="btn-continue" class="btn btn-default btn-primary">Continue</button>
+            </div>
+        </div>
+    </div>
+</form>

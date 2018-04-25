@@ -1,0 +1,119 @@
+<div class="row-fluid">
+	<div class="span12">
+		<h1>Edit Account Profile</h1>
+		<hr>
+	</div>
+</div>
+
+<div class="row-fluid profile">
+    <div class="profile-avatar">
+        <i class="icon-th-large"></i>
+    </div>
+</div>
+
+<form id = "edit_account_form" method="post" action="/corporate/update_account">
+
+<div class="row-fluid">
+	<div class="span6 offset3 flat-well">		
+		<div class="row-fluid">
+			<div class="span12">				       
+				<select id= "selCompany" select style="visibility: hidden"> 
+					<option id= "-1" value=-1>Select Account</option>						
+					{{#each users}}
+						<option id='{{this.id}}' value=	'{{this.data}}'>
+						{{this.lname}}, {{this.fname}} {{this.mname}}
+						</option>
+					{{/each}}						
+				</select>
+				<h1 id = "coName"></h1>
+			<div/>	
+		<div/>
+	<div/>
+<div/>		
+<div class="tabbable"> 
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tabProfile" data-toggle="tab">Profile</a></li>
+			<li><a href="#tabContact" data-toggle="tab">Contact</a></li>
+			<li><a href="#tabAdministrator" data-toggle="tab">Administrator</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="tabProfile">
+			<p>Profile</p>
+		</div>
+		<div class="tab-pane" id="tabContact">
+			<legend>Point of Contact</legend>
+				<div class="row-fluid">
+					<div class="span12">
+						<label>Name:</label>						
+					</div> 
+					<div class="span3">
+						<label>First:</label>
+						<input type="text" id="firstname" name = "firstname" value=""/>
+					</div>
+					<div class="span2">
+						<label>Middle:</label>						
+						<input type="text" id="middlename" name = "middlename" placeholder="(Optional)" value=""/>
+					</div>
+					<div class="span6">
+						<label>Last:</label>
+						<input type="text" id="lastname" name = "lastname" value=""/>
+					</div>
+				</div>
+				<div class="row-fluid">
+					<br>
+					<div class="span11">
+						<label>Username:</label>
+					</div>
+					<div class="span11">											
+						<input type="text" id="username" name = "username" value=""/>
+					</div>
+					<div class="span11">
+						<label>E-mail Address:</label>
+					</div>
+					<div class="span11">											
+						<input type="text" id="email" name = "email" value=""/>
+					</div>
+				</div>
+		</div>
+		
+		<div class="tab-pane" id="tabAdministrator">
+			<p>This is where superusers are assigned.</p>
+		</div>
+
+	</div>
+</div>
+
+
+</div>
+
+<div class="row-fluid">
+	<div class="span6 offset3 text-right">
+		<a id= "edit_submit" class="btn btn-wide btn-primary btn-edit-submit">Save Changes</a>		
+	</div>
+</div>
+
+<!-- Error dialog -->
+<div class="modal fade" id="errAudit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Account Audit Error</h4>
+            </div>
+            <div class="modal-body">
+                <div class="span4">												
+						<label id="errText"> </label>
+				</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<input type="hidden" id="id" name = "id" value=""/> 
+<input type="hidden" id="edited_user" name = "edited_user" />
+<input type="hidden" id="auth_user" name = "auth_user" value={{this.user.data}} />
+</form>

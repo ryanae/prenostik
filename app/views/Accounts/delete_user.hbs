@@ -1,0 +1,134 @@
+<div class="row-fluid">
+	<div class="span12">
+		<div>
+			<h1 id='coidentifier'> </h1>		
+			<h3>Delete User</h3>
+		</div>
+		<hr>
+	</div>
+</div>
+
+<div class="row-fluid profile">
+    <div class="profile-avatar">
+        <i class="icon-user"></i>
+    </div>
+</div>
+
+<form method="post" id="accounts_delete_user" action="/users/accounts_delete_user">
+<div class="row-fluid">
+	<div class="span6 offset3 flat-well">
+		<fieldset>
+			<div class="row-fluid">
+				<div class="span12">
+				    <h1>Select User</h1>
+					<select id= "selEditUser"> 
+						<option id = "-1" value="-1">Select User</option>						
+						{{#each users}}
+							<option id='{{this.id}}' value=	'{{this.data}}'>
+							{{this.lname}}, {{this.fname}} {{this.mname}}
+							</option>
+						{{/each}}						
+					</select>
+				</div>		
+				<br>
+				<legend>Profile</legend>
+				<div class="row-fluid">
+					<div class="span12">
+						<label><i class="icon-user">&nbsp </i>Name:</label>						
+					</div>
+				</div>
+				<div class="row-fluid">
+					<div class="span12">
+						<div class="row-fluid">
+							<div class="span6">
+								<div class="span4">
+									<label>First:</label>									
+								</div>
+								<div class="span3">
+									<label>Middle:</label>															
+								</div>
+								<div class="span5">
+									<label>Last:</label>									
+								</div>
+							</div>
+						</div>						
+						<div class="row-fluid">
+							<div class="span6">
+								<div class="span4">
+									<input type="text" id="firstname" />
+								</div>
+								<div class="span3">
+									<input type="text" id="middlename"/>
+								</div>
+								<div class="span5">
+									<input type="text" id="lastname" />
+								</div>
+							</div>
+						</div>
+						<div class="row-fluid">					
+							<div class="span6">
+								<div class="row-fluid">					
+									<div class="span12">
+										<label><i class="icon-user">&nbsp </i>Username:</label>
+									</div>
+								</div>
+								<div class="row-fluid">					
+									<div class="span12">											
+										<input type="text" id="username" />
+									</div>
+								</div>	
+								<div class="row-fluid">	
+									<div class="span12">
+										<label><i class="icon-envelope">&nbsp </i>E-mail Address:</label>
+									</div>
+								</div>
+								<div class="row-fluid">	
+									<div class="span12">											
+										<input type="text" id="email" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		<br> 
+
+
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span6 offset3 text-right">
+		<a data-toggle="modal" href="#delActConfirm" class="btn btn-wide btn-primary" id="mcDeleteBtn"><i class="icon-trash icon-large"></i> Delete User</a>		
+	</div>
+</div>
+
+<!-- Confirmation dialog -->
+<div class="modal fade" id="delActConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Confirm User Account Deletion</h4>
+            </div>
+            <div class="modal-body">
+				
+					<div class="span4">												
+							<label>Are you sure you wish to delete this user?</label>
+					</div>				
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="submit" class="btn btn-primary" id='yesDeleteUser'>Delete User</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="info"> </div>
+<input type="hidden" id="id" name = "id" value=""/> 
+
+
+</form>

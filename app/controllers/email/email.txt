@@ -1,0 +1,33 @@
+{
+	"from": "Prenostik Account <accounts@prenostik.com>",
+	"intro": "",
+	"resetUser": {
+		"subject": "Account Login Reset",
+		"body": "Your Prenostik login password has been reset. "
+	},
+	"resetAdmin": {
+		"subject": "Account Login Reset",
+		"body": "Your Prenostik login password has been reset by your account administrator. "
+	},
+	"accountNew": {
+		"subject": "Prenostik Account Created",
+		"body": "Your Prenostik login account has been created. "  
+	},
+	"accountLocked": {
+		"subject": "Prenostik Account Locked",
+		"body": "Your Prenostik account login has been locked because too many failed attempts to login were made.  Your password has been reset. "
+	},
+	"accountPassExpired": {
+		"subject": "Prenostik Password has Expired",
+		"body": "Your Prenostik login password expired, and has been reset. "
+	},
+	"accountExpired": {
+		"subject": "Prenostik Access Expired",
+		"body": "Your term of access to the Prenostik website has expired.  Please contact your account administrator to obtain access."
+	},
+	"resetCommon":"Please visit RELOGIN_URL to set your new password.  Use the temporary password provided below. Please note that the temporary password will expire in 24 hours.  If you do not complete the login process before the password expires, you will need to contact your account administrator.\n\nTemporary password: ",
+	"wrap": "\n\nPlease do not reply to this automatically generated e-mail.  Contact your account administrator if you have any questions.",
+	"sig": "\n\nPrenostik - Turning Information into Actionable Knowledge that Matters.\nVist our website at ",
+	"replyto": "prenostik@prenostik.com",
+	"website": "www.prenostik.com"
+}

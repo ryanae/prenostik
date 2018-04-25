@@ -1,0 +1,275 @@
+#analyzeToolbar {
+    margin-top: 40px;
+
+    .btn-toolbar {
+        margin: 0;
+
+        .btn {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .btn.active {
+            background-color: @base !important;
+        }
+
+        .btn-save {
+            display: none;
+        }
+        
+        .btn-group {
+            white-space: normal;
+        }
+
+        .tab-buttons {
+            .unsaved-indicator {
+                color: @firm;
+                margin-right: 5px;
+            }
+        }
+
+    }
+}
+
+.analyze-section-toolbar, .tab-toolbar {
+    width: 100%;
+    padding: 0.5em;
+    background-color: @base;
+    border-top-right-radius: 6px;
+    &.square-corner {
+        border-top-right-radius: 0;
+    }
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+
+    .btn {
+        background-color: mix(@wet-asphalt, white, 85%);
+        &:hover {
+            background-color: mix(@wet-asphalt, white, 75%);
+        }
+    }
+}
+
+.tab-toolbar {
+    display: none;
+
+    .btn {
+        i {
+            margin-right: 5px;
+        }
+    }
+}
+
+.options-container {
+    position: relative;
+}
+
+#trendingOptions {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: @zindexDropdown;
+    float: left;
+    width: 620px !important;
+    border: 2px solid @well-border;
+        background-color: @well-background;
+    .border-radius(6px);
+    box-sizing: border-box;
+    margin-top: 0px;
+    padding: 20px;
+    font-size: @base-font-size;
+    .transition(0.25s);
+    .opacity(0);
+
+    &.open {
+        .opacity(100);
+        margin-top: 10px;
+        .transition(0.25s);
+
+    }
+
+    input.error {
+        border-color: @danger;
+    }
+
+    .label-important {
+        margin-top: -15px;
+        display: block;
+        box-sizing: border-box;
+        padding-top: 5px;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    form {
+        position: relative;
+    }
+
+    select.select2 {
+        width: 100%;
+    }
+
+    .field-start-date, .field-end-date {
+        margin-bottom: 10px;
+    }
+
+    .field-offset-limit {
+        width: 43px;
+        float: left;
+    }
+
+    .field-offset-type {
+        float: right;
+        width: 75px;
+    }
+
+    .btn-group {
+        width: 100%;
+    }
+}
+
+.analyze-section {
+    padding: 1em 0;
+    // display: none;
+
+    #trendingChartLoader {
+        display: none;
+    }
+
+    .trending-charts {
+        display: none;
+                    
+        .unsaved-indicator {
+            color: @firm;
+            margin-right: 5px;
+        }
+    }
+    
+    .analyze-error {
+        display: none;
+    }
+    
+    .nav-tabs [class^="icon-"] {
+        line-height: 20px;
+    }
+}
+
+.best-predictor-model-table-container,
+.top-correlation-table-container {
+    margin-top: 20px;
+    background-color: white;
+    margin-bottom: 0;
+}
+
+#scenario-tab {
+    .btn-toolbar {
+        margin: 0;
+    }
+    
+    .scenario-buttons {
+        .unsaved-indicator {
+            color: @firm;
+            margin-right: 5px;
+        }
+    }
+    
+    .btn {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    
+    .btn.active {
+        background-color: #34495e !important;
+    }
+}
+
+#scenario-content {
+    border: 0px;
+    border-top-left-radius: 0px;
+    padding:0px;
+    
+    .btn-toolbar {
+        margin: 0px;
+        padding: 7px;
+        background-color: @base;
+                   
+        .btn-group {
+            white-space: normal;
+        }
+        
+        .btn {
+            background-color: mix(@wet-asphalt, white, 85%);
+            &:hover {
+                background-color: mix(@wet-asphalt, white, 75%);
+            }
+        }
+        
+    }
+}
+
+.forecast-equalizer {
+    /* override line 286, vendor\flat-ui\modules\input.less */
+    .input-append, .input-prepend {
+        margin-bottom: 0px;
+    }
+    .input-append .add-on, .input-prepend .add-on,
+    .input-append .btn-group .btn, .input-prepend .btn-group .btn,{
+        /*height: 38px;*/
+        min-width: 12px;
+    }
+    .ui-slider{
+        margin-bottom:12px;
+        height:20px;
+    }
+    .ui-slider-handle {
+        background-color: #CACFD2;
+        height:20px;
+        top:0px;
+    }
+    .forecast {
+        max-width:120px;
+    }
+    /*flat-ui seems to override condensed table layout properties */
+    .table-condensed th, .table-condensed td {
+        padding: 4px 5px;
+    }
+    .table-semi-condensed th, .table-semi-condensed td {
+        padding: 12px 10px 8px;
+    }
+    table thead tr {
+        background-color : #EEEEEE;
+    }
+    .range{
+        margin-top:-10px;
+        margin-right:0px;
+        font-size:smaller;
+        line-height:16px;
+    }
+    .confidenceWindow{
+        position:absolute;
+        left:42%;
+        height:20px;
+        display:block;
+        z-index:10;
+        border-left:1px dashed;
+        border-right:1px dashed;
+        opacity: 0.5;
+        background-color: darkgray; 
+    }
+    #referenceDataTable{
+        margin-bottom:0px;
+        
+        .avgValue {
+            /*margin-left: -33% !important;*/
+        }
+    }
+    
+
+}
+
+tr > th.text-center, tr > td.text-center {
+    text-align: center;
+}
+tr > th.text-right, tr > td.text-right {
+    text-align: right;
+}

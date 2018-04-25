@@ -1,0 +1,75 @@
+<div class="row-fluid">
+	<div class="span12">
+		<h1>
+			<a href="/manage/datasets"><i class="icon-chevron-sign-left"></i></a>Preview
+		</h1>
+		<hr>
+	</div>
+</div>
+<form method="POST" action="/manage/datasets/injest/multicolumn" enctype="multipart/form-data" id="addMCDatasetForm">
+    <div id="datasetLoader" class="well">
+        <img src="/img/ajax-loader-circle.gif"/>&nbsp; Uploading Data...
+    </div>
+<table class="table table-striped datasets-preview">
+    <thead>
+    <tr>
+        <th>Row</th>
+        {{#each previewData.header.columns}}
+        <th>{{value}}</th>
+        {{/each}}
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>&nbsp;</td>
+        {{#each previewData.header.columns}}
+        {{#if editable}}
+        <td id="col{{@index}}">
+            <input id="dataset_name{{@index}}" type="text" placeholder="Enter New Data Set Name" value="{{value}}" name="dataset_name">
+            <div class="dataOptions">
+                <label class="radio">
+                    <input type="radio" name="mode{{@index}}" value='u' data-toggle="radio" checked>
+                    Append
+                </label>
+                <label class="radio">
+                    <input type="radio" name="mode{{@index}}" value='r' data-toggle="radio">
+                    Replace
+            </label>
+            </div>
+        </td>
+        {{else}}
+        <td>&nbsp;</td>
+        {{/if}}
+        {{/each}}
+    </tr>
+    {{#each previewData.rows}}
+    <tr>
+        <td>{{rowNumber}}<br>
+        {{#each columns}}
+            <td>{{value}} {{#each messages}} <i class="icon-warning-sign" data-original-title="{{description}}" data-toggle="tooltip"></i> {{/each}}</td>
+        {{/each}}
+    </tr>
+    {{/each}}
+    </tbody>
+</table>
+<hr>
+    <div class="navbar navbar-inverse navbar-fixed-bottom">
+        <div class="navbar-inner" style="padding-bottom: 5px; padding-right: 5px;">
+            <div class="navbar-text pull-left" style="padding-left:10px; padding-top: 5px;">
+                <small>Selected File: <i class="icon-file"></i>
+                {{previewData.fileName}}</small>
+            </div>
+            <div class="btn-group pull-right">
+                <button type="button" style="width: 220px;" id="btn-cancel" class="btn btn-default">Cancel</button>
+								{{#if previewData.is_valid}}
+                <button type="submit" style="width: 220px;" id="btn-continue" class="btn btn-default btn-primary">Continue</button>
+								{{else}}
+                <button style="width: 220px;" class="btn btn-default disabled btn-primary">Continue</button>
+								{{/if}}
+            </div>
+        </div>
+    </div>
+</form>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>

@@ -1,0 +1,21 @@
+machine:
+  node:
+    version: 6.0.0
+
+dependencies:
+  pre:
+    - node -v
+
+deployment:
+  staging:
+    branch: develop
+    codedeploy:
+      prenostik-frontend:
+        application_root: /
+        region: us-east-1
+        revision_location:
+          revision_type: S3
+          s3_location:
+            bucket: prenostik-codedeploy
+            key_pattern: prenostik-frontend/circleci-prenostik-frontend-{BRANCH}-{SHORT_COMMIT}
+        deployment_group: circleci
