@@ -4,14 +4,14 @@
 }
 
 #sidebar-wrapper {
-    max-width: 200px;
+    width: 20%;
     min-height: 100vh;
     background: #333;
 }
 
 .sidebar-nav a {
     display: flex;
-    width: 200px;
+    width: 100%;
     padding: 5px;
     color: white;
 }
