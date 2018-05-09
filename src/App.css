@@ -1,17 +1,1 @@
-.wrapper {
-    display: flex;
-    align-items: stretch;
-}
-
-#sidebar-wrapper {
-    width: 20%;
-    min-height: 100vh;
-    background: #333;
-}
-
-.sidebar-nav a {
-    display: flex;
-    width: 100%;
-    padding: 5px;
-    color: white;
-}
+/* This .css file will affect the overall style of the app. */

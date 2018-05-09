@@ -15,7 +15,7 @@ const App = () => (
 );
 
 const Navigation = () => (
-    <nav>
+    <nav id="sidebar">
         <ul>
             <li><NavLink to ="/">Home</NavLink></li>
             <li><NavLink to ="/analysis/new">Start New Analysis</NavLink></li>
