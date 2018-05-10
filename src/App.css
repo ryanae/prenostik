@@ -1,1 +1,20 @@
 /* This .css file will affect the overall style of the app. */
+
+html, .container-fluid {
+    min-height: 100vh;
+}
+
+#sidebar {
+    display: inline-block;
+    padding: 5px;
+    position: fixed;
+    min-height: 100vh;
+    max-width: 20%;
+    background: #333;
+}
+
+#main {
+    padding: 10px;
+    max-width: 80%;
+    float: right;
+}
