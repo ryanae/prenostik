@@ -1,0 +1,58 @@
+<div class="trending-charts">
+
+	<ul class="nav nav-tabs nav-append-content">
+		<li class="active"><a href="#correlation-chart-tab{{count}}" data-toggle="tab"> Correlation</a></li>
+		<li><a href="#sequence-chart-tab{{count}}" data-toggle="tab"> Sequence</a></li>
+		<li><a href="#best-predictor-chart-tab{{count}}" data-toggle="tab"> Best Predictor Model</a></li>
+        <li><a href="#forecast-chart-tab{{count}}" data-toggle="tab"><i></i> Forecasting</a></li>
+	</ul>
+
+	<div class="tab-content">
+		<div class="tab-pane active" id="correlation-chart-tab{{count}}">
+			<div class="well">
+        <div class="row-fluid analyze-error">
+            <div class="span12 flashMessages">
+                <div id="correlation-error" class="alert flash-error"></div>
+            </div>
+        </div>
+				<!--div style="z-index:1;position:absolute;top:82px;right:10px;width:300px;">
+						<div>Show w/ pairs2? &nbsp;<input data-size="mini" style="width:auto" type="checkbox" name="my-checkbox{{count}}" checked></div>
+				</div-->
+				<div class="correlation-chart"></div>
+				<div class="correlation-table"></div>
+			</div>
+		</div>
+		<div class="tab-pane" id="sequence-chart-tab{{count}}">
+			<div class="well">
+                <div class="row-fluid analyze-error">
+                    <div class="span12 flashMessages">
+                        <div id="sequence-error" class="alert flash-error"></div>
+                    </div>
+                </div>
+				<div class="sequence-chart"></div>
+				<div class="sequence-table"></div>
+			</div>
+		</div>
+		<div class="tab-pane" id="best-predictor-chart-tab{{count}}">
+			<div class="well">
+                <div class="row-fluid analyze-error">
+                    <div class="span12 flashMessages">
+                        <div id="best-predictor-error" class="alert flash-error"></div>
+                    </div>
+                </div>
+				<div class="best-predictor-chart"></div>
+				<div class="best-predictor-table"></div>
+			</div>
+		</div>
+        <div class="tab-pane" id="forecast-chart-tab{{count}}">
+			<!--<div class="well">-->
+                <div class="row-fluid analyze-error">
+                    <div class="span12 flashMessages">
+                        <div id="forecast-error" class="alert flash-error"></div>
+                    </div>
+                </div>
+                <div class="forecast-equalizer"></div>
+				<div class="forecast-chart"></div>
+		</div>
+	</div>
+</div>

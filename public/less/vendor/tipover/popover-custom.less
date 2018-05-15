@@ -1,0 +1,78 @@
+//--- Custom Bootstrap Popover Styling ---
+
+// Full specification
+// Note: 4 or 5 parameters must be specified for this full spec to be used directly
+//       if fewer parameters then the simple version below will be used
+//       if 7 parameters then the full spec + outermost border version below will be used
+.popover-custom(@textColor; @bkgdColor; @titleColor; @titleBkgd; @titleBorder: #ebebeb;) {
+  color: @textColor;
+  background-color: @bkgdColor;
+
+  .popover-title {
+    color: @titleColor;
+    background-color: @titleBkgd;
+    border-bottom-color: @titleBorder;
+	border-radius: 0;
+  }
+
+  &.top .arrow:after {
+    border-top-color: @bkgdColor;
+  }
+
+  &.right .arrow:after {
+    border-right-color: @bkgdColor;
+  }
+
+  &.bottom .arrow:after {
+    border-bottom-color: @bkgdColor;
+  }
+
+  &.left .arrow:after {
+    border-left-color: @bkgdColor;
+  }
+}
+// Full specification #2, includes outermost border color
+// Note: 7 parameters must be specified for this full spec to be used directly
+//       @border1 is an IE8 fallback color, set to #999 in Bootstrap's default popover
+//       @border2 is set to rgba(0, 0, 0, 0.25) in Bootstrap's default popover
+.popover-custom(@textColor; @bkgdColor; @titleColor; @titleBkgd; @titleBorder; @border1; @border2) {
+  border-color: @border1;
+  border-color: @border2;
+  .popover-custom(@textColor; @bkgdColor; @titleColor; @titleBkgd; @titleBorder);
+
+  &.top .arrow {
+    border-top-color: @border1;
+    border-top-color: @border2;
+  }
+
+  &.right .arrow {
+    border-right-color: @border1;
+    border-right-color: @border2;
+  }
+
+  &.bottom .arrow {
+    border-bottom-color: @border1;
+    border-bottom-color: @border2;
+  }
+
+  &.left .arrow {
+    border-left-color: @border1;
+    border-left-color: @border2;
+  }
+}
+
+// Simple version for light backgrounds with darker text
+// @bkgdColor = the content background color
+// @textDarken: 70% = the amount to darken the text color
+// @titleDarken: 7% = the amount to darken the title background color
+.popover-custom(@bkgdColor; @textDarken: 70%; @titleDarken: 7%) {
+  .popover-custom(darken(@bkgdColor, @textDarken); @bkgdColor; darken(@bkgdColor, (@textDarken + @titleDarken)); darken(@bkgdColor, @titleDarken); darken(@bkgdColor, (@titleDarken * 2)));
+}
+
+// Simple version for dark backgrounds with lighter text
+// @bkgdColor = the content background color
+// @textLighten: 70% = the amount to lighten the text color
+// @titleLighten: 24% = the amount to lighten the title background color
+.popover-custom-dark(@bkgdColor; @textLighten: 70%; @titleLighten: 24%) {
+  .popover-custom(lighten(@bkgdColor, @textLighten); @bkgdColor; lighten(@bkgdColor, (@textLighten + @titleLighten)); lighten(@bkgdColor, @titleLighten); lighten(@bkgdColor, (@titleLighten / 2)));
+}

@@ -1,0 +1,20 @@
+<div class="well top-correlation-table-container">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Test Data</th>
+				<th>Time Shift ({{shiftType}})</th>
+				<th>Percentage Correlated</th>
+			</tr>
+		</thead>
+		<tbody>
+            {{#each shifts}}
+				<tr>
+					<td>{{datastreamname}}</td>
+					<td>{{shiftfactor}}</td>
+					<td>{{adjustedpecentagecorrelated}}</td>
+				</tr>
+            {{/each}}
+		</tbody>
+	</table>
+</div>

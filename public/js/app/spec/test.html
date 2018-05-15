@@ -1,0 +1,997 @@
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/js/app/spec/lib/mocha.css" />
+    <script src="/js/lib/jstat/core.js"></script>
+    <script src="/js/lib/jstat/distribution.js"></script>
+    <script src="/js/lib/jstat/linearalgebra.js"></script>
+    <script src="/js/lib/jstat/special.js"></script>
+
+        
+    <script id="best-predictor-model-table-template" type="text/x-handlebars-template">
+                <div class="well best-predictor-model-table-container">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Test Data</th>
+				<th class="text-center">Time Shift ({{shiftType}})</th>
+				<th class="text-center">Rank</th>
+                <th class="text-center">Percentage Correlated</th>
+                <th class="text-center">Coefficient</th>
+			</tr>
+		</thead>
+		<tbody>
+            {{#each autofactorreduce.factors}}
+				<tr>
+					<td>{{datastreamname}}</td>
+					<td class="span1 text-center">{{shiftfactor}}</td>
+					<td class="span1 text-center"><div data-toggle=tooltip data-original-title="P value: {{pvalformatted}}">{{rank}}</div></td>
+					<td class="span1 text-center">{{adjustedpercentagecorrelated}}</td>
+                    <td class="span1 text-right">{{coefficientformatted}}</td>
+				</tr>
+            {{/each}}
+		</tbody>
+	</table>
+
+	<div class="well well-small">
+		<h6 class="text-center"><b>Combined Percentage Correlation: {{autofactorreduce.percentagecorrelatedrounded}}%</b></h6>
+	</div>
+</div>
+            </script>
+        
+            <script id="category-pane-template" type="text/x-handlebars-template">
+                <ul class="nav nav-list nav-list-vivid">
+    <li class="nav-header"><a href="/manage/datasets">Categories<span class="nav-counter">Show All</span></a></li>
+    {{#each categories}}
+        {{#if active}}
+        <li class="active">
+        {{else}}
+        <li>
+        {{/if}}
+        <a class="ui-droppable" href="/manage/datasets/filtercategory/{{id}}">
+            {{name}}
+            <span class="nav-counter">{{count}}</span>
+        </a>
+    </li>
+    {{/each}}
+</ul>
+            </script>
+        
+            <script id="datasets-template" type="text/x-handlebars-template">
+                <div class="row-fluid">
+	<div class="span12">
+		<h1>Data Sets
+            <div class="pull-right">
+                <a data-toggle="modal" href="#myModal" class="btn btn-primary" id="mcUploadButton"><i class="icon-plus-sign icon-large"></i> Upload Data</a>
+                <!--<a href="/manage/datasets/add" class="btn btn-primary"><i class="icon-plus-sign icon-large"></i> Upload Data Set</a>-->
+            </div>
+		</h1>
+		<hr>
+	</div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Upload Data</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/manage/datasets/add/preview" enctype="multipart/form-data" id="addDatasetForm">
+                    <div class="row-container">
+                        <label>File</label>
+                        <input type="text" name="file_clone" disabled="disabled" class="disabled" value=""/>
+                        <button class="btn btn-choose-file">Choose File</button>
+                        <input type="file" class="input-file" name="file[0]" value=""/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="mc-submit" type="button" class="btn btn-primary">Preview</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="categorizeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Categorize Multiple Datasets</h4>
+            </div>
+            <div class="modal-body">
+                {{!--<form method="POST" action="/manage/datasets/add/preview" id="multiCategorizeForm">--}}
+                    <div id="categoryListContainer" class="row-container">
+                        <label>Category</label>
+                        {{!--select list provided dynamically--}}
+                    </div>
+                {{!--</form>--}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="categorizeSubmit" type="button" class="btn btn-primary">Continue</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<form>
+	<div class="row-fluid">
+        <div class="span3">
+            <div id="category-pane" class="tool-pane" data-spy="affix">
+                <ul class="nav nav-list nav-list-vivid">
+                    <li class="nav-header"><a href="/manage/datasets">Categories<span class="nav-counter">All</span></a></li>
+                    {{#each categories}}
+                        {{#if active}}
+                        <li class="active">
+                        {{else}}
+                        <li>
+                        {{/if}}
+                        <a class="ui-droppable" href="/manage/datasets/filtercategory/{{id}}">
+                            {{name}}
+                            <span class="nav-counter">{{count}}</span>
+                        </a>
+                    </li>
+                    {{/each}}
+                </ul>
+                <br>
+                <a id="category_add" href="/manage/categories/add" class="btn btn-block"><i class="icon-plus-sign"></i> Add Category</a>
+            </div>
+        </div>
+
+        <div class="span9">
+            {{#each categories}}
+                {{#if active}}
+                    <div class="flat-well well-small header-pane" data-spy="affix">
+                        <h4 style="margin: 0">{{name}}
+                            {{#if modify}}
+                                &nbsp; <a href="/manage/categories/update/{{id}}" class="btn-edit"><i class="icon-cog"></i></a>&nbsp;
+                                <a href="/manage/categories/delete/{{id}}" class="btn-delete-category"><i class="icon-trash"></i></a>
+                            {{/if}}
+                        </h4>
+                    </div>
+                {{/if}}
+            {{/each}}
+
+            {{!--bootstrap table-striped class conflicts with datatables classes--}}
+            <table class="table table-striped-deprecated table-condensed datasets">
+                <thead>
+                <tr>
+                    {{!--<th>
+                        <span id="allDatasets">
+                            <input type="checkbox" value="" id="applyAll" data-toggle="checkbox">
+                        </span>
+                    </th>--}}
+						<th>Name</th>
+						<th class="text-right">#&nbsp;Points</th>
+						<th id="column-action" class="text-right">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {{#each datasets}}
+                    <tr class="ui-draggable" id="{{id}}">
+                        {{!--<td>
+                            <input type="checkbox" name="checkbox-{{id}}" id="checkbox-{{id}}" data-toggle="checkbox">
+                        </td>--}}
+                        <td class="name">
+                            {{name}}<br>
+                            <small>
+                                <i>Date Range: {{startFormatted}} - {{endFormatted}}</i>
+                            </small>
+                        </td>
+                        <td class="text-right">{{numDataPoints}}</td>
+                        <td class="text-right">
+                            <!--<a class="btn btn-update btn-primary" href="/manage/datasets/update/{{id}}"><i class="icon-edit" rel="tooltip" title="Categorize" data-original-title="..." data-toggle="tooltip"></i></a>-->
+                            <a class="btn btn-update btn-primary" href="/manage/datasets/append/{{id}}"><i class="icon-upload" rel="tooltip" title="Append" data-original-title="..." data-toggle="tooltip"></i></a>
+                            <a class="btn btn-delete btn-danger" href="/manage/datasets/delete/{{id}}"><i class="icon-remove-sign" rel="tooltip" title="Delete" data-original-title="..." data-toggle="tooltip"></i></a>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+            </script>
+        
+            <script id="forecast-equalizer-template" type="text/x-handlebars-template">
+                <div class="scenarioContainer">
+    <div id="scenario-tab">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="btn-toolbar">
+                    <div class="btn-group scenario-buttons baseline">
+                        <button class="btn btn-scenario active" data-section="#forecast-scenario-baseline">
+                            <span class="name">Baseline</span>
+                        </button>
+                     </div>
+                    <div class="btn-group scenario-buttons scenario">
+                        {{#each scenario}}
+                            <button class="btn btn-scenario" data-section="#forecast-scenario-tab{{@index}}}">
+                                <i class="status"></i>&nbsp;<span class="name">{{title}}</span>&nbsp;&nbsp;<i class="icon-remove-sign"></i>
+                            </button>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scenario-content" class="tab-content">
+        <!--sub template-->
+        <div class="row-fluid">
+            <div class="span12 btn-toolbar">
+                <div class="btn-group pull-right">
+                    <div class="btn btn-reset-scenario">
+                        <i class="icon-retweet"></i> Reset
+                    </div>
+                    <div class="btn btn-save-scenario">
+                        <i class="icon-save"></i> Save
+                    </div>
+                    <div class="btn btn-rename-scenario">
+                        <i class="icon-pencil"></i> Rename
+                    </div>
+                    <div class="btn btn-copy-scenario">
+                        <i class="icon-share-alt"></i> Copy
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane scenario baseline active" id="forecast-scenario-baseline">
+            <!--todo:use row-fluid rather than table -->
+            <table class="table table-striped table-semi-condensed reference-data">
+                <thead>
+                    <tr>
+                        <th>Reference Data</th>
+                        <th class="text-center">Forecast<br/>Period<br/>({{baseline.shiftType}})</th>
+                        <th class="text-center">Forecast<br/>Date</th>
+                        <th class="text-center">Confidence<br/>Interval</th>
+                        <th class="text-center"><div class="pull-left">-200%</div><span class="avgValue">Avg</span><div class="pull-right">+200%</div></th>
+                        <th>Forecast</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="factorRow-0" class="factorRow warning">
+                        <td class="span3">{{baseline.factors.[0].datastreamname}}</td>
+                        <td class="span1 text-center forecast-period">##</td>
+                        <td class="span1 text-center forecast-date">&nbsp;</td>
+                        <td class="span1 text-center alpha" data-resetvalue="95" >95%
+                            <!--todo: try spin button alternative...
+                            <ul class="nav">
+                                <li class="dropdown active">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">95%&nbsp;&nbsp;<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li class="active"><a href="#fakelink">95%</a></li>
+                                        <li class="active"><a href="#fakelink">90%</a></li>
+                                        <li class="active"><a href="#fakelink">85%</a></li>
+                                    </ul>
+                                </li>
+                            </ul>-->
+                        </td>
+                        <td class="span3"> 
+                            <div class="forecast-slider forecast-slider-0 dependent ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false">
+                                <div class="confidenceWindow" data-original-title="" data-toggle="tooltip"></div>
+                            </div>
+                            <div class="range range-0 muted text-center" style="width:100%;">
+                                <span class="pull-left text-left minValue">0</span>
+                                <span class="text-center avgValue"></span>
+                                <span class="pull-right text-right maxValue"></span>
+                            </div>
+                        </td>
+                        <td class="span3">
+                            <div class="input-prepend input-append">
+                                <div class="btn-group">
+                                    <input class="forecast forecast-0 dependent span2" id="forecast-0" type="text" data-streamid="{{baseline.factors.[0].datastreamid}}" data-resetvalue="" data-intercept="{{baseline.intercept}}" data-residualStandardError="{{baseline.residualStandardError}}" data-degreesoffreedom="{{baseline.degreesOfFreedom}}">
+                                    <button id="solve-0" class="btn solve dependent icon-star solving" type="button" data-resetvalue="true" data-original-title="Currently solving for the reference value" data-toggle="tooltip"></button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--This table for independent variables-->
+            <!--todo:use row-fluid rather than table -->
+            <table class="table table-striped table-semi-condensed test-data">
+                <thead>
+                    <tr>
+                        <th>Test Data</th>
+                        <th class="text-center">Time<br/>Shift<br/>({{baseline.shiftType}})</th>
+                        <th class="text-center sorting_asc">&nbsp;&nbsp;&nbsp;Rank&nbsp;&nbsp;&nbsp;</th>
+                        <th class="text-center">Coefficient</th>
+                        <th class="text-center"><div class="pull-left">-100%</div>Avg<div class="pull-right">+100%</div></th>
+                        <th>Forecast</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each baseline.factors}}
+                    {{#if @index}}
+                    <tr id="factorRow-{{@index}}" class="factorRow">
+                        <td class="span3">{{datastreamname}}</td>
+                        <td class="span1 text-center">{{shiftfactor}}</td>
+                        <td class="span1 text-center"><div data-toggle=tooltip data-original-title="P value: {{pvalformatted}}">{{rank}}</div></td>
+                        <td class="span1 text-right">{{coefficientformatted}}</td>
+                        <td class="span3">
+                            <div class="forecast-slider forecast-slider-{{@index}} independent ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false"></div>
+                            <div class="range range-{{@index}} muted text-center" style="width:100%;">
+                                <span class="pull-left text-left minValue">0</span>
+                                <span class="text-center avgValue"></span>
+                                <span class="pull-right text-right maxValue"></span>
+                            </div>
+                        </td>
+                        <td class="span3">
+                            <div class="input-prepend input-append">
+                                <div class="btn-group">
+                                    <input class="forecast forecast-{{@index}} independent span2" id="forecast-{{@index}}" type="text" data-streamid="{{datastreamid}}" data-resetvalue="" data-coefficient="{{coefficient}}">
+                                    <button id="solve-{{@index}}" class="btn solve independent icon-star-empty" type="button" data-resetvalue="" data-original-title="Click to solve for this test value" data-toggle="tooltip"></button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+
+
+        {{#each scenario}}
+        <div class="tab-pane scenario user" id="forecast-scenario-tab{{@index}}">
+            <!--todo:use row-fluid rather than table -->
+            <table class="table table-striped table-semi-condensed reference-data">
+                <thead>
+                <tr>
+                    <th>Reference Data</th>
+                    <th class="text-center">Forecast<br/>Period<br/>({{../baseline.shiftType}})</th>
+                    <th class="text-center">Forecast<br/>Date</th>
+                    <th class="text-center">Confidence<br/>Interval</th>
+                    <th class="text-center"><div class="pull-left">-200%</div><span class="avgValue">Avg</span><div class="pull-right">+200%</div></th>
+                    <th>Forecast</th>
+                </tr>
+                </thead>
+                <tbody>
+                        <tr id="factorRow-0" class="factorRow">
+                            <td class="span3">{{factors.[0].datastreamname}}</td>
+                            <td class="span1 text-center forecast-period">##</td>
+                            <td class="span1 text-center forecast-date">&nbsp;</td>
+                            <td class="span1 text-center alpha" data-resetvalue="{{factors.[0].state.alpha}}" >95%
+                                <!--todo: try spin button alternative...
+                                <ul class="nav">
+                                    <li class="dropdown active">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">95%&nbsp;&nbsp;<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li class="active"><a href="#fakelink">95%</a></li>
+                                            <li class="active"><a href="#fakelink">90%</a></li>
+                                            <li class="active"><a href="#fakelink">85%</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>-->
+                            </td>
+                            <td class="span3">
+                                <div class="forecast-slider forecast-slider-0 dependent ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false" value="{{factors.[0].state.value}}">
+                                    <div class="confidenceWindow" data-original-title="" data-toggle="tooltip"></div>
+                                </div>
+                                <div class="range range-0 muted text-center" style="width:100%;">
+                                    <span class="pull-left text-left minValue">0</span>
+                                    <span class="text-center avgValue"></span>
+                                    <span class="pull-right text-right maxValue"></span>
+                                </div>
+                            </td>
+                            <td class="span3">
+                                <div class="input-prepend input-append">
+                                    <div class="btn-group">
+                                        {{#if factors.[0].state.solveId}}
+                                            <input class="forecast forecast-0 dependent span2" id="forecast-0" type="text" value="" disabled="true" data-stream-id="{{factors.[0].datastreamid}}" data-resetvalue="{{factors.[0].state.value}}" data-intercept="{{intercept}}" data-residualStandardError="{{residualStandardError}}" data-degreesoffreedom="{{degreesOfFreedom}}">
+                                            <button id="solve-0" class="btn solve dependent solving icon-star" type="button" data-resetvalue="true" data-original-title="Currently solving for the reference value" data-toggle="tooltip"></button>
+                                        {{else}}
+                                            <input class="forecast forecast-0 dependent span2" id="forecast-0" type="text" value="{{factors.[0].state.value}}" data-stream-id="{{factors.[0].datastreamid}}" data-resetvalue="{{factors.[0].state.value}}" data-intercept="{{intercept}}" data-residualStandardError="{{residualStandardError}}" data-degreesoffreedom="{{degreesOfFreedom}}">
+                                            <button id="solve-0" class="btn solve dependent icon-star-empty" type="button" data-resetvalue="" data-original-title="Click to solve for the reference value" data-toggle="tooltip"></button>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+            <!--This table for independent variables-->
+            <!--todo:use row-fluid rather than table -->
+            <table class="table table-striped table-semi-condensed tablesorter test-data">
+                <thead>
+                <tr>
+                    <th class="">Test Data</th>
+                    <th class="text-center">Time<br/>Shift<br/>({{../baseline.shiftType}})</th>
+                    <th class="text-center">&nbsp;&nbsp;&nbsp;Rank&nbsp;&nbsp;&nbsp;</th>
+                    <th class="text-center">Coefficient</th>
+                    <th class="text-center"><div class="pull-left">-100%</div>Avg<div class="pull-right">+100%</div></th>
+                    <!--<th class="text-center"> </th>-->
+                    <th>Forecast</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each factors}}
+                    {{#if @index}}
+                        <tr id="factorRow-{{@index}}" class="factorRow">
+                            <td class="span3">{{datastreamname}}</td>
+                            <td class="span1 text-center">{{shiftfactor}}</td>
+                            <td class="span1 text-center">{{rank}}</td>
+                            <td class="span1 text-right">{{coefficientFormatted}}</td>
+                            <td class="span3">
+                                <div class="forecast-slider forecast-slider-{{@index}} independent ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false" value="{{state.value}}"></div>
+                                <div class="range range-{{@index}} muted text-center" style="width:100%;">
+                                    <span class="pull-left text-left minValue">0</span>
+                                    <span class="text-center avgValue"></span>
+                                    <span class="pull-right text-right maxValue"></span>
+                                </div>
+                            </td>
+                            <!--<td class="span1">&nbsp;</td>-->
+                            <td class="span3">
+                                <div class="input-prepend input-append">
+                                    <div class="btn-group">
+                                        {{#if state.solveId}}
+                                        <input class="forecast forecast-{{@index}} independent span2" id="forecast-{{@index}}" type="text" disabled="true" data-stream-id="{{datastreamid}}" data-resetvalue="{{state.value}}" value="" data-coefficient="{{coefficient}}">
+                                        <button id="solve-{{@index}}" class="btn solve independent solving icon-star" type="button" data-resetvalue="true" data-original-title="Currently solving for this test value" data-toggle="tooltip"></button>
+                                        {{else}}
+                                        <input class="forecast forecast-{{@index}} independent span2" id="forecast-{{@index}}" type="text" data-stream-id="{{datastreamid}}" data-resetvalue="{{state.value}}" value="{{state.value}}" data-coefficient="{{coefficient}}">
+                                        <button id="solve-{{@index}}" class="btn solve independent icon-star-empty" type="button" data-resetvalue="" data-original-title="Click to solve for this test value" data-toggle="tooltip"></button>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/if}}
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{/each}}
+
+    </div>
+</div>
+            </script>
+        
+            <script id="list-worksheets-table-template" type="text/x-handlebars-template">
+                {{#if worksheets}}
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Created</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+        {{#each worksheets}}
+			<tr>
+				<td>{{name}}</td>
+				<td>{{createdFormatted}}</td>
+				<td><a href="#{{id}}" class="btn btn-mini btn-primary btn-open" data-worksheetid="{{id}}"><i class="icon-folder-open"></i> Open</a></td>
+			</tr>
+        {{/each}}
+	</tbody>
+</table>
+{{else}}
+    <p>You have not saved any snapshots yet.</p>
+{{/if}}
+
+            </script>
+        
+            <script id="top-correlation-table-template" type="text/x-handlebars-template">
+                <div class="well top-correlation-table-container">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Test Data</th>
+				<th>Time Shift ({{shiftType}})</th>
+				<th>Percentage Correlated</th>
+			</tr>
+		</thead>
+		<tbody>
+            {{#each shifts}}
+				<tr>
+					<td>{{datastreamname}}</td>
+					<td>{{shiftfactor}}</td>
+					<td>{{adjustedpecentagecorrelated}}</td>
+				</tr>
+            {{/each}}
+		</tbody>
+	</table>
+</div>
+            </script>
+        
+            <script id="trending-charts-template" type="text/x-handlebars-template">
+                <div class="trending-charts">
+
+	<ul class="nav nav-tabs nav-append-content">
+		<li class="active"><a href="#correlation-chart-tab{{count}}" data-toggle="tab"> Correlation</a></li>
+		<li><a href="#sequence-chart-tab{{count}}" data-toggle="tab"> Sequence</a></li>
+		<li><a href="#best-predictor-chart-tab{{count}}" data-toggle="tab"> Best Predictor Model</a></li>
+        <li><a href="#forecast-chart-tab{{count}}" data-toggle="tab"><i></i> Forecasting</a></li>
+	</ul>
+
+	<div class="tab-content">
+		<div class="tab-pane active" id="correlation-chart-tab{{count}}">
+			<div class="well">
+                <div class="row-fluid analyze-error">
+                    <div class="span12 flashMessages">
+                        <div id="correlation-error" class="alert flash-error"></div>
+                    </div>
+                </div>
+				<div class="correlation-chart"></div>
+				<div class="correlation-table"></div>
+			</div>
+		</div>
+		<div class="tab-pane" id="sequence-chart-tab{{count}}">
+			<div class="well">
+                <div class="row-fluid analyze-error">
+                    <div class="span12 flashMessages">
+                        <div id="sequence-error" class="alert flash-error"></div>
+                    </div>
+                </div>
+				<div class="sequence-chart"></div>
+				<div class="sequence-table"></div>
+			</div>
+		</div>
+		<div class="tab-pane" id="best-predictor-chart-tab{{count}}">
+			<div class="well">
+                <div class="row-fluid analyze-error">
+                    <div class="span12 flashMessages">
+                        <div id="best-predictor-error" class="alert flash-error"></div>
+                    </div>
+                </div>
+				<div class="best-predictor-chart"></div>
+				<div class="best-predictor-table"></div>
+			</div>
+		</div>
+        <div class="tab-pane" id="forecast-chart-tab{{count}}">
+			<!--<div class="well">-->
+                <div class="row-fluid analyze-error">
+                    <div class="span12 flashMessages">
+                        <div id="forecast-error" class="alert flash-error"></div>
+                    </div>
+                </div>
+                <div class="forecast-equalizer"></div>
+				<div class="forecast-chart"></div>
+		</div>
+	</div>
+</div>
+            </script>
+        
+            <script id="trending-template" type="text/x-handlebars-template">
+                <div class="analyze-view">
+  <div id="analyzeToolbar">
+      <div class="row-fluid">
+          <div class="span12">
+              <div class="btn-toolbar">
+                  <div class="btn-group">
+                      <button class="btn btn-open-worksheet" data-toggle="tooltip" title="Open Snapshot">
+                          <i class="icon-folder-open"></i>
+                      </button>
+                  </div>
+
+                  <div class="btn-group tab-buttons"></div>
+
+                  <div class="btn-group">
+                      <button data-toggle="tooltip" title="Create Snapshot" class="btn btn-create-tab">
+                          <i class="icon-plus"></i>
+                      </button>
+                  </div>
+
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div id="sectionContainer">
+
+      <div class="row-fluid">
+          <div class="span12 tab-toolbar">
+              <div class="btn-group">
+                  <a class="btn btn-primary btn-options" href="#">
+                      Parameters
+                      <i class="icon-cog"></i>
+                  </a>
+              </div>
+              <div class="btn-group pull-right">
+                  <div class="btn btn-save-worksheet">
+                      <i class="icon-save"></i> Save
+                  </div>
+                  <div class="btn-rename-tab btn">
+                      <i class="icon-pencil"></i> Rename
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div class="row-fluid options-container">
+          <div id="trendingOptions">
+              <form action="">
+                  <fieldset>
+                      <div class="row-fluid">
+                          <div class="span12">
+                              <label>Reference Data</label>
+                              <select name="reference_data" class="select2 field-reference-data">
+                                  <option value="0">-- Choose Data --</option>
+                                  <optgroup label="">
+                                      {{#each datasets}}
+                                      {{#if optGroup}}
+                                  </optgroup>
+                                  <optgroup label="{{categoryName}}">
+                                      {{/if}}
+                                      {{#if selectedReference}}
+                                      <option selected value="{{id}}" data-start="{{start}}" data-end="{{end}}">{{name}}
+                                          ({{YYYY-MM-DD start}} to {{YYYY-MM-DD end}})
+                                      </option>
+                                      {{else}}
+                                      <option value="{{id}}" data-start="{{start}}" data-end="{{end}}">{{name}}
+                                          ({{YYYY-MM-DD start}} to {{YYYY-MM-DD end}})
+                                      </option>
+                                      {{/if}}
+                                      {{/each}}
+                                  </optgroup>
+                              </select>
+                          </div>
+                      </div>
+
+                      <div class="row-fluid">
+                          <div class="span4">
+                              <label>&nbsp;</label>
+
+                              <div class="btn-group">
+                                  <a href="#" class="btn btn-block dropdown-toggle" data-toggle="dropdown"><i
+                                          class="icon-calendar"></i> Choose Preset</a>
+                                  <ul id="preset-dates" class="dropdown-menu dropdown-inverse">
+                                      <li><a href="#" data-preset="today">Today</a></li>
+                                      <li><a href="#" data-preset="ytd">Year-To-Date</a></li>
+                                      <li><a href="#" data-preset="qtd">Quarter-To-Date</a></li>
+                                      <li><a href="#" data-preset="mtd">Month-To-Date</a></li>
+                                      <li><a href="#" data-preset="wtd">Week-To-Date</a></li>
+                                      <li><a href="#" data-preset="last-year">Last Year</a></li>
+                                      <li><a href="#" data-preset="last-quarter">Last Quarter</a></li>
+                                      <li><a href="#" data-preset="last-month">Last Month</a></li>
+                                      <li><a href="#" data-preset="last-week">Last Week</a></li>
+                                  </ul>
+                              </div>
+                          </div>
+                          <div class="span4">
+                              <label>Analysis Start Date</label>
+                              <input type="text" class="flat-datepicker field-start-date" value="2011-01-01"/>
+                          </div>
+                          <div class="span4">
+                              <label>Analysis End Date</label>
+                              <input type="text" class="flat-datepicker field-end-date" value="2012-01-01"/>
+                          </div>
+                      </div>
+                      <div class="row-fluid">
+                          <div class="span4">
+                              <label>Correlation Offset (+/-)</label>
+                              <input type="text" class="flat-spinner spinner field-offset-limit" maxlength="3" value="6"/>
+                              <select style="width: 99px;" class='field-offset-type select2-hidesearch'>
+                                  <option value="day">Days</option>
+                                  <option value="week">Weeks</option>
+                                  <option selected value="month">Months</option>
+                                  <option value="year">Years</option>
+                              </select>
+                          </div>
+                          <div class="span4">
+                              <label data-toggle="tooltip" title="Effective start date considering correlation offset">Required
+                                  Start Date</label>
+                              <input type="text" class="disabled adjusted-start-date" disabled="disabled"/>
+                          </div>
+                          <div class="span4">
+                              <label data-toggle="tooltip" title="Effective end date considering correlation offset">Required
+                                  End Date</label>
+                              <input type="text" class="disabled adjusted-end-date" disabled="disabled"/>
+                          </div>
+                      </div>
+
+                      <div class="row-fluid">
+                          <div class="span12">
+                              <label>Test Data to Analyze</label>
+                              <select style="width: 578px" class="select2-multi field-test-data" multiple
+                                      name="test_data">
+                                  <optgroup label="">
+                                      {{#each datasets}}
+                                      {{#if optGroup}}
+                                  </optgroup>
+                                  <optgroup label="{{categoryName}}">
+                                      {{/if}}
+                                      {{#if selectedTest}}
+                                      <option selected value="{{id}}" data-start="{{start}}" data-end="{{end}}">{{name}}
+                                          ({{YYYY-MM-DD start}} to {{YYYY-MM-DD end}})
+                                      </option>
+                                      {{else}}
+                                      <option value="{{id}}" data-start="{{start}}" data-end="{{end}}">{{name}}
+                                          ({{YYYY-MM-DD start}} to {{YYYY-MM-DD end}})
+                                      </option>
+                                      {{/if}}
+                                      {{/each}}
+                                  </optgroup>
+                              </select>
+                          </div>
+                      </div>
+
+                      <div class="row-fluid">
+                          <div class="span12">
+                              <div class="errors"></div>
+                          </div>
+                      </div>
+                      <div class="row-fluid">
+                          <div class="span12 text-right">
+                              <button class="btn btn-cancel">Cancel</button>
+                              <button class="btn btn-primary btn-submit">Submit</button>
+                          </div>
+                      </div>
+                  </fieldset>
+              </form>
+          </div>
+      </div>
+
+      <div class="row-fluid">
+          <div class="span12 analyze-sections">
+              <div class="analyze-section section-trending">
+                  <div id="emptyCalculationMessage" class="well">Select Parameters to generate a chart.</div>
+                  <div id="trendingChartLoader" class="well">
+                      <img src="/img/ajax-loader-circle.gif"/> &nbsp; Generating Charts...
+                  </div>
+              </div>
+
+          </div>
+
+          <div class="analyze-section section-compare">
+              This is the compare tab section.
+          </div>
+      </div>
+  </div>
+
+  <div id="openWorksheetModal" class="modal hide fade">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3>Open Snapshot</h3>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+          <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+          <!--<a href="#" class="btn btn-primary">Open Worksheet</a>-->
+      </div>
+  </div>
+</div>
+
+
+            </script>
+        
+            <script id="wk-category-pane-template" type="text/x-handlebars-template">
+                <ul class="nav nav-list nav-list-vivid">
+    <li class="nav-header"><a href="/manage/snapshots">Categories<span class="nav-counter">Show All</span></a></li>
+    {{#each categories}}
+        {{#if active}}
+        <li class="active">
+        {{else}}
+        <li>
+        {{/if}}
+        <a class="ui-droppable" href="/manage/snapshots/filtercategory/{{id}}">
+            {{name}}
+            <span class="nav-counter">{{count}}</span>
+        </a>
+    </li>
+    {{/each}}
+</ul>
+
+            </script>
+        
+            <script id="worksheets-template" type="text/x-handlebars-template">
+                <div class="row-fluid">
+	<div class="span12">
+		<h1>Snapshots
+		</h1>
+		<hr>
+	</div>
+</div>
+
+
+<div class="modal fade" id="categorizeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Categorize Multiple Snapshots</h4>
+            </div>
+            <div class="modal-body">
+                    <div id="categoryListContainer" class="row-container">
+                        <label>Category</label>
+                        {{!--select list provided dynamically--}}
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="categorizeSubmit" type="button" class="btn btn-primary">Continue</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<form>
+	<div class="row-fluid">
+        <div class="span3">
+            <div id="category-pane" class="tool-pane wk-category-pane" data-spy="affix">
+                <ul class="nav nav-list nav-list-vivid">
+                    <li class="nav-header"><a href="/manage/snapshots">Categories<span class="nav-counter">All</span></a></li>
+                    {{#each categories}}
+                        {{#if active}}
+                        <li class="active">
+                        {{else}}
+                        <li>
+                        {{/if}}
+                        <a class="ui-droppable" href="/manage/snapshots/filtercategory/{{id}}">
+                            {{name}}
+                            <span class="nav-counter">{{count}}</span>
+                        </a>
+                    </li>
+                    {{/each}}
+                </ul>
+                <br>
+                <a id="category_add" href="/manage/categories/add#snapshot" class="btn btn-block"><i class="icon-plus-sign"></i> Add Category</a>
+            </div>
+        </div>
+		<div class="span9">
+      {{#each categories}}
+        {{#if active}}
+          <div class="flat-well well-small header-pane" data-spy="affix">
+            <h4 style="margin:0">{{name}}
+              {{#if modify}}
+                &nbsp; <a href="/manage/categories/update/{{id}}#snapshot" class="btn-edit"><i class="icon-cog"></i></a>&nbsp;
+                <a href="/manage/categories/delete/{{id}}?type=snapshot" class="btn-delete-category"><i class="icon-trash"></i></a>
+              {{/if}}
+            </h4>
+          </div>
+        {{/if}}
+      {{/each}}
+
+      {{#if worksheets}}
+				<table class="table table-striped-depreacted table-condensed worksheets">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Created</th>
+							<th class="text-right">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+            {{#each worksheets}}
+							<tr class="ui-draggable" id="{{id}}">
+								<td class="name">{{name}}</td>
+								<td>{{createdFormatted}}</td>
+								<td class="text-right">
+									<a href="/analyze/trending#{{id}}" class="btn btn-mini btn-primary btn-open"><i class="icon-folder-open" rel="tooltip" title="Open" data-original-title="..." data-toggle="tooltip"></i></a>
+									<a href="/manage/snapshots/delete/{{id}}" class="btn btn-mini btn-danger"><i class="icon-remove-sign" rel="tooltip" title="Delete" data-original-title="..." data-toggle="tooltip"></i></a>
+								</td>
+							</tr>
+                        {{/each}}
+					</tbody>
+				</table>
+            {{else}}
+                <p>You have not saved any snapshots yet.</p>
+            {{/if}}
+		</div>
+	</div>
+</form>
+
+            </script>
+
+    <script id="home-template" type="text/x-handlebars-template">
+                <div class="row-fluid">
+    <div class="span12 analyze-sections">
+        <div class="analyze-section section-trending">
+            <div id="emptyCalculationMessage">
+
+                <div class="alert alert-info">
+                    <h3>Welcome.</h3>
+                    <p>This is where it all begins. You can perform calculations, create new snapshots to easily compare results, and save
+                        <a href="/manage/snapshots" data-toggle="tooltip" title="Snapshots are saved calculations">snapshots</a> to easily recall them later. <!-- Worksheets can be further organized into
+                            <a href="#" data-toggle="tooltip" title="Workbooks are a named collection of worksheets">workbooks</a> and
+                            <a href="#" data-toggle="tooltip" title="Projects are a named collection of workbooks">projects</a>.-->
+                    </p>
+                    <p class="text-center">
+                        <a href="/analyze/trending" class="btn btn-info btn-large-icon btn-wide btn-options-clone">
+                            <i class="icon-bar-chart"></i>
+                            Start New Calculation
+                        </a>
+                        <a href="#" class="btn btn-wide btn-large-icon btn-open-worksheet">
+                            <i class="icon-folder-open"></i>
+                            Open Snapshot
+                        </a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="openWorksheetModal" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Open Snapshot</h3>
+    </div>
+    <div class="modal-body"></div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        <!--<a href="#" class="btn btn-primary">Open Worksheet</a>-->
+    </div>
+</div>
+            </script>
+
+    <script id="category-update-template" type="text/x-handlebars-template">
+                <div class="row-fluid">
+    <div class="span12">
+        <h1>
+      {{#if category.categoryType}}
+            <a href="/manage/snapshots/filtercategory/{{category.id}}" data-original-title="Back to Snapshots" data-toggle="tooltip">
+      {{else}}
+            <a href="/manage/datasets/filtercategory/{{category.id}}" data-original-title="Back to Datasets" data-toggle="tooltip">
+      {{/if}}
+      <i class="icon-chevron-sign-left"></i></a> Update Category
+        </h1>
+        <hr>
+    </div>
+</div>
+<form method="POST" action="/manage/categories/update" id="updateCategoryForm">
+    <div class="rows">
+        <div class="row-fluid row-container">
+            <div class="span6">
+                <label> Category Name</label>
+                <input type="text" autocomplete="off" name="name" value="{{category.name}}"/>
+                <input type="hidden" name="id" value="{{category.id}}"/>
+                <input type="hidden" name="type" value="{{category.categoryType}}"/>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div class="navbar navbar-inverse navbar-fixed-bottom">
+        <div class="navbar-inner" style="padding-bottom: 5px; padding-right: 5px;">
+            <div class="btn-group pull-right">
+                <button type="button" style="width: 220px;" id="btn-cancel" class="btn cancel-category-update btn-default">Cancel</button>
+                <button type="button" style="width: 220px;" id="btn-continue" class="btn continue-category-update btn-default btn-primary">Continue</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+            </script>
+        
+    <script src="/js/vendor/jquery/jquery.js" type="text/javascript"></script>
+    <script src="/js/app/spec/lib/mocha.js"></script>
+    <script src="/js/app/spec/lib/chai.js"></script>
+    <script src="/js/app/spec/lib/sinon.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <script>
+      function assert(expr, msg) {
+        if (!expr) throw new Error(msg || 'failed');
+      }
+    </script>
+	<script src="/js/vendor/jquery.cookie.js"></script>
+	<script src="/js/vendor/foundation.datepicker.js"></script>
+	<script src="/js/vendor/select2.min.js"></script>
+	<script src="/js/vendor/date.format.js"></script>
+	<script src="/js/vendor/dateutil.js"></script>
+	<script src="/js/vendor/date.js"></script>
+	<script src="/js/vendor/highstock/js/highstock.js"></script>
+    <script src="/js/vendor/bootstrap/bootstrap-affix.js"></script>
+    <script src="/js/vendor/jquery/jquery.dataTables.js"></script>
+    <script src="/js/vendor/tabletools/TableTools.js"></script>
+    <script src="/js/vendor/tabletools/ZeroClipboard.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+    <script src="/js/app/spec/app_spec.min.js"></script>
+    <script>
+      onload = function(){
+        var runner = mocha.run();
+      };
+    </script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+  </body>
+</html>

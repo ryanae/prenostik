@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>categoryUpdate.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="app.html">
+                  app.js
+                </a>
+              
+                
+                <a class="source" href="PrenostikUser.html">
+                  PrenostikUser.js
+                </a>
+              
+                
+                <a class="source" href="accounts.html">
+                  accounts.js
+                </a>
+              
+                
+                <a class="source" href="accountsCommon.html">
+                  accountsCommon.js
+                </a>
+              
+                
+                <a class="source" href="categories.html">
+                  categories.js
+                </a>
+              
+                
+                <a class="source" href="corpaccounts.html">
+                  corpaccounts.js
+                </a>
+              
+                
+                <a class="source" href="login.html">
+                  login.js
+                </a>
+              
+                
+                <a class="source" href="analyze.html">
+                  analyze.js
+                </a>
+              
+                
+                <a class="source" href="category.html">
+                  category.js
+                </a>
+              
+                
+                <a class="source" href="categoryUpdate.html">
+                  categoryUpdate.js
+                </a>
+              
+                
+                <a class="source" href="dataset.html">
+                  dataset.js
+                </a>
+              
+                
+                <a class="source" href="home.html">
+                  home.js
+                </a>
+              
+                
+                <a class="source" href="snapshot.html">
+                  snapshot.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>categoryUpdate.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> toast = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../lib/toast'</span>),
+    hbs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'hbsfy/runtime'</span>),
+    _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'underscore'</span>),
+    Backbone = <span class="hljs-built_in">require</span>(<span class="hljs-string">'backbone'</span>);
+
+Backbone.$ = $;
+
+<span class="hljs-keyword">var</span> Category = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../models/category'</span>);
+<span class="hljs-keyword">var</span> category = <span class="hljs-keyword">new</span> Category()
+
+<span class="hljs-keyword">var</span> categoryUpdateTpl = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../../templates/category-update.hbs'</span>);
+
+<span class="hljs-keyword">var</span> CategoryUpdateView = Backbone.View.extend({
+	el: $(<span class="hljs-string">'#container'</span>),
+
+	template: categoryUpdateTpl,
+
+	events: {
+		<span class="hljs-string">'click #btn-continue'</span>: <span class="hljs-string">'onUpdateClick'</span>,
+		<span class="hljs-string">'click #btn-cancel'</span>: <span class="hljs-string">'onCancelClick'</span>
+	},
+
+	initialize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(socket, id, categoryType)</span> </span>{
+		_.bindAll(<span class="hljs-keyword">this</span>, <span class="hljs-string">'render'</span>);
+		<span class="hljs-keyword">this</span>.socket = socket;
+		<span class="hljs-keyword">this</span>.categoryId = id;
+		<span class="hljs-keyword">this</span>.categoryType = categoryType;
+		<span class="hljs-keyword">this</span>.render();
+	},
+
+	remove: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+	      <span class="hljs-keyword">this</span>.$el.empty().off(); <span class="hljs-comment">/* off to unbind the events */</span>
+	      <span class="hljs-keyword">this</span>.stopListening();
+	      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+	},
+
+	render: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+		category.fetch({
+			url: <span class="hljs-string">'/api/categories/get/'</span> + <span class="hljs-keyword">this</span>.categoryId,
+			success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+				<span class="hljs-keyword">var</span> categoryData = category.toJSON();
+				<span class="hljs-keyword">var</span> html = self.template({category: categoryData});
+				$(<span class="hljs-string">'#container'</span>).html(html);
+			}
+		});
+		<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+	},
+
+	onUpdateClick: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+		<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'clicked'</span>);
+		e.preventDefault();
+
+	},
+
+	onCancelClick: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'clicked'</span>);
+		<span class="hljs-built_in">window</span>.router.navigate(<span class="hljs-string">'/manage/'</span>+<span class="hljs-keyword">this</span>.categoryType+<span class="hljs-string">'/'</span>+<span class="hljs-keyword">this</span>.categoryId);
+
+
+	}
+});
+
+<span class="hljs-built_in">module</span>.exports = CategoryUpdateView;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

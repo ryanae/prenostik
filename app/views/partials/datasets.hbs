@@ -1,0 +1,224 @@
+<div class="row-fluid">
+	<div class="span12">
+	  <div id="datasets-h1">
+			<h1>Data Sets</h1>
+		</div>
+        <div class="pull-right">
+            <a href="#myModal" class="btn btn-primary" id="mcUploadButton"><i class="icon-plus-sign icon-large"></i> Upload Data</a>
+            <!--<a href="/manage/datasets/add" class="btn btn-primary"><i class="icon-plus-sign icon-large"></i> Upload Data Set</a>-->
+        </div>
+		<hr>
+	</div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Upload Data</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/manage/datasets/add/preview" enctype="multipart/form-data" id="addDatasetForm">
+                    <div class="row-container">
+                        <label>File</label>
+                        <input type="text" name="file_clone" disabled="disabled" class="disabled" value=""/>
+                        <button class="btn btn-choose-file">Choose Fillet</button>
+                        <input type="file" class="input-file" name="file" value=""/>
+						<span>Accepted formats: *.csv</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="mc-submit" type="button" class="btn btn-primary">Preview</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="categorizeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Categorize Multiple Datasets</h4>
+            </div>
+            <div class="modal-body">
+                {{!--<form method="POST" action="/manage/datasets/add/preview" id="multiCategorizeForm">--}}
+                    <div id="categoryListContainer" class="row-container">
+                        <label>Category</label>
+                        {{!--select list provided dynamically--}}
+                    </div>
+                {{!--</form>--}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="categorizeSubmit" type="button" class="btn btn-primary">Continue</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<form>
+	<div class="row-fluid">
+        <div class="span3">
+            <div id="category-pane" class="tool-pane">
+                <ul class="nav nav-list nav-list-vivid">
+                    <li class="nav-header"><a href="/manage/datasets">Categories<span class="nav-counter">All</span></a></li>
+                    {{#each categories}}
+                        {{#if active}}
+                        <li class="active">
+                        {{else}}
+                        <li>
+                        {{/if}}
+                        <a class="ui-droppable" href="/manage/datasets/{{id}}">
+                            {{name}}
+                            <span class="nav-counter">{{count}}</span>
+                        </a>
+                    </li>
+                    {{/each}}
+                </ul>
+                <br>
+                <a id="category_add" href="/manage/categories/add/datasets" class="btn btn-block"><i class="icon-plus-sign"></i> Add Category</a>
+            </div>
+        </div>
+
+        <div class="span9">
+            {{#each categories}}
+                {{#if active}}
+                    <div class="flat-well well-small header-pane">
+                        <h4 style="margin: 0">{{name}}
+                            {{#if modify}}
+                                &nbsp; <a href="/manage/categories/update/{{id}}" class="btn-edit"><i class="icon-cog"></i></a>&nbsp;
+                                <a href="/manage/categories/delete/{{id}}" class="btn-delete-category"><i class="icon-trash"></i></a>
+                            {{/if}}
+                        </h4>
+                    </div>
+                {{/if}}
+            {{/each}}
+
+            <div class="table-top">
+							<div class="row-fluid">
+								<div class="span8">
+									<div class="btn-group">
+										<a class="btn btn-primary btn-categorize"><i class="icon-edit"></i> Categorize</a>
+										<a class="btn btn-danger btn-multidelete"><i class="icon-remove-sign"></i> Delete</a>
+										<a class="btn btn-primary btn-select-all"><i class="icon-plus-sign"></i> Select All</a>
+										</div>
+								</div>
+								<div class="span4" style="float:right;text-align:right;">
+									<label>
+										Search:
+										<input type="text" class="search">
+									</label>
+								</div>
+							</div>
+						</div>
+
+            {{!--bootstrap table-striped class conflicts with datatables classes--}}
+            <table class="table table-striped-deprecated table-condensed datasets header-fixed">
+                <thead>
+                <tr>
+                    {{!--<th>
+                        <span id="allDatasets">
+                            <input type="checkbox" value="" id="applyAll" data-toggle="checkbox">
+                        </span>
+                    </th>--}}
+						<th class="col1">&nbsp;Name
+								<span style="float:right;">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+								</span>
+						</th>
+						<th class="col2">&nbsp;Owner
+								<span style="float:right;">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+								</span>
+						</th>
+						<th class="col3">&nbsp;Created
+								<span style="float:right;">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+								</span>
+						</th>
+						<th class="col4">&nbsp;Modified By
+								<span style="float:right;">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+								</span>
+						</th>
+						<th class="col5">&nbsp;Modified
+								<span style="float:right;">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+								</span>
+						</th>
+						<th class="col6">&nbsp;#&nbsp;Points
+								<span style="float:right;">
+									<span class="dropup">
+										<span class="caret"></span>
+									</span>
+									<br/>
+									<span class="caret"></span>
+								</span>
+						</th>
+						<th class="col7">&nbsp;Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {{#each datasets}}
+                    <tr class="ui-draggable" id="{{id}}">
+                        {{!--<td>
+                            <input type="checkbox" name="checkbox-{{id}}" id="checkbox-{{id}}" data-toggle="checkbox">
+                        </td>--}}
+                        <td class="name col1">
+                            {{name}}<br>
+                            <small>
+                                <i>Date Range: {{startFormatted}} - {{endFormatted}}</i>
+                            </small>
+													 <br/>
+													{{#if assignedWorksheets.length}}
+													<span class="label label-primary snapshot-dropdown">Linked Snapshots</span>
+													<ul class="assigned-snapshot-list">
+														{{#each assignedWorksheets}}
+															<li>{{this}}</li>
+														{{/each}}
+													</ul>
+													{{/if}}
+                        </td>
+                        <td class="col2">{{createdBy.lastname}}, {{createdBy.firstname}}</td>
+                        <td class="col3">{{createdDate}}</td>
+												{{#if modifiedBy}}
+													<td class="col4">{{modifiedBy.lastname}}, {{modifiedBy.firstname}}</td>
+												{{else}}
+													<td class="col4"></td>
+												{{/if}}
+                        <td class="col5">{{modifiedDate}}</td>
+                        <td class="col6">{{numDataPoints}}</td>
+                        <td class="col7">
+                            <!--<a class="btn btn-update btn-primary" href="/manage/datasets/update/{{id}}"><i class="icon-edit" rel="tooltip" title="Categorize" data-original-title="..." data-toggle="tooltip"></i></a>-->
+                            <a class="btn btn-update btn-primary" href="/manage/datasets/append/{{id}}"><i class="icon-upload" rel="tooltip" title="Append" data-original-title="..." data-toggle="tooltip"></i></a>
+                            <a class="btn btn-delete btn-danger" href="/manage/datasets/delete/{{id}}"><i class="icon-remove-sign" rel="tooltip" title="Delete" data-original-title="..." data-toggle="tooltip"></i></a>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>

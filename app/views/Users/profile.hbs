@@ -1,0 +1,189 @@
+<div class="row-fluid">
+	<div class="span12">
+		<h1>Profile Information</h1>
+		<hr>
+	</div>
+</div>
+
+<div class="row-fluid profile">
+    <div class="profile-avatar">
+        <i class="icon-user"></i>
+    </div>
+</div>
+
+<form id="personal_profile" name="personal_profile" method="post" action="/users/profile">
+
+<div class="row-fluid">
+	<div class="span6 offset3 flat-well">
+		<ul class="nav nav-tabs"id="tabs">
+			<li class="active"><a href="#tabPersProfile" data-toggle="tab" id="profileTab">Profile</a></li>
+			<li><a href="#tabPassword" data-toggle="tab" id="passwordTab">Password</a></li>
+		</ul>
+		<div class="tab-content" >
+			<div class="tab-pane active" id="tabPersProfile">
+				<div class="row-fluid">
+					<fieldset>							
+						<div class="row-fluid">
+							<div class="span12">
+								<div class="row-fluid">
+									<div class="span6">
+										<div class="row-fluid">
+											<div class="span12">
+												<label><i class="icon-user">&nbsp </i>Name:</label>	
+											</div>
+										</div>
+										<div class="row-fluid">
+											<div class="span12">
+												<div class="span4 required">
+													<label>First:</label>
+													<input type="text" id="firstname" name = "firstname" value="{{user.firstname}}"/>
+												</div>
+												<div class="span3">
+													<label>Middle:</label>						
+													<input type="text" id="middlename" name = "middlename" value="{{user.middlename}}"/>
+												</div>
+												<div class="span5 required">
+													<label>Last:</label>
+													<input type="text" id="lastname" name = "lastname" value="{{user.lastname}}"/>
+												</div>
+											</div>
+										</div>
+										<div class="row-fluid">
+											<div class="span12 required">
+												<label><i class="icon-user">&nbsp </i>Username:</label>
+											</div>
+										</div>
+										<div class="row-fluid">
+											<div class="span12">											
+												<input type="text" id="username" name = "username" value="{{user.username}}"/>
+											</div>
+										</div>	
+										<div class="row-fluid">
+											<div class="span12 required">								
+													<label><i class="icon-envelope">&nbsp </i>E-mail Address:</label>
+											</div>
+										</div>
+										<div class="row-fluid">
+											<div class="span12">											
+												<input type="text" id="email" name = "email" value="{{user.email}}"/>
+											</div>
+										</div>
+										<div class="row-fluid">
+											<div class="span12 required">
+												<label>Confirm E-mail Address:</label>
+											</div>
+										</div>							
+										<div class="row-fluid">
+											<div class="span12 required">
+												<input type="text" id="emailc" name = "emailc" value="{{user.email}}"/>
+											</div>
+										</div>											
+									</div>
+									
+									<div class="span6">
+										<div class="row-fluid">
+											<div class="span12">
+												<label></label>
+											</div>
+										</div>
+										<div class="row-fluid">
+											<div class="span11 offset1">
+												<label>Assigned Role(s):</label>
+											</div>
+										</div>
+										<div class="row-fluid">
+											<div class="span11 offset1">										
+												<ul >								
+													{{#each user.groups}}
+													<li>{{this.name}}</li>
+													{{/each}}									
+												</ul>
+											</div>
+										</div>										
+									</div>
+								</div>
+							</div>
+						</div>						
+					</fieldset>
+				</div>
+			</div>
+			
+			<div class="tab-pane" id="tabPassword">
+				<div class="row-fluid">
+					<div class="span6">
+						<div class="row-fluid">
+							<div class="span12">
+								<legend>Change password</legend>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<div class="span12">								
+								<input class="login-field" id="password" type="password" name="password"placeholder="New password"/>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<div class="span12">								
+								<label>Quality:</label>
+								<input class="text" id="qualityMeter"  name="qualityMeter" />
+							</div>	
+						</div>
+						<div class="row-fluid">
+							<div class="span12">								
+								<input class="login-field" id="passwordConfirm" type="password" name="passwordConfirm"placeholder="Re-enter new password"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<div class="row-fluid">
+	<div class="span6 offset6 text-right">
+		<a id= "profile_submit" class="btn btn-wide btn-primary btn-profile-submit">Save Changes</a>		
+	</div>
+</div>
+
+<!-- Audit Error dialog -->
+<div class="modal fade" id="errAudit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Account Data Error</h4>
+            </div>
+            <div class="modal-body">
+				<h6 id=errText> </h6>
+                <div class="span6">	
+					<div id="errList"></div>
+				</div>	 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                
+            </div>
+        </div>
+    </div>
+</div><!-- end modal dialog -->
+
+<!-- Authorization dialog -->
+<div class="modal fade" id="authEdits" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Authorization Required</h4>
+            </div>
+            <div class="modal-body">
+				<h6 id=errText>Please enter your current password to authorize these changes:</h6>
+                <div class="span8">	
+					<input type="password" id="cpass" name = "cpass" value=""/>
+				</div>	 
+            </div>
+            <div class="modal-footer">
+                <button id="authOK" type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                <button id="authNO" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div><!-- end modal dialog -->
+</form>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>login.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="app.html">
+                  app.js
+                </a>
+              
+                
+                <a class="source" href="PrenostikUser.html">
+                  PrenostikUser.js
+                </a>
+              
+                
+                <a class="source" href="accounts.html">
+                  accounts.js
+                </a>
+              
+                
+                <a class="source" href="accountsCommon.html">
+                  accountsCommon.js
+                </a>
+              
+                
+                <a class="source" href="categories.html">
+                  categories.js
+                </a>
+              
+                
+                <a class="source" href="corpaccounts.html">
+                  corpaccounts.js
+                </a>
+              
+                
+                <a class="source" href="login.html">
+                  login.js
+                </a>
+              
+                
+                <a class="source" href="analyze.html">
+                  analyze.js
+                </a>
+              
+                
+                <a class="source" href="category.html">
+                  category.js
+                </a>
+              
+                
+                <a class="source" href="categoryUpdate.html">
+                  categoryUpdate.js
+                </a>
+              
+                
+                <a class="source" href="dataset.html">
+                  dataset.js
+                </a>
+              
+                
+                <a class="source" href="home.html">
+                  home.js
+                </a>
+              
+                
+                <a class="source" href="snapshot.html">
+                  snapshot.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>login.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> toast = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../lib/toast'</span>);
+<span class="hljs-keyword">var</span> hbs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'hbs'</span>);
+<span class="hljs-keyword">var</span> PrenostikUser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./PrenostikUser'</span>);
+<span class="hljs-keyword">var</span> accountsCommon = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./accountsCommon'</span>);
+
+<span class="hljs-keyword">var</span> ctxSocket = {};
+<span class="hljs-keyword">var</span> Login = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(socket)</span> </span>{
+	<span class="hljs-keyword">this</span>.ctx = <span class="hljs-string">'.login-controller'</span>;
+	<span class="hljs-keyword">this</span>.socket = socket;
+
+	ctxSocket = socket;
+	<span class="hljs-keyword">this</span>.init();
+}
+
+Login.prototype.init = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+};
+
+<span class="hljs-built_in">module</span>.exports = Login;
+
+$( <span class="hljs-built_in">document</span> ).ready(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+	<span class="hljs-keyword">var</span> commonLib = <span class="hljs-keyword">new</span> accountsCommon;
+	$( <span class="hljs-string">"#username"</span> ).focus();  
+	$(<span class="hljs-string">'#forgot'</span>).attr(<span class="hljs-string">'href'</span>, <span class="hljs-string">'forgot'</span>);
+	$(<span class="hljs-string">'#password'</span>).attr(<span class="hljs-string">'maxlength'</span>,<span class="hljs-string">"50"</span>);
+	$(<span class="hljs-string">'#passwordConfirm'</span>).attr(<span class="hljs-string">'maxlength'</span>,<span class="hljs-string">"50"</span>);
+	$(<span class="hljs-string">'#qualityMeter'</span>).prop(<span class="hljs-string">"disabled"</span>, <span class="hljs-literal">true</span>);
+	$(<span class="hljs-string">'#qualityMeter'</span>).css(<span class="hljs-string">'color'</span>, <span class="hljs-string">'white'</span>);
+	commonLib.meter(<span class="hljs-number">0</span>, $(<span class="hljs-string">'#qualityMeter'</span>).get(<span class="hljs-number">0</span>));
+
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#init_pass'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{		
+		<span class="hljs-keyword">var</span> pass = $(<span class="hljs-string">'#password'</span>).val();
+		<span class="hljs-keyword">var</span> passC = $(<span class="hljs-string">'#passwordConfirm'</span>).val();
+		<span class="hljs-keyword">var</span> audit = commonLib.validatePassword(pass, passC);
+		<span class="hljs-keyword">if</span>(audit.valid == <span class="hljs-literal">true</span>)		
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"relogin"</span>).submit();		
+		<span class="hljs-keyword">else</span> <span class="hljs-comment">// There's a problem with the passwords.</span>
+			displayErrors(audit); 
+		
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#mnulogout'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+		<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"\n log out on menu clicked."</span>);
+		<span class="hljs-keyword">var</span> backlen = <span class="hljs-built_in">window</span>.history.length;
+		<span class="hljs-built_in">window</span>.history.go(-backlen);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>window.location.href = ‘/users/login’;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#profile_submit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Submit edits to a user’s personal profile.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">var</span> profile = {fname:$(<span class="hljs-string">'#firstname'</span>).get(<span class="hljs-number">0</span>),
+					   lname:$(<span class="hljs-string">'#lastname'</span>).get(<span class="hljs-number">0</span>),
+					   username:$(<span class="hljs-string">'#username'</span>).get(<span class="hljs-number">0</span>),
+					   email:$(<span class="hljs-string">'#email'</span>).get(<span class="hljs-number">0</span>),
+					   emailc:$(<span class="hljs-string">'#emailc'</span>).get(<span class="hljs-number">0</span>)
+					   }			
+		<span class="hljs-keyword">var</span> audit = commonLib.isValidEdit(profile);
+		
+		<span class="hljs-keyword">if</span>(audit.valid == <span class="hljs-literal">true</span>)
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Now check for a new password</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">var</span> newPass = $(<span class="hljs-string">'#password'</span>).val();		
+			<span class="hljs-keyword">if</span>(newPass.localeCompare(<span class="hljs-string">""</span>) !=<span class="hljs-number">0</span>)			
+				audit = commonLib.validatePassword(newPass, $(<span class="hljs-string">'#passwordConfirm'</span>).val());				
+				
+			<span class="hljs-keyword">if</span>(audit.valid == <span class="hljs-literal">true</span>)
+				$(<span class="hljs-string">"#authEdits"</span>).modal(); <span class="hljs-comment">// Get the current password.</span>
+			<span class="hljs-keyword">else</span> <span class="hljs-comment">// Password trouble.  Tell the user.</span>
+				displayErrors(audit); 			
+		}
+		<span class="hljs-keyword">else</span> <span class="hljs-comment">// Profile validation failed.  Inform the user of the problem.						</span>
+			displayErrors(audit); 					
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#authOK'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+			<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Pass: "</span>, $(<span class="hljs-string">'#cpass'</span>).val());</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Submit page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Page approved.  Submitting."</span>);
+			<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"personal_profile"</span>).submit();			
+			$(<span class="hljs-string">'#cpass'</span>).val(<span class="hljs-string">""</span>);			
+	});	
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'click'</span>, <span class="hljs-string">'#authNO'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>If user cancels the dialog, don’t need the pass
+hanging around in memory.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		$(<span class="hljs-string">'#cpass'</span>).val(<span class="hljs-string">""</span>);
+	});
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'keyup'</span>, <span class="hljs-string">'#password'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span>
+	</span>{
+		<span class="hljs-keyword">var</span> pass = $(<span class="hljs-string">'#password'</span>).val();
+		<span class="hljs-keyword">var</span> quality = commonLib.scorePassword(pass);
+		commonLib.meter(quality, $(<span class="hljs-string">'#qualityMeter'</span>).get(<span class="hljs-number">0</span>));		
+	});		
+	
+	$(<span class="hljs-string">'body'</span>).on(<span class="hljs-string">'change'</span>, <span class="hljs-string">'#password'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>
+	</span>{
+		<span class="hljs-keyword">var</span> pass = $(<span class="hljs-string">'#password'</span>).val();
+		<span class="hljs-keyword">var</span> quality = commonLib.scorePassword(pass);
+		commonLib.meter(quality, $(<span class="hljs-string">'#qualityMeter'</span>).get(<span class="hljs-number">0</span>));
+	});
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">displayErrors</span><span class="hljs-params">(audit)</span>
+</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Add the list to be modified to the dialog</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	$(<span class="hljs-string">"#errList"</span>).empty();
+	$(<span class="hljs-string">'#errList'</span>).append(<span class="hljs-string">"&lt;ul id='lstList' style='list-style-type:disc'&gt;&lt;/ul&gt;"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Populate the error messages</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>; i&lt;audit.errList.length; i++) 			
+		$(<span class="hljs-string">"#lstList"</span>).append(<span class="hljs-string">"&lt;li&gt;"</span>+audit.errList[i].text+<span class="hljs-string">"&lt;/li&gt;"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Tell the user what happened</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span>(audit.errList.length &gt; <span class="hljs-number">1</span>)
+		$(<span class="hljs-string">'#errText'</span>).text(<span class="hljs-string">"The following errors have occurred:"</span>);
+	<span class="hljs-keyword">else</span>
+		$(<span class="hljs-string">'#errText'</span>).text(<span class="hljs-string">"The following error has occurred:"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Display</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	$(<span class="hljs-string">"#errAudit"</span>).modal(); 	
+}	
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

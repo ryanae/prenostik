@@ -1,0 +1,28 @@
+<div class="well best-predictor-model-table-container">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Test Data</th>
+				<th class="text-center">Time Shift ({{shiftType}})</th>
+				<th class="text-center">Rank</th>
+                <th class="text-center">Percentage Correlated</th>
+                <th class="text-center">Coefficient</th>
+			</tr>
+		</thead>
+		<tbody>
+            {{#each autofactorreduce.factors}}
+				<tr>
+					<td>{{datastreamname}}</td>
+					<td class="span1 text-center">{{shiftfactor}}</td>
+					<td class="span1 text-center"><div data-toggle=tooltip data-original-title="P value: {{pvalformatted}}">{{rank}}</div></td>
+					<td class="span1 text-center">{{adjustedpercentagecorrelated}}</td>
+                    <td class="span1 text-right">{{coefficientformatted}}</td>
+				</tr>
+            {{/each}}
+		</tbody>
+	</table>
+
+	<div class="well well-small">
+		<h6 class="text-center"><b>Combined Percentage Correlation: {{autofactorreduce.percentagecorrelatedrounded}}%</b></h6>
+	</div>
+</div>

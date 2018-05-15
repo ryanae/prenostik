@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>snapshot.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="app.html">
+                  app.js
+                </a>
+              
+                
+                <a class="source" href="PrenostikUser.html">
+                  PrenostikUser.js
+                </a>
+              
+                
+                <a class="source" href="accounts.html">
+                  accounts.js
+                </a>
+              
+                
+                <a class="source" href="accountsCommon.html">
+                  accountsCommon.js
+                </a>
+              
+                
+                <a class="source" href="categories.html">
+                  categories.js
+                </a>
+              
+                
+                <a class="source" href="corpaccounts.html">
+                  corpaccounts.js
+                </a>
+              
+                
+                <a class="source" href="login.html">
+                  login.js
+                </a>
+              
+                
+                <a class="source" href="analyze.html">
+                  analyze.js
+                </a>
+              
+                
+                <a class="source" href="category.html">
+                  category.js
+                </a>
+              
+                
+                <a class="source" href="categoryUpdate.html">
+                  categoryUpdate.js
+                </a>
+              
+                
+                <a class="source" href="dataset.html">
+                  dataset.js
+                </a>
+              
+                
+                <a class="source" href="home.html">
+                  home.js
+                </a>
+              
+                
+                <a class="source" href="snapshot.html">
+                  snapshot.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>snapshot.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> toast = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../lib/toast'</span>),
+    hbs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'hbsfy/runtime'</span>),
+    _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'underscore'</span>),
+    Q = <span class="hljs-built_in">require</span>(<span class="hljs-string">'q'</span>),
+    Backbone = <span class="hljs-built_in">require</span>(<span class="hljs-string">'backbone'</span>);
+Backbone.$ = $;
+
+<span class="hljs-keyword">var</span> Categories = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../collections/categories'</span>);
+<span class="hljs-keyword">var</span> Snapshots = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../collections/snapshots'</span>);
+
+<span class="hljs-keyword">var</span> snapshots = <span class="hljs-keyword">new</span> Snapshots();
+<span class="hljs-keyword">var</span> categories = <span class="hljs-keyword">new</span> Categories();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>templates</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> worksheetsTpl = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../../templates/worksheets.hbs'</span>);
+<span class="hljs-keyword">var</span> categoryPane = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../../templates/wk-category-pane.hbs'</span>);
+
+<span class="hljs-keyword">var</span> SnapshotsView = Backbone.View.extend({
+
+  el: $(<span class="hljs-string">'#container'</span>),
+
+  template: worksheetsTpl,
+
+  events: {
+    <span class="hljs-string">'click .btn-select-all'</span>: <span class="hljs-string">'toggleSelectAll'</span>,
+    <span class="hljs-string">'click .btn-multidelete'</span>: <span class="hljs-string">'multiDelete'</span>,
+    <span class="hljs-string">'click .btn-categorize'</span>: <span class="hljs-string">'assignCategory'</span>,
+    <span class="hljs-string">'click .btn-rename'</span>: <span class="hljs-string">'renameSnapshot'</span>,
+    <span class="hljs-string">'click .btn-delete'</span>: <span class="hljs-string">'onDeleteClick'</span>,
+    <span class="hljs-string">'click .btn-delete-category'</span>: <span class="hljs-string">'onCategoryDeleteClick'</span>,
+    <span class="hljs-string">'click .btn-edit'</span>: <span class="hljs-string">'onCategoryEditClick'</span>,
+    <span class="hljs-string">'click #categorizeSubmit'</span>: <span class="hljs-string">'onCategorySelect'</span>,
+    <span class="hljs-string">'click .dataset-dropdown'</span>: <span class="hljs-string">'toggleLinkedDatasets'</span>
+  },
+
+  initialize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(socket, filterId)</span> </span>{
+    _.bindAll(<span class="hljs-keyword">this</span>, <span class="hljs-string">'render'</span>, <span class="hljs-string">'addAll'</span>);
+    <span class="hljs-keyword">this</span>.socket = socket;
+    <span class="hljs-keyword">this</span>.filterId = filterId;
+    <span class="hljs-keyword">this</span>.render();
+  },
+
+  remove: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">this</span>.$el.empty().off(); <span class="hljs-comment">/* off to unbind the events */</span>
+      <span class="hljs-keyword">this</span>.stopListening();
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  },
+
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    $.isLoading({ text: <span class="hljs-string">"Loading Snapshot List View"</span>});
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+
+    <span class="hljs-keyword">var</span> opts = {
+      reset: <span class="hljs-literal">true</span>,
+      success: self.addAll
+    }
+
+    <span class="hljs-keyword">var</span> categoryOpts = {
+      data: {type: <span class="hljs-number">1</span>},
+      reset: <span class="hljs-literal">true</span>,
+    }
+
+    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.filterId) {
+      opts.data = $.param({id: self.filterId});
+      categoryOpts.data.activeId = self.filterId;
+    }
+
+    self.initializeSnapshots(opts.data, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(snapshotData)</span></span>{
+      self.initializeCategories(categoryOpts.data, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(categoryData)</span></span>{
+        categories.reset(categoryData.categories);
+        snapshots.reset(snapshotData);
+        self.addAll();
+        $.isLoading(<span class="hljs-string">'hide'</span>);
+      });
+    });
+
+  },
+
+  initializeCategories: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data, cb)</span></span>{
+    $.ajax({
+      url: <span class="hljs-string">'/api/categories'</span>,
+      dataType: <span class="hljs-string">'json'</span>,
+      data: data,
+      success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+        cb(response);
+      }
+    })
+
+  },
+
+  initializeSnapshots: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data, cb)</span></span>{
+    $.ajax({
+      url: <span class="hljs-string">'/api/snapshots'</span>,
+      dataType: <span class="hljs-string">'json'</span>,
+      data: data,
+      success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+        cb(response);
+      }
+    })
+  },
+
+  addAll: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> snapshotData = snapshots.toJSON()
+    <span class="hljs-keyword">var</span> categoryData = categories.toJSON()
+    <span class="hljs-keyword">var</span> data = {
+      <span class="hljs-string">'worksheets'</span>: snapshotData,
+      <span class="hljs-string">'categories'</span>: categoryData
+    };
+    <span class="hljs-keyword">var</span> html = <span class="hljs-keyword">this</span>.template(data);
+    $(<span class="hljs-string">'#container'</span>).html(html);
+    $(<span class="hljs-string">'html'</span>).attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'worksheets-controller'</span>);
+
+    <span class="hljs-keyword">var</span> activeElem = $(<span class="hljs-string">'#category-pane .active'</span>);
+    <span class="hljs-keyword">var</span> headerPane = $(<span class="hljs-string">'.header-pane'</span>);
+    <span class="hljs-keyword">if</span> (activeElem.length === <span class="hljs-number">0</span>) {
+      $(<span class="hljs-string">'li.nav-header'</span>).addClass(<span class="hljs-string">'active'</span>);
+    }
+    <span class="hljs-keyword">if</span> (headerPane.length === <span class="hljs-number">0</span>) {
+      $(<span class="hljs-string">'.span9'</span>).prepend(<span class="hljs-string">'&lt;div class="flat-well well-small header-pane"&gt;&lt;h4 style="margin:0"&gt;All Categories&lt;/h4&gt;&lt;/div&gt;'</span>);
+    }
+
+    self.setupTable();
+    self.delegateEvents(self.events);
+  },
+
+  applyRowEvent: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    $(<span class="hljs-string">'.header-fixed &gt; tbody &gt; tr'</span>).off().on(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        e.preventDefault();
+        <span class="hljs-keyword">if</span>($(<span class="hljs-keyword">this</span>).hasClass(<span class="hljs-string">'selected-rows'</span>)){
+          $(<span class="hljs-keyword">this</span>).removeClass(<span class="hljs-string">'selected-rows'</span>);
+        } <span class="hljs-keyword">else</span> {
+          $(<span class="hljs-keyword">this</span>).addClass(<span class="hljs-string">'selected-rows'</span>);
+        }
+        $(<span class="hljs-string">'.selected-rows'</span>).draggable({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>option: { disabled: false },</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          helper: self.onDragCategory,
+          cursorAt: {
+            left: -<span class="hljs-number">5</span>,
+            bottom: <span class="hljs-number">5</span>
+          },
+          cursor: <span class="hljs-string">'move'</span>,
+          distance: <span class="hljs-number">10</span>,
+          delay: <span class="hljs-number">100</span>,
+          scope: <span class="hljs-string">'category'</span>,
+          revert: <span class="hljs-string">'invalid'</span>
+        });
+
+    });
+  },
+
+  setupTable: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Initialize table manipulation</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-string">'.table.no.worksheets'</span>).dataTable({
+      <span class="hljs-string">"bPaginate"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-string">"bLengthChange"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-string">"bFilter"</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-string">"bSort"</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-string">"bInfo"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-string">"bAutoWidth"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-string">"aoColumns"</span>: [
+        <span class="hljs-comment">/* Name */</span> <span class="hljs-literal">null</span>,
+        <span class="hljs-comment">/* Created */</span> <span class="hljs-literal">null</span>,
+        <span class="hljs-comment">/* Actions */</span> {
+          <span class="hljs-string">"bSearchable"</span>: <span class="hljs-literal">false</span>,
+          <span class="hljs-string">"bSortable"</span>: <span class="hljs-literal">false</span>
+        }
+      ],
+      <span class="hljs-string">"sDom"</span>: <span class="hljs-string">"&lt;'row-fluid tabletool-pane'&lt;'span8'T&gt;&lt;'span4'f&gt;r&gt;t&lt;'row-fluid'&lt;'span6'i&gt;&lt;'span6'p&gt;&gt;"</span>, <span class="hljs-comment">//"sDom": 'T&lt;"clear"&gt;lfrtip',</span>
+      <span class="hljs-string">"oTableTools"</span>: {
+        <span class="hljs-string">"sRowSelect"</span>: <span class="hljs-string">"multi"</span>,
+        <span class="hljs-string">"sSwfPath"</span>: <span class="hljs-string">"/img/tabletools/copy_csv_xls_pdf.swf"</span>,
+        <span class="hljs-string">"aButtons"</span>: [ <span class="hljs-comment">//"select_all", "select_none",</span>
+          <span class="hljs-comment">/*{
+           "sExtends":    "text",
+           "sButtonText": "&lt;i class='icon-edit'&gt;&lt;/i&gt; Categorize",
+           "sButtonClass": "btn btn-primary",
+           "fnInit": function ( nButton, oConfig ) {
+           $(nButton).removeClass('DTTT_button');
+           },
+           "fnClick": multiCategorize
+           },*/</span>
+          {
+            <span class="hljs-string">"sExtends"</span>: <span class="hljs-string">"text"</span>,
+            <span class="hljs-string">"sButtonText"</span>: <span class="hljs-string">"&lt;i class='icon-edit'&gt;&lt;/i&gt; Categorize"</span>,
+            <span class="hljs-string">"sButtonClass"</span>: <span class="hljs-string">"btn btn-primary"</span>,
+            <span class="hljs-string">"fnInit"</span>: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(nButton, oConfig)</span> </span>{
+              $(nButton).removeClass(<span class="hljs-string">'DTTT_button'</span>);
+            },
+            <span class="hljs-string">"fnClick"</span>: self.assignCategory
+          },
+          {
+            <span class="hljs-string">"sExtends"</span>: <span class="hljs-string">"text"</span>,
+            <span class="hljs-string">"sButtonText"</span>: <span class="hljs-string">"&lt;i class='icon-remove-sign'&gt;&lt;/i&gt; Delete"</span>,
+            <span class="hljs-string">"sButtonClass"</span>: <span class="hljs-string">"btn btn-danger"</span>,
+            <span class="hljs-string">"fnInit"</span>: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(nButton, oConfig)</span> </span>{
+              $(nButton).removeClass(<span class="hljs-string">'DTTT_button'</span>);
+            },
+            <span class="hljs-string">"fnClick"</span>: self.multiDelete
+          },
+          {
+            <span class="hljs-string">"sExtends"</span>: <span class="hljs-string">"text"</span>,
+            <span class="hljs-string">"sButtonText"</span>: <span class="hljs-string">"&lt;i class='icon-plus-sign'&gt;&lt;/i&gt; Select All"</span>,
+            <span class="hljs-string">"sButtonClass"</span>: <span class="hljs-string">"btn btn-primary"</span>,
+            <span class="hljs-string">"fnInit"</span>: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(nButton, oConfig)</span> </span>{
+              $(nButton).removeClass(<span class="hljs-string">'DTTT_button'</span>);
+            },
+            <span class="hljs-string">"fnClick"</span>: self.toggleSelectAll,
+            <span class="hljs-string">"fnSelect"</span>: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(nButton, oConfig, nRow)</span> </span>{
+              $(<span class="hljs-string">"tbody tr:not('.DTTT_selected')"</span>).draggable(<span class="hljs-string">"disable"</span>);
+              $(<span class="hljs-string">"tbody tr.DTTT_selected"</span>).draggable(<span class="hljs-string">"enable"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>refreshDraggable();</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            }
+          }
+        ]
+      }
+    });
+
+    $(<span class="hljs-string">'.dataTables_wrapper .DTTT_container'</span>).addClass(<span class="hljs-string">'btn-group'</span>);
+
+    $(<span class="hljs-string">'.header-fixed'</span>).tablesorter();
+
+
+    <span class="hljs-comment">/*$('.tool-pane,.tabletool-pane,table.worksheets thead').affix({
+      offset: {
+        top: 100
+      }
+    });*/</span>
+
+    $(<span class="hljs-built_in">document</span>).scroll(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> _top = $(<span class="hljs-built_in">document</span>).scrollTop();
+      <span class="hljs-keyword">if</span> (_top &gt; <span class="hljs-number">100</span>) {
+        self.adjustColumnHeaders();
+      }
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>resize header column widths when resizing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-built_in">window</span>).resize(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>When we use bootstrap affix on the thead, the column headers are no longer “connected” to the tbody td’s,
+so we set up this handler to resize the header columns widths
+todo: A bit hacky, is there a better way?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      self.adjustColumnHeaders();
+    });
+
+    $(<span class="hljs-string">'div#category-pane .ui-droppable'</span>).droppable({
+      scope: <span class="hljs-string">'category'</span>,
+      activeClass: <span class="hljs-string">'active'</span>,
+      hoverClass: <span class="hljs-string">'dropHover'</span>, <span class="hljs-comment">//icon-plus-sign</span>
+      tolerance: <span class="hljs-string">'pointer'</span>,
+      drop: self.onDropCategory
+    });
+
+    $(<span class="hljs-string">'div#category-pane .ui-droppable'</span>).removeData(<span class="hljs-string">'backbone-view'</span>);
+    $(<span class="hljs-string">'div#category-pane .ui-droppable'</span>).data(<span class="hljs-string">'backbone-view'</span>, self);
+    <span class="hljs-comment">/*$("tr.ui-draggable").draggable({
+</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>option: { disabled: false },</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      helper: self.onDragCategory,
+      cursorAt: {
+        left: -5,
+        bottom: 5
+      },
+      cursor: 'move',
+      distance: 10,
+      delay: 100,
+      scope: 'category',
+      revert: 'invalid'
+    });*/
+
+    $.expr[':'].Contains = function(a,i,m){
+      return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())&gt;=0;
+    };
+
+
+    $('.search').change(function () {
+        var filter = $(this).val();
+        console.log(filter);
+        if (filter) {
+          $('table.worksheets &gt; tbody &gt; tr').find("td:not(:Contains(" + filter + "))").parent().hide();
+          $('table.worksheets &gt; tbody &gt; tr').find("td:Contains(" + filter + ")").parent().show();
+        } else {
+          $('table.worksheets &gt; tbody').find("tr").show();
+        }
+      }).keyup(function () {
+        $(this).change();
+      });
+
+    self.applyRowEvent();
+
+  },
+
+  adjustColumnHeaders: function() {
+    $("table.worksheets thead.affix th").each(function(index) {
+      $(this).css('width', $("table.worksheets tbody tr:first-child td").eq(index).css("width"));
+    });
+  },
+
+  multiDelete: function(e) {
+    e.preventDefault();
+    var selectedRows = $('.selected-rows');
+    var worksheets = _.map(selectedRows, function(value){
+        return parseInt(value.id);
+    });
+    var snapshotList = _.reduce(selectedRows, function(memo, value) {
+      return memo + "&lt;li id='" + value.id + "'&gt;" + value.children[0].childNodes[1].innerText + "&lt;/li&gt;";
+    }, '');
+    snapshotList = "&lt;ul class='alert' id=''&gt;" + snapshotList + "&lt;/ul&gt;"
+    var html = '&lt;p class="lead text-center"&gt;Are you sure you want to delete the selected Snapshots(s)?&lt;/p&gt;' + snapshotList;
+    bootbox.confirm(html, function(result){
+        if (result) {
+          $.ajax({
+            url: '/api/snapshots/multidelete',
+            method: 'POST',
+            data: { ids: worksheets },
+            dataType: 'JSON',
+            beforeSend: function(){
+              $.isLoading({text: 'Deleting Snapshots'});
+            },
+            complete: function(){
+              $.isLoading('hide');
+            },
+            success: function(response){
+              if(response.success ){
+                 toast.notifySuccess('Success', 'Snapshots deleted successfully.');
+                 _.each(worksheets, function(value, key, list){
+                   $('#'+value).remove();
+                 });
+              } else {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>show error toast</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">var</span> error_res = response.error;
+                <span class="hljs-keyword">if</span>(<span class="hljs-keyword">typeof</span> error_res === <span class="hljs-string">"undefined"</span> || !error_res){
+                  toast.notifyError(<span class="hljs-string">'Error'</span>, <span class="hljs-string">'Could not delete selected Snapshot(s).'</span>)
+                  <span class="hljs-built_in">console</span>.log(error_res);
+                } <span class="hljs-keyword">else</span> {
+                  <span class="hljs-keyword">var</span> message = error_res.error.message;
+                  toast.notifyError(<span class="hljs-string">'Error'</span>, message)
+                }
+              }
+            },
+            error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span></span>{
+               <span class="hljs-built_in">console</span>.log(err);
+            }
+          });
+        } <span class="hljs-keyword">else</span> {
+
+        }
+    });
+  },
+
+  assignCategory: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> categories = $(<span class="hljs-string">'div#category-pane  ul li a.ui-droppable'</span>);
+    <span class="hljs-keyword">var</span> selectList = _.reduce(categories, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(memo, value)</span> </span>{
+      <span class="hljs-keyword">var</span> categoryId = value.href.substring(value.href.lastIndexOf(<span class="hljs-string">'/'</span>) + <span class="hljs-number">1</span>);
+      <span class="hljs-keyword">return</span> memo + <span class="hljs-string">"&lt;option value='"</span> + categoryId + <span class="hljs-string">"'&gt;"</span> + value.firstChild.nodeValue + <span class="hljs-string">"&lt;/option&gt;"</span>;
+    }, <span class="hljs-string">''</span>);
+    selectList = <span class="hljs-string">"&lt;select id='categorySelect'&gt;&lt;option value=''&gt;select category...&lt;/option&gt;"</span> + selectList + <span class="hljs-string">"&lt;/select&gt;"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>append select list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ($(<span class="hljs-string">'#categoryListContainer select'</span>)) {
+      $(<span class="hljs-string">'#categoryListContainer'</span>).replaceWith(selectList);
+    } <span class="hljs-keyword">else</span> {
+      $(<span class="hljs-string">'#categoryListContainer'</span>).append(selectList);
+    }
+    $(<span class="hljs-string">'#categorizeModal'</span>).modal(<span class="hljs-string">'show'</span>);
+  },
+
+  onCategorySelect: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> worksheetsTable = TableTools.fnGetInstance($(<span class="hljs-string">'table.worksheets'</span>).attr(<span class="hljs-string">'id'</span>));
+    <span class="hljs-keyword">var</span> selectedRows = worksheetsTable.fnGetSelected();
+    <span class="hljs-comment">/* perform operations on TR elements in the aSelectedTrs array */</span>
+    <span class="hljs-keyword">var</span> dataList = _.reduce(selectedRows, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(memo, value)</span> </span>{
+      <span class="hljs-keyword">return</span> memo + <span class="hljs-string">"&lt;li id='"</span> + value.id + <span class="hljs-string">"'&gt;"</span> + value.children[<span class="hljs-number">0</span>].firstChild.nodeValue + <span class="hljs-string">"&lt;/li&gt;"</span>;
+    }, <span class="hljs-string">''</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>return $(“&lt;ul class=’alert’’ id=’’ data-datasetids=’’&gt;”+datalist+”</ul>“);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    dataList = <span class="hljs-string">"&lt;ul class='alert'' id='' data-worksheetids=''&gt;"</span> + dataList + <span class="hljs-string">"&lt;/ul&gt;"</span>;
+
+    <span class="hljs-keyword">var</span> categoryId = $(<span class="hljs-string">'#categorySelect'</span>).val();
+    <span class="hljs-keyword">var</span> worksheets = _.map(selectedRows, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span> </span>{
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'id'</span>: <span class="hljs-built_in">parseInt</span>(value.id),
+        <span class="hljs-string">'categoryId'</span>: <span class="hljs-built_in">parseInt</span>(categoryId)
+      };
+    });
+
+    <span class="hljs-keyword">var</span> categoryName = $(<span class="hljs-string">"#categorySelect option:selected"</span>).text();
+    <span class="hljs-keyword">var</span> html = <span class="hljs-string">'&lt;p class="lead text-center"&gt;Are you sure you want to re-categorize the following snapshots as "'</span> + categoryName + <span class="hljs-string">'"?&lt;/p&gt;&lt;ul&gt;'</span> + dataList + <span class="hljs-string">'&lt;/ul&gt;'</span>;
+    bootbox.confirm(html, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(result)</span></span>{
+      <span class="hljs-keyword">if</span>(result) {
+        $(<span class="hljs-string">'#categorizeModal'</span>).modal(<span class="hljs-string">'hide'</span>);
+        self.multiCategoizeSend(worksheets);
+        setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+          <span class="hljs-built_in">window</span>.location.reload();
+        }, <span class="hljs-number">500</span>);
+      }
+    });
+  },
+
+  multiCategorizeSend: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(worksheets)</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> href = <span class="hljs-string">"/api/snapshots/multiupdate"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>snapshots.set(worksheets);
+toast.notifySuccess(‘Success’, ‘Worksheets updated successfully.’);
+//update the category list
+var html = hbs.handlebars.compile($(‘#wk-category-pane-template’).html())(response);
+$(“.wk-category-pane”).html(html);
+todo: duplicated - encapsulate</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-comment">/*$('div#category-pane .ui-droppable').droppable({
+      scope: 'category',
+      activeClass: 'active',
+      hoverClass: 'dropHover', //icon-plus-sign
+      tolerance: 'pointer',
+      drop: self.onDropCategory
+    });*/</span>
+
+    $.ajax({
+      url: href,
+      data: {
+        <span class="hljs-string">"worksheets"</span>: <span class="hljs-built_in">JSON</span>.stringify(worksheets)
+      },
+      method: <span class="hljs-string">'post'</span>,
+      dataType: <span class="hljs-string">'json'</span>,
+      success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+        <span class="hljs-keyword">if</span> (response.success) {
+          toast.notifySuccess(<span class="hljs-string">'Success'</span>, <span class="hljs-string">'Worksheets updated successfully.'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>update the category list</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">var</span> html = categoryPane(response);
+          $(<span class="hljs-string">".wk-category-pane"</span>).html(html);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>todo: duplicated - encapsulate</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          $(<span class="hljs-string">'div#category-pane .ui-droppable'</span>).droppable({
+            scope: <span class="hljs-string">'category'</span>,
+            activeClass: <span class="hljs-string">'active'</span>,
+            hoverClass: <span class="hljs-string">'dropHover'</span>, <span class="hljs-comment">//icon-plus-sign</span>
+            tolerance: <span class="hljs-string">'pointer'</span>,
+            drop: self.onDropCategory
+          });
+        } <span class="hljs-keyword">else</span> {
+          toast.notifyError(<span class="hljs-string">'Error'</span>, <span class="hljs-string">'Error: '</span> + response.error.code + <span class="hljs-string">' - '</span> + response.error.message);
+        }
+      },
+      error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>todo: handle error condition gracefully</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      }
+    });
+  },
+
+  onDropCategory: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(event, ui)</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> categoryId = <span class="hljs-keyword">this</span>.href.substring(<span class="hljs-keyword">this</span>.href.lastIndexOf(<span class="hljs-string">'/'</span>) + <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">var</span> worksheets = _.map(ui.helper.find(<span class="hljs-string">'li'</span>), <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span> </span>{
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'id'</span>: <span class="hljs-built_in">parseInt</span>(value.id),
+        <span class="hljs-string">'categoryId'</span>: <span class="hljs-built_in">parseInt</span>(categoryId)
+      };
+    });
+
+
+    <span class="hljs-keyword">var</span> snapshotsView = $(<span class="hljs-string">'div#category-pane .ui-droppable'</span>).data(<span class="hljs-string">'backbone-view'</span>);
+
+    <span class="hljs-keyword">if</span> (worksheets.length &gt; <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">var</span> html = <span class="hljs-string">'&lt;p class="modal-text lead text-center"&gt;Are you sure you want to re-categorize the following snapshots?&lt;/p&gt;&lt;ul class="snapshot-list"&gt;'</span> + ui.helper.html() + <span class="hljs-string">'&lt;/ul&gt;'</span>;
+      bootbox.confirm(html, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(result)</span> </span>{
+          <span class="hljs-keyword">if</span> (result) {
+              snapshotsView.multiCategorizeSend(worksheets);
+              setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+                <span class="hljs-built_in">window</span>.location.reload();
+              }, <span class="hljs-number">500</span>);
+          }
+      });
+    }
+  },
+
+  onDragCategory: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(event)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>make a list of selected items</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> selectedRows = $(<span class="hljs-string">'.selected-rows'</span>);
+    <span class="hljs-keyword">var</span> datalist = _.reduce(selectedRows, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(memo, value)</span> </span>{
+      <span class="hljs-keyword">return</span> memo + <span class="hljs-string">"&lt;li id='"</span> + value.id + <span class="hljs-string">"'&gt;"</span> + value.children[<span class="hljs-number">0</span>].childNodes[<span class="hljs-number">1</span>].innerText + <span class="hljs-string">"&lt;/li&gt;"</span>;
+    }, <span class="hljs-string">''</span>);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Data list"</span>, datalist);
+    <span class="hljs-keyword">return</span> $(<span class="hljs-string">"&lt;ul class='alert'' id='' data-worksheetids=''&gt;"</span> + datalist + <span class="hljs-string">"&lt;/ul&gt;"</span>);
+  },
+
+  toggleSelectAll: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span></span>{
+    e.preventDefault();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>select all of the visible rows without selecting filtered ones that are not visible</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span>($(<span class="hljs-string">'.btn-select-all'</span>).find(<span class="hljs-string">'i'</span>).hasClass(<span class="hljs-string">'icon-plus-sign'</span>)) {
+      $(<span class="hljs-string">'table &gt; tbody &gt; tr'</span>).each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(i, elem)</span> </span>{
+          <span class="hljs-keyword">if</span>($(elem).is(<span class="hljs-string">':visible'</span>)) {
+            $(elem).addClass(<span class="hljs-string">'selected-rows'</span>);
+          }
+      });
+      $(<span class="hljs-string">'.btn-select-all'</span>).html(<span class="hljs-string">"&lt;i class='icon-minus-sign'&gt;&lt;/i&gt; Deselect All"</span>);
+    } <span class="hljs-keyword">else</span> {
+      $(<span class="hljs-string">'table &gt; tbody &gt; tr'</span>).each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(i, elem)</span> </span>{
+          <span class="hljs-keyword">if</span>($(elem).is(<span class="hljs-string">':visible'</span>)) {
+            $(elem).removeClass(<span class="hljs-string">'selected-rows'</span>);
+          }
+       });
+      $(<span class="hljs-string">'.btn-select-all'</span>).html(<span class="hljs-string">"&lt;i class='icon-plus-sign'&gt;&lt;/i&gt; Select All"</span>);
+    }
+  },
+
+  onCategoryDeleteClick: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-keyword">var</span> col1 = $(e.currentTarget).closest(<span class="hljs-string">'h4'</span>).text();
+    <span class="hljs-keyword">var</span> href = $(e.currentTarget).attr(<span class="hljs-string">'href'</span>);
+
+    <span class="hljs-keyword">var</span> html = <span class="hljs-string">'&lt;p class="lead text-center"&gt;Are you sure you want to delete the following category?&lt;/p&gt;'</span>;
+    html += <span class="hljs-string">'&lt;dl class="dl-horizontal"&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dt&gt;Name&lt;/dt&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dd&gt;'</span> + col1 + <span class="hljs-string">'&lt;/dd&gt;'</span>;
+    html += <span class="hljs-string">'&lt;/dl&gt;'</span>;
+
+    bootbox.confirm(html, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(result)</span> </span>{
+      <span class="hljs-keyword">if</span> (result) {
+        <span class="hljs-built_in">window</span>.location = href;
+      }
+    });
+
+    e.preventDefault();
+  },
+
+  onDeleteClick: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'delete clicked'</span>);
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    <span class="hljs-keyword">var</span> col1 = $(e.currentTarget).closest(<span class="hljs-string">'tr'</span>).find(<span class="hljs-string">'.name'</span>).text();
+    <span class="hljs-keyword">var</span> col2 = $(e.currentTarget).closest(<span class="hljs-string">'tr'</span>).find(<span class="hljs-string">'td:nth-child(2)'</span>).text();
+    <span class="hljs-keyword">var</span> href = $(e.currentTarget).attr(<span class="hljs-string">'href'</span>);
+
+    <span class="hljs-keyword">var</span> html = <span class="hljs-string">'&lt;p class="lead text-center"&gt;Are you sure you want to delete the following snapshot?&lt;/p&gt;'</span>;
+    html += <span class="hljs-string">'&lt;dl class="dl-horizontal"&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dt&gt;Name&lt;/dt&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dd&gt;'</span> + col1 + <span class="hljs-string">'&lt;/dd&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dt&gt;Created&lt;/dt&gt;'</span>;
+    html += <span class="hljs-string">'  &lt;dd&gt;'</span> + col2 + <span class="hljs-string">'&lt;/dd&gt;'</span>;
+    html += <span class="hljs-string">'&lt;/dl&gt;'</span>;
+
+    bootbox.confirm(html, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(result)</span> </span>{
+      <span class="hljs-keyword">if</span> (result) {
+        <span class="hljs-keyword">var</span> worksheetId = $(e.currentTarget).closest(<span class="hljs-string">'tr'</span>).attr(<span class="hljs-string">'id'</span>);
+        $.ajax({
+          url: <span class="hljs-string">'/api/snapshots/delete/'</span>+worksheetId,
+          method: <span class="hljs-string">'get'</span>,
+          dataType: <span class="hljs-string">'json'</span>,
+          success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+            toast.notifySuccess(<span class="hljs-string">'Success'</span>, response.message);
+            $(<span class="hljs-string">'#'</span>+worksheetId).remove();
+          },
+
+          error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(res)</span> </span>{
+            <span class="hljs-built_in">console</span>.error(res);
+          }
+
+        });
+      }
+    });
+
+    e.preventDefault();
+  },
+
+  toggleLinkedDatasets: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+      e.stopImmediatePropagation();
+      $(e.currentTarget).siblings(<span class="hljs-string">'.assigned-dataset-list'</span>).toggle();
+  },
+
+  onCategoryEditClick: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    e.preventDefault();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>TODO permissions check</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> href = $(e.currentTarget).attr(<span class="hljs-string">'href'</span>);
+    <span class="hljs-built_in">window</span>.location = href;
+  },
+
+  renameSnapshot: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    e.preventDefault();
+
+    <span class="hljs-keyword">var</span> worksheetId = $(e.currentTarget).closest(<span class="hljs-string">'tr'</span>).attr(<span class="hljs-string">'id'</span>);
+    <span class="hljs-keyword">var</span> currentName = $(e.currentTarget).closest(<span class="hljs-string">'tr'</span>).find(<span class="hljs-string">'.name'</span>).text()
+
+
+    <span class="hljs-keyword">var</span> getSnapshots = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+      <span class="hljs-keyword">var</span> deferred = Q.defer();
+      <span class="hljs-keyword">var</span> worksheetNames = [];
+
+      $.ajax({
+        url: <span class="hljs-string">'/api/snapshots/list'</span>,
+        dataType: <span class="hljs-string">'json'</span>,
+        beforeSend: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+          $.isLoading({
+            text: <span class="hljs-string">"Loading All Snapshot Names"</span>,
+            position:<span class="hljs-string">'overlay'</span>});
+        },
+        complete: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+          $.isLoading(<span class="hljs-string">'hide'</span>);
+        },
+        error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(msg)</span></span>{
+          deferred.reject(msg);
+        },
+        success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; response.length; j++) {
+            <span class="hljs-keyword">var</span> obj1 = response[j];
+            worksheetNames.push(obj1.name);
+          }
+          deferred.resolve(worksheetNames);
+        }
+      });
+      <span class="hljs-keyword">return</span> deferred.promise;
+    };
+
+    getSnapshots().then(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(worksheetNames)</span></span>{
+        <span class="hljs-keyword">var</span> div = bootbox.prompt(<span class="hljs-string">'Rename/Copy Snapshot'</span>, <span class="hljs-string">'Cancel'</span>, <span class="hljs-string">'Rename'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(tabName, cloneRequest)</span> </span>{
+          <span class="hljs-keyword">if</span>(!cloneRequest){
+            <span class="hljs-keyword">if</span> (_.contains(worksheetNames, tabName)) {
+              toastr.error(<span class="hljs-string">"Snapshot Name Already Exists"</span>, <span class="hljs-string">'&lt;i class="icon-ban-circle"&gt;&lt;/i&gt; &lt;span&gt;'</span> + <span class="hljs-string">"Error"</span> + <span class="hljs-string">'&lt;/span&gt;'</span>);
+              <span class="hljs-keyword">return</span>;
+            }
+          }
+
+          <span class="hljs-keyword">if</span> (tabName === <span class="hljs-literal">null</span>) {
+            tabName = currentName;
+          } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(cloneRequest){
+
+            <span class="hljs-keyword">if</span>(tabName == currentName){
+              <span class="hljs-keyword">var</span> newTabName;
+              <span class="hljs-keyword">var</span> counter = <span class="hljs-number">1</span>;
+              <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>){
+                newTabName = tabName + <span class="hljs-string">' ('</span>+ counter +<span class="hljs-string">')'</span>;
+                <span class="hljs-keyword">if</span>(worksheetNames.indexOf(newTabName) === -<span class="hljs-number">1</span>){
+                  tabName = newTabName;
+                  <span class="hljs-keyword">break</span>;
+                }
+                counter++;
+              }
+            }
+
+            $.ajax({
+              url: <span class="hljs-string">'/api/snapshots/clone/'</span> + worksheetId,
+              data: {
+                name: tabName
+              },
+              method: <span class="hljs-string">'post'</span>,
+              dataType: <span class="hljs-string">'json'</span>,
+              beforeSend: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+                $.isLoading({
+                  text: <span class="hljs-string">"Copying Snapshot"</span>, 
+                  position:<span class="hljs-string">'overlay'</span>});
+              },
+              complete: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+                $.isLoading(<span class="hljs-string">'hide'</span>);
+              },
+              success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+                <span class="hljs-keyword">if</span> (response.id) {
+                  toast.notifySuccess(<span class="hljs-string">'Success'</span>, <span class="hljs-string">'Snapshot cloned successfully.'</span>);
+                  self.render();
+                } <span class="hljs-keyword">else</span> {
+                  toast.notifyError(<span class="hljs-string">'Error'</span>, <span class="hljs-string">'Unable to clone snapshot:'</span> + response.error);
+                }
+              }
+            });
+
+          } <span class="hljs-keyword">else</span> {
+
+            $.ajax({
+              url: <span class="hljs-string">'/api/snapshots/update'</span>,
+              data: {
+                id: worksheetId,
+                name: tabName
+              },
+              method: <span class="hljs-string">'post'</span>,
+              dataType: <span class="hljs-string">'json'</span>,
+              success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> </span>{
+                <span class="hljs-keyword">if</span> (response.success) {
+                  $(<span class="hljs-string">'#'</span>+worksheetId).find(<span class="hljs-string">'.name'</span>).text(tabName);
+                  toast.notifySuccess(<span class="hljs-string">'Success'</span>, <span class="hljs-string">'Snapshot updated successfully.'</span>);
+                } <span class="hljs-keyword">else</span> {
+                  toast.notifyError(<span class="hljs-string">'Error'</span>, <span class="hljs-string">'Unable to update worksheet:'</span> + response.error);
+                }
+              }
+            });
+          }
+        }, currentName, <span class="hljs-string">'Copy'</span>);
+
+        $(div).find(<span class="hljs-string">'input'</span>).css({
+          <span class="hljs-string">'margin-top'</span>: <span class="hljs-string">'5px'</span>,
+          <span class="hljs-string">'margin-bottom'</span>: <span class="hljs-string">'80px'</span>
+        });
+
+        setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+          $(div).find(<span class="hljs-string">'input'</span>).autocomplete({
+            source: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(request, response)</span> </span>{
+              <span class="hljs-keyword">var</span> results = $.ui.autocomplete.filter(worksheetNames, request.term);
+              response(results.slice(<span class="hljs-number">0</span>, <span class="hljs-number">5</span>));
+            }
+          });
+        }, <span class="hljs-number">500</span>);
+
+    });
+
+  }
+
+});
+
+<span class="hljs-built_in">module</span>.exports = SnapshotsView;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+
+.profile {
+    position: relative;
+}
+.profile-avatar {
+    position: absolute;
+    top: 0;
+    left: 70px;
+    font-size: 96px;
+    background-color: @base;
+    border-radius: 6px;
+    padding: 10px;
+    width: 125px;
+    line-height: 0;
+    text-align: center;
+    color: mix(@base, white, 65%);
+}
+
+.users-controller {
+    input {
+        margin-bottom: 10px !important;
+    }
+
+    input.error {
+      border-color: @danger;
+    }
+
+    .input-label-important {
+      margin-top: -15px;
+      display: block;
+      box-sizing: border-box;
+      padding-top: 15px;
+      margin-bottom: 10px;
+      margin-right: 0;
+      background-color: #e74c3c;
+      color: white;
+    }
+}
+
+.profile-avatar-triple {
+    position: absolute;
+    top: 0;
+    left: 70px;
+    font-size: 32px;
+    background-color: @base;
+    border-radius: 6px;
+    padding: 10px;
+    width: 125px;
+    line-height: 0;
+    text-align: center;
+    color: mix(@base, white, 65%);
+}
+
+.disabled {
+    cursor: default !important;
+    pointer-events: none;
+	color:lightgrey !important;	
+}
+.accounts-err-pop {
+    margin-top: 40px;
+	background-color:red;
+}
+
+.popover.blueWhite {
+  .popover-custom(#333, #fff, #fff, #08c, #06a);
+}
+.popover.blueWhiteblue {	
+  .popover-custom(#339, #eff, #fff, #08c, #06a, #0af, #08c);
+}
+
+.required label {
+    font-weight: bold;
+}
+.required label:after {
+    color: #e32;
+	font-size: 15px;
+    content: ' *';
+    display:inline;
+}
+.btn-stack {    
+        margin-top: 3px;    
+}

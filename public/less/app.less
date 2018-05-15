@@ -1,0 +1,337 @@
+@import "vendor/bootstrap/bootstrap.less";
+@import "vendor/bootstrap/bootstrap-switch.less";
+@import "vendor/toastr/toastr.less";
+@import "vendor/font-awesome/font-awesome.less";
+@import "vendor/select2/select2.less";
+@import "vendor/flat-ui/flat-ui.less";
+@import "vendor/datatables/jquery.dataTables.less";
+@import "vendor/tabletools/TableTools.less";
+@import "app/login.less";
+@import "app/analyze.less";
+@import "app/datasets.less";
+@import "app/worksheets.less";
+@import "app/account.less";
+@import "vendor/tipover/popover-custom.less";
+@import "vendor/tipover/tooltip-custom.less";
+
+html {
+  height: 100%;
+}
+
+body {
+    padding-top: 73px;
+    padding-bottom: 40px;
+    overflow-y: scroll;
+    min-height:100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    i[class^="icon-"] {
+        margin-right: 10px;
+    }
+}
+
+.yes {
+  color: @success;
+}
+
+.no {
+  color: @danger;
+}
+
+input:not(.spinner) {
+    /*height: auto !important;*/ /*tday experimental change*/
+    box-sizing: border-box;
+    margin: 0;
+    width: 100%;
+}
+
+.btn-large-icon {
+    i {
+        display: block;
+        font-size: 62px;
+        line-height: 85px;
+    }
+}
+
+.flat-well {
+    background-color: @form-color;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    .border-radius(6px);
+
+    // Ear
+    &.ear:before {
+        content: '';
+        border-style: solid;
+        border-width: 12px 12px 12px 0;
+        border-color: transparent @form-color transparent transparent;
+        height: 0;
+        position: absolute;
+        left: -12px;
+        top: 35px;
+        width: 0;
+        -webkit-transform: rotate(360deg); // Make corners smooth
+    }
+}
+
+.toastMessages {
+    display: none !important; // toastr will show these instead
+}
+
+.navbar {
+    .brand {
+        padding: 6px 20px;
+        border-bottom: none;
+    }
+
+    .nav > li > a {
+        border-bottom: none;
+    }
+
+    .dropdown .dropdown-menu .nav-header {
+        text-shadow: none;
+        color: lighten(@base, 33%);
+        padding-left: 10px;
+    }
+}
+
+
+/* override vendor\flat-ui\modules\tooltip.less */
+.tooltip.right .tooltip-arrow {
+    border-right-color: #34495e; //change background color to blue info
+}
+.tooltip.top .tooltip-arrow {
+    border-top-color: #34495e; //change background color to blue info
+}
+.tooltip-inner {
+    background-color: #34495e; //change background color to blue info
+}
+
+/*navigation bar graphic*/
+a.brand img {
+    height:39px;
+}
+
+/*provide additional bootstrap-like classes*/
+.child-absolute{
+    position:relative;
+}
+.child-absolute .pull-down{
+    position:absolute;
+    bottom:0px;
+}
+.child-absolute .pull-right{
+    right:0px;
+}
+
+.footer {
+  border-top: 1px;
+  border-top-color: black;
+  width: 98.5%;
+  position:fixed;
+  bottom:0;
+  padding-bottom: 5px;
+  z-index:99999;
+}
+
+.table-top {
+  position:relative;
+  clear:both;
+  *zoom:1;
+}
+
+.modal-body {
+  overflow: auto;
+}
+
+.header-fixed {
+  position:relative;
+  margin:0 auto;
+  clear:both;
+  width: 100%;
+  *zoom:1;
+}
+
+.header-fixed > tbody {
+  overflow-y:auto;
+  height: 600px;
+}
+
+.header-fixed > thead,
+.header-fixed > tbody,
+.header-fixed > thead > tr,
+.header-fixed > tbody > tr,
+.header-fixed > thead > tr > th,
+.header-fixed > tbody > tr > td {
+  display:block;
+}
+
+.header-fixed > tbody > tr,
+.header-fixed > thead > tr {
+  cursor:pointer;
+}
+
+.header-fixed > tbody > tr:after,
+.header-fixed > thead > tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.header-fixed > tbody > tr > td,
+.header-fixed > thead > tr > th {
+    padding: 5px 0px;
+    float: left;
+}
+
+.table.datasets > tbody > tr > td,
+.table.datasets > thead > tr > th {
+   padding: 5px 0px;
+}
+
+.sort-arrows {
+  float: right;
+}
+
+@quarter: 25%;
+@tenth: 10%;
+
+.table.datasets > tbody > tr > .col1,
+.table.datasets > thead > tr > .col1 {
+  width: 40%;
+
+}
+.table.datasets > tbody > tr > .col2,
+.table.datasets > thead > tr > .col2 {
+  width: @tenth;
+}
+
+.table.datasets > tbody > tr > .col3,
+.table.datasets > thead > tr > .col3 {
+  width: @tenth;
+}
+.table.datasets > tbody > tr > .col4,
+.table.datasets > thead > tr > .col4 {
+  width: @tenth;
+}
+.table.datasets > tbody > tr > .col5,
+.table.datasets > thead > tr > .col5 {
+  width: @tenth;
+}
+.table.datasets > tbody > tr > .col6,
+.table.datasets > thead > tr > .col6 {
+  width: @tenth;
+  text-align: center;
+}
+
+.table.datasets > tbody > tr > .col7,
+.table.datasets > thead > tr > .col7 {
+  width: @tenth;
+  text-align: center;
+}
+
+/* worksheets */
+.table.worksheets > tbody > tr > .col1,
+.table.worksheets > thead > tr > .col1 {
+  width: 35%;
+
+}
+.table.worksheets > tbody > tr > .col2,
+.table.worksheets > thead > tr > .col2 {
+  width: 13%;
+}
+
+.table.worksheets > tbody > tr > .col3,
+.table.worksheets > thead > tr > .col3 {
+  width: 13%;
+}
+
+.table.worksheets > tbody > tr > .col4,
+.table.worksheets > thead > tr > .col4 {
+  width: 13%;
+}
+
+.table.worksheets > tbody > tr > .col5,
+.table.worksheets > thead > tr > .col5 {
+  width: 13%;
+}
+
+.table.worksheets > tbody > tr > .col7,
+.table.worksheets > thead > tr > .col7 {
+  width:  12%;
+  text-align: center;
+}
+
+
+.dataset-dropdown, .snapshot-dropdown {
+  cursor:pointer;
+}
+
+.selected-rows {
+  background-color: #9FAFD1;
+}
+
+.assigned-dataset-list, .assigned-snapshot-list {
+  display:none;
+}
+
+.dropup .caret {
+  border-bottom:10px solid #c9c9c9;
+}
+
+.caret {
+  border-top:10px solid #c9c9c9;
+}
+
+.isloading-wrapper.isloading-right {
+  margin-left: 10px;
+}
+.isloading-overlay {
+  position:relative;
+  text-align: center;
+}
+.isloading-overlay .isloading-wrapper {
+  background: #34495e;
+  color: #FFFFFF;
+  -webkit-border-radius: 7px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 7px;
+  -moz-background-clip: padding;
+  border-radius: 7px;
+  background-clip: padding-box;
+  display: inline-block;
+  margin: 0 auto;
+  padding: 10px 20px;
+  font-size: 24px;
+  top: 10%;
+  z-index: 9000;
+}
+
+.ui-menu {
+  background: #fff;
+  width: 50px;
+  border: 1px solid #eee;
+  list-style-type: none;
+  z-index: 999999999999;
+}
+
+.ui-menu .ui-menu-item {
+    border-radius: 0px;
+}
+
+.ui-menu-item .ui-state-focus {
+  background: #eee;
+}
+
+body.modal-open {
+  overflow:hidden;
+}
+
+.ui-helper-hidden-accessible { display:none; }
