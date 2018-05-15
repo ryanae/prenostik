@@ -6,10 +6,9 @@ class Home extends Component {
     render() {
         
         return (
-            <div class="wrapper">
-                <div class="col-4">
-                    <h2>Homepage</h2>
-                </div>            
+            <div>
+                <h2>Recent Activity</h2>
+                <div><button type="button" class="btn btn-success" href="#">Create New Analysis</button></div>
             </div>
         );
         
