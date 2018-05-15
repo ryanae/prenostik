@@ -7,13 +7,17 @@ import datasets from './pages/datasets/datasets.js';
 import newAnalysis from './pages/analysis/newAnalysis.js';
 import savedResults from './pages/saved/savedResults.js';
 
+import homeIcon from './icons/home.svg';
+import userIcon from './img/user.jpg';
+
 const App = () => (
     <div className="app" class="container-fluid">
         <div class="row">
-            <div class="col-xs-2">
+            <div class="col sidebar">
                 <Navigation />
             </div>
-            <div class="col-xs-10">
+    
+            <div class="col content">
                 <Main />
             </div>
         </div>
@@ -22,20 +26,56 @@ const App = () => (
 
 const Navigation = () => (
         <nav id="sidebar">
-            <ul>
-                <button type="button" class="btn btn-outline-light btn-block">
-                    <NavLink to ="/">Home</NavLink>
+            <NavLink to ="/">
+                <div class="nav-header"> <h1>Pre<strong>nostik</strong></h1> </div>
+            </NavLink>
+    
+            <div class="user-info">
+                <img src={userIcon}/>
+                <h3>User Name</h3>
+                <h4>company name </h4>
+            </div>
+    
+            <div class="nav-links">
+                <NavLink to ="/">
+                    <button type="button" class="nav-btn btn btn-block">
+                        <div class="nav-icon"> <img src={homeIcon} /> </div> 
+
+                        <div class="nav-label">Home</div>
+                    </button>
+                </NavLink>
+
+                <NavLink to ="/analysis/new">
+                    <button type="button" class="nav-btn btn btn-block">
+                        <div class="nav-icon"> <img src={homeIcon} /> </div> 
+
+                        <div class="nav-label">Start New Analysis</div>
+                    </button>
+                </NavLink>
+
+                <NavLink to ="/saved-results">
+                    <button type="button" class="nav-btn btn btn-block">
+                        <div class="nav-icon"> <img src={homeIcon} /> </div> 
+
+                        <div class="nav-label">Saved Results</div>
+                    </button>
+                </NavLink>
+
+                <NavLink to ="/my-datasets">
+                    <button type="button" class="nav-btn btn btn-block">
+                        <div class="nav-icon"> <img src={homeIcon} /> </div> 
+
+                        <div class="nav-label">My Datasets</div>                
                 </button>
-                <button type="button" class="btn btn-outline-light btn-block">
-                    <NavLink to ="/analysis/new">Start New Analysis</NavLink>
-                </button>
-                <button type="button" class="btn btn-outline-light btn-block">
-                    <NavLink to ="/saved-results">Saved Results</NavLink>
-                </button>
-                <button type="button" class="btn btn-outline-light btn-block">
-                    <NavLink to ="/my-datasets">My Datasets</NavLink>
-                </button>
-            </ul>
+                </NavLink>
+
+                <div class="collapse-button">
+                    <button type="button" class="nav-btn btn btn-outline-light btn-block">
+                        <img src={homeIcon} />
+                    </button>
+                </div>
+            </div>
+    
         </nav>
 );
 
