@@ -10,7 +10,12 @@ import savedResults from './pages/saved/savedResults.js';
 import homeIcon from './icons/home.svg';
 import userIcon from './img/user.jpg';
 
-const App = () => (
+function toggleSidebar() {
+    var sidebar = document.getElementByClassName("sidebar");
+    sidebar.style.background = "#000";
+}
+
+const App = () => (    
     <div className="app" class="container-fluid">
         <div class="row">
             <div class="col sidebar">
@@ -27,7 +32,10 @@ const App = () => (
 const Navigation = () => (
         <nav id="sidebar">
             <NavLink to ="/">
-                <div class="nav-header"> <h1>Pre<strong>nostik</strong></h1> </div>
+                <div class="nav-header"> 
+                    <h1>Pre<strong>nostik</strong></h1> 
+                    <h2><strong>P</strong></h2>
+                </div>
             </NavLink>
     
             <div class="user-info">

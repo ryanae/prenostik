@@ -16,6 +16,7 @@ body, html {
 
 .sidebar {
     min-height: 100vh;
+    min-width: 225px;
     max-width: 225px;
     background: #333;
     padding: 0px;
@@ -103,3 +104,10 @@ body, html {
     max-height: 15px;
     max-width: 15px;
 }
+
+/* The following content is HIDDEN in the FULL sidebar */
+#sidebar h2 {
+    display: none;
+}
+
+/* The following content is HIDDEN in the LITE sidebar */
