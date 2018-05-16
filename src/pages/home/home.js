@@ -1,19 +1,50 @@
-/* This is the main/first page for the Home page. */
+/* Home page */
 
-import React from 'react';
+import React, { Component } from 'react';
 
-const home = () => (
-    <div className="home">
+
+
+class Home extends Component {
+    render() {
         
-        <div class="card">
-            <div class="card-title">
+        return (
+            <div>
+                <h3 class="m-3">Recent Activity</h3>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">  
+                            <div class="card w-auto">
+                            <div class="card-body">
+                                <h6 class="card-title">Sample Result</h6>
+                                <img class="m-2" src="sample.jpg"></img>
+                              <p class="h6"><strong>Last Edited</strong> <a href="#" class="btn btn-success float-right">Open</a></p>
+                            
+                        </div>
             </div>
-            <div class="card-body">
-                <p>Date Created: 00/00/00</p>
+                        </div>
+                        <div class="col">
+                              <div class="card w-auto">
+                            <div class="card-body">
+                                <h6 class="card-title">Sample Result</h6>
+                                <img class="m-2" src="#"></img>
+                              <p class="h6"><strong>Last Edited</strong> <a href="#" class="btn btn-success float-right">Open</a></p>
+                            
+                        </div>
             </div>
-        </div>
-    
-    </div>
-);
+                        </div>
+        
+                      
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        );
+        
+    }
+}
 
-export default home;
+export default Home
