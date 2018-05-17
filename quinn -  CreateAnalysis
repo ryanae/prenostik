@@ -1,0 +1,105 @@
+import React, { Component } from 'react';
+import { Button, ButtonGroup } from 'reactstrap';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
+
+
+
+
+class CreateAnalysis extends Component {
+  constructor (props) {
+    super(props);
+
+    this.state = { cSelected: '', startDate: moment()};
+ 
+
+    this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  onRadioBtnClick(rSelected) {
+    this.setState({ rSelected });
+  }
+
+  handleChange(date) {
+    
+    this.setState({
+      startDate: date
+    });
+    
+  }
+
+  render() {
+    return (
+      <div>
+        <h2>Start New Analysis</h2>
+        
+        <ButtonGroup>
+
+
+          <Button outline color="info" onClick={() => this.onRadioBtnClick(
+            <form class="d-flex">
+
+              <br></br>
+              <label>
+                Reference Data:              
+
+                  <button class="float-right" bsStyle="primary" bsSize="large" onClick={()=> {alert('Data Sets')}} > 
+                     --Select Reference Dataset--
+
+                  </button>
+                   <p>Select dataset to be used to 
+                  compare with other data fields.</p>
+                  <br></br>
+
+                Test Data to Analyze:
+                  <button class="float-right" bsStyle="primary" bsSize="large" onClick={()=> {alert('Data Sets')}} > 
+                   --Select Test Dataset(s)--
+                  </button>
+                    <p> Select dataset(s) to compare with selected reference dataset.</p>
+                  <br></br>
+               </label>        
+              </form> )} >
+           
+            <strong>Step 1 </strong> Choose Dateset
+
+
+          </Button>
+          <Button 
+            outline color="info" 
+            onClick={() => this.onRadioBtnClick(
+          
+            <label>
+              Choose Start Date: 
+         
+              <DatePicker 
+                selected ={this.state.startDate} 
+                onChange={this.handleChange}
+              />
+            </label>
+            )} 
+
+            >
+            
+            <strong>Step 2 </strong> Choose Timeframe
+          </Button>
+
+          <Button outline color="info" onClick={() => this.onRadioBtnClick(3)} active={this.state.rSelected === 3}>
+            <strong>Step 3 </strong> Confirm Selections
+          </Button>
+        </ButtonGroup>
+
+        <div>{this.state.rSelected}</div>
+
+
+        
+        
+      </div>
+    );
+  }
+}
+
+
+
+export default CreateAnalysis
