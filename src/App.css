@@ -132,12 +132,27 @@ body, html {
     border-radius: 25px;
 }
 
+#saved-heading{ 
+    text-align: left;
+    letter-spacing: 3px; 
+    font-size: 2em;
+    font-family: inherit;
+    padding: 10px; 
+    padding-left:25px; 
+    margin-top: 20px; 
+}
+
 .panel-body{
     position: relative;
     width:600px; 
     height:400px;
-    margin: 20px;
-    margin-top: 40px; 
+}
+
+#last-edited-text{
+    position:absolute; 
+    bottom: 10px; 
+    padding: 10px; 
+    padding-left: 25px; 
 }
 
 #open-save-btn{
@@ -145,3 +160,4 @@ body, html {
     bottom: 30px; 
     right: 10px; 
 }
+

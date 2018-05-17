@@ -28,8 +28,9 @@ const savedResults = () => (
         <div class="row">   
             <div class="col-sm">
                 <div class="panel panel-default"> 
+                <div class="panel heading" id="saved-heading"> Result 1 </div>
                 <div class="panel-body">
-                    <p>Result 1 </p>
+                    <div id="last-edited-text"> Last Edited </div>
                     <button type="button" class="btn" id="open-save-btn">Open</button>
                 </div>
                 </div>
@@ -37,8 +38,9 @@ const savedResults = () => (
     
             <div class="col-sm">
                 <div class="panel panel-default"> 
+                <div class="panel heading" id="saved-heading"> Result 2 </div>
                 <div class="panel-body">
-                    <p>Result 2</p>
+                    <div id="last-edited-text"> Last Edited </div>
                     <button type="button" class="btn" id="open-save-btn">Open</button>
                 </div>
                 </div>
@@ -48,8 +50,9 @@ const savedResults = () => (
             <div class="row">   
             <div class="col-sm">
                 <div class="panel panel-default"> 
+                <div class="panel heading"  id="saved-heading"> Result 3 </div>
                 <div class="panel-body">
-                    <p>Result 3</p>
+                    <div id="last-edited-text"> Last Edited </div>
                     <button type="button" class="btn" id="open-save-btn">Open</button>
                 </div>
                 </div>
@@ -57,8 +60,9 @@ const savedResults = () => (
     
             <div class="col-sm">
                 <div class="panel panel-default"> 
+                <div class="panel heading"  id="saved-heading"> Result 4 </div>
                 <div class="panel-body">
-                    <p>Result 4</p>
+                    <div id="last-edited-text"> Last Edited </div>
                     <button type="button" class="btn" id="open-save-btn">Open</button>
                 </div>
                 </div>
