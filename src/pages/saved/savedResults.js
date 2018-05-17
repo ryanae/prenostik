@@ -6,50 +6,61 @@ const savedResults = () => (
     
     <div id="savedResults" className="savedResults">
         <div class="row">
-            <h1> Results for Untitled Analysis</h1>
+            <h1> Saved Results</h1>
         </div>
         <div class="row">
-    
             <div class="col">
-            <button type="button" class="btn btn-primary btn-block">View</button>
+            <button type="button" class="btn btn-primary btn-block" id="save-result-btn">View</button>
             </div>
     
             <div class="col">
-            <button type="button" class="btn btn-primary btn-block">Edit</button> 
+            <button type="button" class="btn btn-primary btn-block" id="save-result-btn">Edit</button> 
             </div>
     
             <div class="col">
-            <button type="button" class="btn btn-primary btn-block hidden-print" onclick="printfunction()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button>
+            <button type="button" class="btn btn-primary btn-block hidden-print" id="save-result-btn" onclick="printfunction()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button>
             </div>
     
             <div class="col">
-            <button type="button" class="btn btn-primary btn-block"  data-toggle="modal" data-target="#SaveModal" >Save</button> 
+            <button type="button" class="btn btn-primary btn-block"  id="save-result-btn" data-toggle="modal" data-target="#SaveModal" >Save</button> 
             </div>
         </div>
         <div class="row">   
             <div class="col-sm">
                 <div class="panel panel-default"> 
-                <div class="panel-body">Put graph here</div>
+                <div class="panel-body">
+                    <p>Result 1 </p>
+                    <button type="button" class="btn" id="open-save-btn">Open</button>
+                </div>
                 </div>
             </div>
     
             <div class="col-sm">
                 <div class="panel panel-default"> 
-                <div class="panel-body">Put graph here</div>
+                <div class="panel-body">
+                    <p>Result 2</p>
+                    <button type="button" class="btn" id="open-save-btn">Open</button>
+                </div>
                 </div>
             </div>
         </div>
     
-        <div class="row">   
+            <div class="row">   
             <div class="col-sm">
                 <div class="panel panel-default"> 
-                <div class="panel-body">Put graph here</div>
+                <div class="panel-body">
+                    <p>Result 3</p>
+                    <button type="button" class="btn" id="open-save-btn">Open</button>
+                </div>
                 </div>
             </div>
     
             <div class="col-sm">
                 <div class="panel panel-default"> 
-                <div class="panel-body">Put graph here</div>
+                <div class="panel-body">
+                    <p>Result 4</p>
+                    <button type="button" class="btn" id="open-save-btn">Open</button>
+                </div>
                 </div>
             </div>
         </div>
