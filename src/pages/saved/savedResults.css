@@ -1,0 +1,58 @@
+
+
+.savedResults{ 
+    display: table;
+    width: auto;
+    text-align: center;
+}
+
+.btn-block{ 
+    display:inline-block;
+}
+
+
+.btn-block button{
+    margin: 30px; 
+}
+
+.btn-primary{
+    
+    background-color: #617189!important; 
+    border-color: #495466;
+}
+
+
+
+.panel{ 
+    background-color: #ffffff!important;
+    border-radius: 25px;
+}
+
+#saved-heading{ 
+    text-align: left;
+    letter-spacing: 3px; 
+    font-size: 2em;
+    font-family: inherit;
+    padding: 10px; 
+    padding-left:25px; 
+    margin-top: 20px; 
+}
+
+.panel-body{
+    position: relative;
+    width:600px; 
+    height:400px;
+}
+
+#last-edited-text{
+    position:absolute; 
+    bottom: 10px; 
+    padding: 10px; 
+    padding-left: 25px; 
+}
+
+#open-save-btn{
+    position: absolute; 
+    bottom: 30px; 
+    right: 10px; 
+}

@@ -1,6 +1,7 @@
 /* This is the main/first page for Saved Results */
 
 import React from 'react';
+import './savedResults.css';
 
 const savedResults = () => (
     
