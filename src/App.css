@@ -103,3 +103,37 @@ body, html {
     max-height: 15px;
     max-width: 15px;
 }
+
+.savedResults{ 
+    display: table;
+    width: auto;
+    text-align: center;
+}
+
+.btn-block{ 
+    display:inline-block;
+}
+
+table.center{ 
+    margin-left: auto; 
+    margin-right: auto; 
+}
+.btn-block button{
+    margin: 30px; 
+}
+
+.btn-primary{
+    
+    background-color: #617189!important; 
+    border-color: #495466;
+}
+
+.panel{ 
+    background-color: #ffffff!important; 
+    width: 600px; 
+    height: 400px; 
+    padding: 10px; 
+    border: 10px; 
+    top: 20px; 
+    bottom: 20px; 
+}
