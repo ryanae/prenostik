@@ -1,11 +1,9 @@
 .savedResults{ 
-    display: table;
-    width: auto;
-    text-align: center;
+
 }
 
-#saved-results-btn { 
-    display:inline-block;
+#open-save-btn { 
+
 }
 
 
@@ -35,9 +33,7 @@
 }
 
 .panel-body{
-    position: relative;
-    width:600px; 
-    height:400px;
+    height: 200px;
 }
 
 #last-edited-text{

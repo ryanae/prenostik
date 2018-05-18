@@ -7,9 +7,7 @@ const savedResults = () => (
     
     <div id="savedResults" className="savedResults">
         <h2> Saved Results</h2>
-        <div class="row">
-            
-        </div>
+
         <div class="row">
             <div class="col">
             <button type="button" class="btn btn-primary btn-block" id="save-result-btn">View</button>
@@ -27,8 +25,9 @@ const savedResults = () => (
             <button type="button" class="btn btn-primary btn-block"  id="save-result-btn" data-toggle="modal" data-target="#SaveModal" >Save</button> 
             </div>
         </div>
+    
         <div class="row">   
-            <div class="col-sm">
+            <div class="col">
                 <div class="panel panel-default"> 
                 <div class="panel heading" id="saved-heading"> Result 1 </div>
                 <div class="panel-body">
@@ -38,7 +37,7 @@ const savedResults = () => (
                 </div>
             </div>
     
-            <div class="col-sm">
+            <div class="col">
                 <div class="panel panel-default"> 
                 <div class="panel heading" id="saved-heading"> Result 2 </div>
                 <div class="panel-body">
@@ -50,7 +49,7 @@ const savedResults = () => (
         </div>
     
             <div class="row">   
-            <div class="col-sm">
+            <div class="col">
                 <div class="panel panel-default"> 
                 <div class="panel heading"  id="saved-heading"> Result 3 </div>
                 <div class="panel-body">
@@ -60,7 +59,7 @@ const savedResults = () => (
                 </div>
             </div>
     
-            <div class="col-sm">
+            <div class="col">
                 <div class="panel panel-default"> 
                 <div class="panel heading"  id="saved-heading"> Result 4 </div>
                 <div class="panel-body">
