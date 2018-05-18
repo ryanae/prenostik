@@ -4,17 +4,9 @@ import React from 'react';
 
 const datasets = () => (
     <div className="datasets">
-        datasheets page
-    
-    <input type="file" id="excelfile" />  
-    <input type="button" id="viewfile" value="Export To Table" onclick="ExportToTable()" />  
-      <br />  
-      <br />  
-    <table id="exceltable">  
-    </table> 
+        <h2>My Datasets</h2>
+
     </div>
 );
 
 export default datasets;
-
-function

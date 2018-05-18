@@ -6,8 +6,9 @@ import './savedResults.css';
 const savedResults = () => (
     
     <div id="savedResults" className="savedResults">
+        <h2> Saved Results</h2>
         <div class="row">
-            <h1> Saved Results</h1>
+            
         </div>
         <div class="row">
             <div class="col">

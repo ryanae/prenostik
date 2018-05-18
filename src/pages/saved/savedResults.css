@@ -1,12 +1,10 @@
-
-
 .savedResults{ 
     display: table;
     width: auto;
     text-align: center;
 }
 
-.btn-block{ 
+#saved-results-btn { 
     display:inline-block;
 }
 
@@ -20,8 +18,6 @@
     background-color: #617189!important; 
     border-color: #495466;
 }
-
-
 
 .panel{ 
     background-color: #ffffff!important;
