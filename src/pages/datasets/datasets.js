@@ -17,4 +17,4 @@ const datasets = () => (
 
 export default datasets;
 
-function
+/*function*/
