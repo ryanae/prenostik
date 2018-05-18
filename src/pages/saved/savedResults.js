@@ -2,6 +2,8 @@
 
 import React from 'react';
 import './savedResults.css';
+import { NavLink, Switch, Route } from 'react-router-dom';
+import sample from '../home/chart-example.png';
 
 const savedResults = () => (
     
@@ -30,8 +32,9 @@ const savedResults = () => (
             <div class="col">
                 <div class="panel panel-default"> 
                 <div class="panel heading" id="saved-heading"> Result 1 </div>
+                <img src={sample}/>
                 <div class="panel-body">
-                    <div id="last-edited-text"> Last Edited </div>
+                    <div id="last-edited-text">Last Edited 10/10/10</div>
                     <button type="button" class="btn" id="open-save-btn">Open</button>
                 </div>
                 </div>
@@ -40,6 +43,7 @@ const savedResults = () => (
             <div class="col">
                 <div class="panel panel-default"> 
                 <div class="panel heading" id="saved-heading"> Result 2 </div>
+                <img src={sample}/>
                 <div class="panel-body">
                     <div id="last-edited-text"> Last Edited </div>
                     <button type="button" class="btn" id="open-save-btn">Open</button>
@@ -52,6 +56,7 @@ const savedResults = () => (
             <div class="col">
                 <div class="panel panel-default"> 
                 <div class="panel heading"  id="saved-heading"> Result 3 </div>
+                <img src={sample}/>
                 <div class="panel-body">
                     <div id="last-edited-text"> Last Edited </div>
                     <button type="button" class="btn" id="open-save-btn">Open</button>
@@ -62,6 +67,7 @@ const savedResults = () => (
             <div class="col">
                 <div class="panel panel-default"> 
                 <div class="panel heading"  id="saved-heading"> Result 4 </div>
+                <img src={sample}/>
                 <div class="panel-body">
                     <div id="last-edited-text"> Last Edited </div>
                     <button type="button" class="btn" id="open-save-btn">Open</button>

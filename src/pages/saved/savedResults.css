@@ -1,11 +1,10 @@
-.savedResults{ 
+.savedResults { 
 
 }
 
 #open-save-btn { 
 
 }
-
 
 .btn-block button{
     margin: 30px; 
@@ -22,7 +21,7 @@
     border-radius: 25px;
 }
 
-#saved-heading{ 
+#saved-heading { 
     text-align: left;
     letter-spacing: 3px; 
     font-size: 2em;
@@ -33,9 +32,17 @@
 }
 
 .panel-body{
-    height: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
 }
 
+.panel img {
+    width: 100%;
+}
+
+/*
 #last-edited-text{
     position:absolute; 
     bottom: 10px; 
@@ -48,3 +55,4 @@
     bottom: 30px; 
     right: 10px; 
 }
+*/
