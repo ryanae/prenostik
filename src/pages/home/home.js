@@ -13,7 +13,7 @@ const home = () => (
             <div class="col">  
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Sample Result 1</h5>
+                        <NavLink to ="/analysis/result"> <h5 class="card-title">Sample Result 1</h5> </NavLink>
                         <img class="m-1 embed-responsive" src={sample}></img>
                         <p class="h6 m-3"><strong>Last Edited</strong> 10/10/10 <NavLink to ="/analysis/result">
                 <button type="button" class="btn btn-dark float-right">Open</button> </NavLink> </p>
@@ -22,7 +22,7 @@ const home = () => (
     
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Sample Result 1</h5>
+                        <NavLink to ="/analysis/result"> <h5 class="card-title">Untitled</h5> </NavLink>
                         <img class="m-1 embed-responsive" src={sample}></img>
                         <p class="h6 m-3"><strong>Last Edited</strong> 10/10/10 <NavLink to ="/analysis/result">
                 <button type="button" class="btn btn-dark float-right">Open</button> </NavLink></p>
@@ -33,7 +33,7 @@ const home = () => (
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Sample Result Nickname</h5>
+                        <NavLink to ="/analysis/result"> <h5 class="card-title">Sample Result Nickname</h5> </NavLink>
                         <img class="m-1 embed-responsive" src={sample}></img>
                         <p class="h6 m-3"><strong>Last Edited</strong> 10/10/10 <NavLink to ="/analysis/result">
                 <button type="button" class="btn btn-dark float-right">Open</button> </NavLink></p>
@@ -42,7 +42,7 @@ const home = () => (
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Sample Result 1</h5>
+                        <NavLink to ="/analysis/result"> <h5 class="card-title">Sample Result 1</h5> </NavLink>
                         <img class="m-1 embed-responsive" src={sample}></img>
                         <p class="h6 m-3"><strong>Last Edited</strong> 10/10/10 <NavLink to ="/analysis/result">
                 <button type="button" class="btn btn-dark float-right">Open</button> </NavLink></p>

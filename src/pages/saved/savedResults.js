@@ -2,7 +2,7 @@
 
 import React from 'react';
 import './savedResults.css';
-import { NavLink, Switch, Route } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import sample from '../home/chart-example.png';
 
 const savedResults = () => (
@@ -31,22 +31,22 @@ const savedResults = () => (
         <div class="row">   
             <div class="col">
                 <div class="panel panel-default"> 
-                <div class="panel heading" id="saved-heading"> Result 1 </div>
+                <NavLink to ="/analysis/result"><div class="panel heading" id="saved-heading"> Result 1 </div></NavLink>
                 <img src={sample}/>
                 <div class="panel-body">
                     <div id="last-edited-text">Last Edited 10/10/10</div>
-                    <button type="button" class="btn" id="open-save-btn">Open</button>
+                    <NavLink to ="/analysis/result"><button type="button" class="btn" id="open-save-btn">Open</button></NavLink>
                 </div>
                 </div>
             </div>
     
             <div class="col">
                 <div class="panel panel-default"> 
-                <div class="panel heading" id="saved-heading"> Result 2 </div>
+                <NavLink to ="/analysis/result"><div class="panel heading" id="saved-heading"> Result 2 </div></NavLink>
                 <img src={sample}/>
                 <div class="panel-body">
                     <div id="last-edited-text"> Last Edited </div>
-                    <button type="button" class="btn" id="open-save-btn">Open</button>
+                    <NavLink to ="/analysis/result"><button type="button" class="btn" id="open-save-btn">Open</button></NavLink>
                 </div>
                 </div>
             </div>
@@ -55,22 +55,22 @@ const savedResults = () => (
             <div class="row">   
             <div class="col">
                 <div class="panel panel-default"> 
-                <div class="panel heading"  id="saved-heading"> Result 3 </div>
+                <NavLink to ="/analysis/result"><div class="panel heading"  id="saved-heading"> Result 3 </div></NavLink>
                 <img src={sample}/>
                 <div class="panel-body">
                     <div id="last-edited-text"> Last Edited </div>
-                    <button type="button" class="btn" id="open-save-btn">Open</button>
+                    <NavLink to ="/analysis/result"><button type="button" class="btn" id="open-save-btn">Open</button></NavLink>
                 </div>
                 </div>
             </div>
     
             <div class="col">
                 <div class="panel panel-default"> 
-                <div class="panel heading"  id="saved-heading"> Result 4 </div>
+                <NavLink to ="/analysis/result"><div class="panel heading"  id="saved-heading"> Result 4 </div></NavLink>
                 <img src={sample}/>
                 <div class="panel-body">
                     <div id="last-edited-text"> Last Edited </div>
-                    <button type="button" class="btn" id="open-save-btn">Open</button>
+                    <NavLink to ="/analysis/result"><button type="button" class="btn" id="open-save-btn">Open</button></NavLink>
                 </div>
                 </div>
             </div>
