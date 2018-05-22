@@ -9,6 +9,11 @@ import savedResults from './pages/saved/savedResults.js';
 
 import homeIcon from './icons/home.svg';
 import userIcon from './img/user.jpg';
+import plusIcon from './icons/plus.svg';
+import fileIcon from './icons/file.svg';
+import profileIcon from './icons/profile.svg';
+import signoutIcon from './icons/signout.svg';
+import dataIcon from './icons/data.svg';
 
 const App = () => (
     <div className="app" class="container-fluid">
@@ -47,7 +52,7 @@ const Navigation = () => (
 
                 <NavLink to ="/analysis/new">
                     <button type="button" class="nav-btn btn btn-block">
-                        <div class="nav-icon"> <img src={homeIcon} /> </div> 
+                        <div class="nav-icon"> <img src={plusIcon} /> </div>
 
                         <div class="nav-label">Start New Analysis</div>
                     </button>
@@ -55,7 +60,7 @@ const Navigation = () => (
 
                 <NavLink to ="/saved-results">
                     <button type="button" class="nav-btn btn btn-block">
-                        <div class="nav-icon"> <img src={homeIcon} /> </div> 
+                        <div class="nav-icon"> <img src={fileIcon} /> </div>
 
                         <div class="nav-label">Saved Results</div>
                     </button>
@@ -63,7 +68,7 @@ const Navigation = () => (
 
                 <NavLink to ="/my-datasets">
                     <button type="button" class="nav-btn btn btn-block">
-                        <div class="nav-icon"> <img src={homeIcon} /> </div> 
+                        <div class="nav-icon"> <img src={dataIcon} /> </div>
 
                         <div class="nav-label">My Datasets</div>                
                 </button>
@@ -71,7 +76,7 @@ const Navigation = () => (
 
                 <div class="collapse-button">
                     <button type="button" class="nav-btn btn btn-outline-light btn-block">
-                        <img src={homeIcon} />
+                        <img src={signoutIcon} />
                     </button>
                 </div>
             </div>
