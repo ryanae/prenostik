@@ -1,50 +1,57 @@
-/* Home page */
+/* This is the main/first page for the Home page. */
 
-import React, { Component } from 'react';
+import React from 'react';
+import './home.css';
+import sample from './chart-example.png';
+import { NavLink, Switch, Route } from 'react-router-dom';
 
-
-
-class Home extends Component {
-    render() {
+const home = () => (
+    <div className="home">
+        <h2>Home - Recent Activity</h2>
         
-        return (
-            <div>
-                <h3 class="m-3">Recent Activity</h3>
-                <div class="container">
-                    <div class="row">
-                        <div class="col">  
-                            <div class="card w-auto">
-                            <div class="card-body">
-                                <h6 class="card-title">Sample Result</h6>
-                                <img class="m-2" src="sample.jpg"></img>
-                              <p class="h6"><strong>Last Edited</strong> <a href="#" class="btn btn-success float-right">Open</a></p>
-                            
-                        </div>
-            </div>
-                        </div>
-                        <div class="col">
-                              <div class="card w-auto">
-                            <div class="card-body">
-                                <h6 class="card-title">Sample Result</h6>
-                                <img class="m-2" src="#"></img>
-                              <p class="h6"><strong>Last Edited</strong> <a href="#" class="btn btn-success float-right">Open</a></p>
-                            
-                        </div>
-            </div>
-                        </div>
-        
-                      
-                        
-                        
-                        
-                        
-                        
+        <div class="row">
+            <div class="col">  
+                <div class="card">
+                    <div class="card-body">
+                        <NavLink to ="/analysis/result"> <h5 class="card-title">Sample Result 1</h5> </NavLink>
+                        <img class="m-1 embed-responsive" src={sample}></img>
+                        <p class="h6 m-3"><strong>Last Edited</strong> 10/10/10 <NavLink to ="/analysis/result">
+                <button type="button" class="btn btn-dark float-right">Open</button> </NavLink> </p>
+                    </div>
+                </div>
+    
+                <div class="card">
+                    <div class="card-body">
+                        <NavLink to ="/analysis/result"> <h5 class="card-title">Untitled</h5> </NavLink>
+                        <img class="m-1 embed-responsive" src={sample}></img>
+                        <p class="h6 m-3"><strong>Last Edited</strong> 10/10/10 <NavLink to ="/analysis/result">
+                <button type="button" class="btn btn-dark float-right">Open</button> </NavLink></p>
                     </div>
                 </div>
             </div>
-        );
-        
-    }
-}
+            
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <NavLink to ="/analysis/result"> <h5 class="card-title">Sample Result Nickname</h5> </NavLink>
+                        <img class="m-1 embed-responsive" src={sample}></img>
+                        <p class="h6 m-3"><strong>Last Edited</strong> 10/10/10 <NavLink to ="/analysis/result">
+                <button type="button" class="btn btn-dark float-right">Open</button> </NavLink></p>
+                    </div>
+                </div>
 
-export default Home
+                <div class="card">
+                    <div class="card-body">
+                        <NavLink to ="/analysis/result"> <h5 class="card-title">Sample Result 1</h5> </NavLink>
+                        <img class="m-1 embed-responsive" src={sample}></img>
+                        <p class="h6 m-3"><strong>Last Edited</strong> 10/10/10 <NavLink to ="/analysis/result">
+                <button type="button" class="btn btn-dark float-right">Open</button> </NavLink></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+);
+
+export default home;
