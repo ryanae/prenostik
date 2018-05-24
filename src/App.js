@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import { NavLink, Switch, Route } from 'react-router-dom';
 
@@ -15,19 +15,71 @@ function toggleSidebar() {
     sidebar.style.background = "#000";
 }
 
-const App = () => (    
-    <div className="app" class="container-fluid">
-        <div class="row">
-            <div class="col sidebar">
-                <Navigation />
+class App extends Component { 
+    constructor(){ 
+        super(); 
+        this.handleFiles = this.handleFiles.bind(this);
+        //this.processData = this.processData(this); 
+    };
+ 
+    handleFiles = (files) => {
+        // Check for the various File API support.
+        if (window.FileReader) {
+            // FileReader are supported.
+            console.log("read"); 
+            this.getAsText(files[0]);
+        }
+    };
+
+    getAsText(fileToRead) {
+        var reader = new FileReader();
+        var file_read = document.querySelector("input").files[0];
+        
+        // Read file into memory as UTF-8      
+        reader.readAsText(file_read);
+        // Handle errors load
+        reader.onload = this.fileReadingFinished;
+        reader.onerror = this.errorHandler;
+    };
+
+
+    fileReadingFinished(event) {
+        var csv = event.target.result;
+        var text = csv + " "; 
+        var allTextLines = text.split(/\r\n|\n/);
+        var lines = allTextLines.map(data => data.split(';'));
+        
+    document.getElementById("output").innerHTML=""; 
+    document.getElementById("output").innerHTML=lines; 
+
+        
+        //document.write(lines); 
+    };
+
+    errorHandler(event) {
+        if (event.target.error.name === "NotReadableError") {
+            alert("Cannot read file!");
+        }
+    };
+
+    render(){ 
+        return( 
+            <div className="app" class="container-fluid">
+                <div class="row">
+                    <div class="col sidebar">
+                        <Navigation />
+                    </div>
+
+                    <div class="col content">
+                        <Main />
+                    </div>
+                </div>
             </div>
-    
-            <div class="col content">
-                <Main />
-            </div>
-        </div>
-    </div>
-);
+        )
+    }
+};
+
+
 
 const Navigation = () => (
         <nav id="sidebar">
