@@ -1,0 +1,25 @@
+.card {
+    margin: 20px;
+}
+
+.card-title {
+    padding: 20px 20px 0px 20px;
+    font-weight: lighter;
+}
+
+.card img {
+    max-width: 100%;
+    padding: 0px 15px;
+}
+
+.card-body {
+    margin: 0px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-body .btn {
+    height: 40%;
+}
