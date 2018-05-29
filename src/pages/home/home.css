@@ -1,16 +1,12 @@
-.card {
+.home-card {
     margin-bottom: 30px;
 }
 
-.card-title {
+.home-card-title {
     font-weight: lighter;
 }
 
-.card img {
+.home-card img {
     max-width: 100%;
     padding: 0px 15px;
-}
-
-.card-body .btn {
-    height: 40%;
 }
