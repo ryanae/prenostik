@@ -1,0 +1,7 @@
+
+.box {
+	borderStyle: 'solid'; 
+	margin: 20;
+	borderRadius: 10;
+	padding: 10;
+}
