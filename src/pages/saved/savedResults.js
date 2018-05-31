@@ -28,6 +28,102 @@ class savedResults extends Component {
                 </div>
             
                 <div class="collapse" id="expanded-category-1">
+                    <div class="row entry-file gray-bg">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+            
+                    <div class="row entry-file">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+
+                    <div class="row entry-file gray-bg">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+
+                    <div class="row entry-file">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+                </div>
+
+
+                <div class="row entry-category" data-toggle="collapse" href="#expanded-category-2">
+                    <div class="col"> Sample Folder </div>
+                    <div class="col"> Category </div>
+                    <div class="col"> 05-15-18 </div>
+                    <div class="col"> Username </div>
+                </div>
+            
+                <div class="collapse" id="expanded-category-2">
+                    <div class="row entry-file gray-bg">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+            
+                    <div class="row entry-file">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+                </div>
+            
+                <div class="row entry-category" data-toggle="collapse" href="#expanded-category-3">
+                    <div class="col"> Uncategorized </div>
+                    <div class="col"> Category </div>
+                    <div class="col"> 05-15-18 </div>
+                    <div class="col"> Username </div>
+                </div>
+            
+                <div class="collapse" id="expanded-category-3">
+                    <div class="row entry-file gray-bg">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+            
+                    <div class="row entry-file">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+
+                    <div class="row entry-file gray-bg">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+            
+                    <div class="row entry-file">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+
+                    <div class="row entry-file gray-bg">
+                        <div class="col"> Sample File </div>
+                        <div class="col"> .csv File </div>
+                        <div class="col"> 01-03-18 </div>
+                        <div class="col"> Username </div>
+                    </div>
+            
                     <div class="row entry-file">
                         <div class="col"> Sample File </div>
                         <div class="col"> .csv File </div>
@@ -47,12 +143,22 @@ class savedResults extends Component {
                 <div class="card bg-light mb-3">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-5" id="recent-results">
                                 <h5 class="card-title">Recent Results</h5>
+                                    <div class="recent-entries">
+                                        <div class="card home-card">
+                                            <div class="card-body home-card-body">
+                                                <NavLink to ="/analysis/result"> <h5 class="card-title home-card-title">Sample Result 1</h5> </NavLink>
+                                                <img class="m-1 embed-responsive" src={sample}></img>
+                                                <p class="h6 m-3"><strong>Last Edited</strong> 10/10/10 <NavLink to ="/analysis/result">
+                                        <button type="button" class="home-card-btn btn btn-dark float-right">Open</button> </NavLink> </p>
+                                            </div>
+                                        </div>
+                                    </div>
 
                             </div>
-                            <div class="col-7">
-                                <h5 class="card-title">My Files</h5>
+                            <div class="col-7" id="my-datasets">
+                                <h5 class="card-title">My Datasets</h5>
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" placeholder="Search my datasets" aria-label="Search my datasets" aria-describedby="basic-addon2" />
                                         <div class="input-group-append">
@@ -65,50 +171,13 @@ class savedResults extends Component {
                     </div>
                 </div>
             
-                <div class="row">
-                    <div class="col">
-                    <button type="button" class="btn btn-primary btn-block" id="save-result-btn">View</button>
-                    </div>
 
-                    <div class="col">
-                    <button type="button" class="btn btn-primary btn-block" id="save-result-btn">Edit</button> 
-                    </div>
-
-                    <div class="col">
-                    <button type="button" class="btn btn-primary btn-block hidden-print" id="save-result-btn" onclick="printfunction()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button>
-                    </div>
-
-                    <div class="col">
-                    <button type="button" class="btn btn-primary btn-block"  id="save-result-btn" data-toggle="modal" data-target="#SaveModal" >Save</button> 
-                    </div>
-                </div>
-
-                <div class="modal fade" id="SaveModal" tabindex="-1" role="dialog" aria-labelledby="SaveModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="SaveModalTitle">Save Result</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                            </div>
-                            <div class="modal-body">
-                                Where would you like to save?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
                 </div>
         )
     }
     
 }
 
-function printfunction(){ 
-    window.print(); 
-}
+
+                                
 export default savedResults;

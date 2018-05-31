@@ -1,58 +1,39 @@
-.savedResults { 
-
+#recent-results {
+    border-right: 1px solid #ccc;
 }
 
-#open-save-btn { 
-
+.recent-entries {
+    padding: 10px;
+    font-size: 12px;
 }
 
-.btn-block button{
-    margin: 30px; 
+#my-datasets {
+    font-size: 12px;
 }
 
-.btn-primary{
-    
-    background-color: #617189!important; 
-    border-color: #495466;
+.entries {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
-.panel{ 
-    background-color: #ffffff!important;
-    border-radius: 25px;
+#entry-labels {
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
 }
 
-#saved-heading { 
-    text-align: left;
-    letter-spacing: 1px; 
-    font-size: 2em;
-    font-family: inherit;
-    padding: 10px; 
-    padding-left:25px; 
-    margin-top: 20px; 
+.entry-category {
+    margin-top: 5px;
+    padding: 3px;
+    font-weight: bold;
+    border: 1px solid #ccc;
 }
 
-.panel-body{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
+.entry-file {
+    padding-left: 3px;
 }
 
-.panel img {
-    width: 100%;
+.gray-bg {
+    background: #eee;
+    padding: 3px;
 }
-
-/*
-#last-edited-text{
-    position:absolute; 
-    bottom: 10px; 
-    padding: 10px; 
-    padding-left: 25px; 
-}
-
-#open-save-btn{
-    position: absolute; 
-    bottom: 30px; 
-    right: 10px; 
-}
-*/
