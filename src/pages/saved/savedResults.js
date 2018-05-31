@@ -30,28 +30,28 @@ class savedResults extends Component {
                 <div class="collapse" id="expanded-category-1">
                     <div class="row entry-file gray-bg">
                         <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
             
                     <div class="row entry-file">
                         <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
 
                     <div class="row entry-file gray-bg">
                         <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
 
                     <div class="row entry-file">
                         <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
@@ -67,15 +67,15 @@ class savedResults extends Component {
             
                 <div class="collapse" id="expanded-category-2">
                     <div class="row entry-file gray-bg">
-                        <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Sample Result </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
             
                     <div class="row entry-file">
-                        <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Sample Result </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
@@ -90,43 +90,43 @@ class savedResults extends Component {
             
                 <div class="collapse" id="expanded-category-3">
                     <div class="row entry-file gray-bg">
-                        <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Sample 324245 </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
             
                     <div class="row entry-file">
-                        <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Sample 1231245 </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
 
                     <div class="row entry-file gray-bg">
-                        <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Sample 314545 </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
             
                     <div class="row entry-file">
-                        <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Sample 2343 </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
 
                     <div class="row entry-file gray-bg">
-                        <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Sample 12312 </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
             
                     <div class="row entry-file">
-                        <div class="col"> Sample File </div>
-                        <div class="col"> .csv File </div>
+                        <div class="col"> Sample 12312 </div>
+                        <div class="col"> Result </div>
                         <div class="col"> 01-03-18 </div>
                         <div class="col"> Username </div>
                     </div>
@@ -158,9 +158,9 @@ class savedResults extends Component {
 
                             </div>
                             <div class="col-7" id="my-datasets">
-                                <h5 class="card-title">My Datasets</h5>
+                                <h5 class="card-title">My Results</h5>
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" placeholder="Search my datasets" aria-label="Search my datasets" aria-describedby="basic-addon2" />
+                                        <input type="text" class="form-control" placeholder="Search my results" aria-label="Search my results" aria-describedby="basic-addon2" />
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" type="button">Search</button>
                                         </div>
