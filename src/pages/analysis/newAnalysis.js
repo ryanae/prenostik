@@ -27,8 +27,6 @@ class newAnalysis extends Component {
       startDate : startDate,
       endDate : endDate,
       selectedOption :selectedOption,
-   
-
     };
 
     this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
@@ -74,13 +72,10 @@ class newAnalysis extends Component {
   }
 
   handleChangeCorrelation (e) {
-    this.setState({selectedOption: e.target.value});  
+    this.setState({selectedOption: parseInt (e.target.value,10)});  
   }
 
-  handleConversion (string) {
-    var num =  Number.parseInt(string,10);
-    this.setState ({selectedOption : num});
-  }
+ 
   render () {
   	const {current} = this.state;
     const { selectedOption} = this.state;
@@ -118,7 +113,7 @@ class newAnalysis extends Component {
           
           <br />
           <h5>Required Start Date</h5>
-
+          {this.state.selectedOption}
           <br/>
           <h5>Required End Date </h5>
           
