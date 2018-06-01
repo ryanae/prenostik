@@ -10,7 +10,6 @@ class datasets extends React.Component {
 	constructor(props) {
 		super(props);
 		this.getFiles();
-		
 		this.handleUploadImage = this.handleUploadImage.bind(this);
 		this.getFiles = this.getFiles.bind(this);
 	}
@@ -42,7 +41,6 @@ class datasets extends React.Component {
 			});
 		});
 	}
-  
 
 	render() {
 		return (
@@ -57,11 +55,12 @@ class datasets extends React.Component {
 			<div>
 				<button>Upload</button>
 			</div>
-			<div>
+			<div className="datasets">
 				<h3> Datasets </h3>
 				<div>
 					{datasetList.map((dataset) => {
-						return <img src={`http://localhost:8001/public/${dataset}`} alt={dataset} />
+                        return (<div class="row">{dataset}</div>)
+						//return <img src={`http://localhost:8001/public/${dataset}`} alt={dataset} />
 					})}
 				</div>
 			</div>
