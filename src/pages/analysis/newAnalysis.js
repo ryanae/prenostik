@@ -17,11 +17,24 @@ class newAnalysis extends Component {
 	constructor (props) {
 		super (props);
 
-
+    var startDate = new Date();
+    var endDate = new Date();
+    var selectedOption = '';
+    
 
 		this.state = {
-			current : 0, visible : false, 
-		};
+			current : 0, visible : false,
+      startDate : startDate,
+      endDate : endDate,
+      selectedOption :selectedOption,
+   
+
+    };
+
+    this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
+    this.handleChangeEndDate = this.handleChangeEndDate.bind(this);
+    this.handleChangeCorrelation = this.handleChangeCorrelation.bind(this);
+
 	}
 
   next() {
@@ -52,43 +65,111 @@ class newAnalysis extends Component {
     });
   }  
 
+  handleChangeStartDate (date) {
+    this.setState({ startDate : date});
+  }
+   
+  handleChangeEndDate (date) {
+    this.setState({ endDate : date});
+  }
+
+  handleChangeCorrelation (e) {
+    this.setState({selectedOption: e.target.value});  
+  }
+
+  handleConversion (string) {
+    var num =  Number.parseInt(string,10);
+    this.setState ({selectedOption : num});
+  }
   render () {
   	const {current} = this.state;
+    const { selectedOption} = this.state;
 
-	const firstContent = (
-	      <div>     
-	        <div>
-	          <h3> Reference Dataset </h3> 
-	          <button className ="button1" onClick={this.showModal}>
-	          	<strong>Select Reference Data </strong>
-	          </button>
-            <Modal
-              title="Manage Datasets"
-              visible = {this.state.visible}
-              onOk = {this.handleOk}
-              onCancel = {this.handleCancel}
-            >
-              <strong>My File</strong>
-            </Modal>  
-	        </div>
+    const secondContent = 
+    (
+      <div class = 'row'>
+        <form class = 'column'>
+          <h5> Choose Start Date </h5>
+          <Calendar value = {this.state.startDate} 
+                    onChange = {this.handleChangeStartDate}/>
+          <p> Choose the start date to analyze </p>
 
-          <div>
-            <br />
-            <h3> Test Data </h3>
-            <button className="button1"> 
-              <strong> Select Test Data </strong>
-            </button>
-          </div>
-	    
-	      </div>
-	    )
+          <h5> Choose End Date </h5>
+          <Calendar value = {this.state.endDate}
+                      onChange = {this.handleChangeEndDate} />
+
+          <p> Choosing the end date to analyze </p>
+        </form>
+
+        <form class = 'column'>
+          <h5> Choose Correlation Offsets </h5>
+          <select
+            style={{ width: 200 }}
+         
+            value = {this.state.selectedOption}
+            onChange= {this.handleChangeCorrelation}>
+              <option value = " 0" >---Select--- </option>
+              <option value = " 3" >3 Months  </option>
+              <option value = " 6" >6 Months  </option>
+              <option value = "12" >1 Year   </option>
+              <option value = "18" >18 Months </option>
+              <option value = "24" >2 Years   </option>          
+          </select>
+          
+          <br />
+          <h5>Required Start Date</h5>
+
+          <br/>
+          <h5>Required End Date </h5>
+          
+        </form>
+      </div>
+    )
+
+  	const firstContent = (
+      <div>     
+        <div>
+          <h3> Reference Dataset </h3> 
+          <button className ="button1" onClick={this.showModal}>
+          	<strong>Select Reference Data </strong>
+          </button>
+          <Modal
+            title="Manage Reference Datasets"
+            visible = {this.state.visible}
+            onOk = {this.handleOk}
+            onCancel = {this.handleCancel}
+          >
+            <strong>My File</strong>
+          </Modal>  
+        </div>
+
+        <div>
+          <br/>
+          <h3> Test Data </h3>
+          <button className="button1" onClick={this.showModal}> 
+            <strong> Select Test Data </strong>
+          </button>
+
+          <Modal
+            title="Manage Test Datasets"
+            visible = {this.state.visible}
+            onOk = {this.handleOk}
+            onCancel = {this.handleCancel}
+          >
+            <strong>My File</strong>
+          </Modal>  
+        </div>
+    
+      </div>
+    )
+
 
     const steps = [{
       title: 'First',
       content: firstContent,
     }, {
       title: 'Second',
-      content: 'secondContent',
+      content: secondContent,
     }, {
       title: 'Last',
       content: 'Last-content',
