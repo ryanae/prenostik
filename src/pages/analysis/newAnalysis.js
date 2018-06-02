@@ -20,13 +20,14 @@ class newAnalysis extends Component {
     var startDate = new Date();
     var endDate = new Date();
     var selectedOption = '';
-    
-
+ 
+  
 		this.state = {
 			current : 0, visible : false,
       startDate : startDate,
       endDate : endDate,
       selectedOption :selectedOption,
+
     };
 
     this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
@@ -75,10 +76,10 @@ class newAnalysis extends Component {
     this.setState({selectedOption: parseInt (e.target.value,10)});  
   }
 
- 
   render () {
   	const {current} = this.state;
     const { selectedOption} = this.state;
+   
 
     const secondContent = 
     (
@@ -113,10 +114,8 @@ class newAnalysis extends Component {
           
           <br />
           <h5>Required Start Date</h5>
-          {this.state.selectedOption}
-          <br/>
-          <h5>Required End Date </h5>
-          
+          {this.state.startDate.setMonth(this.state.selectedOption).toLocaleDateString()}
+
         </form>
       </div>
     )
