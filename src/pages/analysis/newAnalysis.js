@@ -3,11 +3,12 @@
 
 import React, { Component } from 'react';
 import {Steps, Button, message, Modal, } from 'antd';
-import Calendar from 'react-calendar';
+import DatePicker from 'react-datepicker';
 import ReactDOM from 'react-dom';
 import Select from 'react-select';
 import moment from 'moment';
 import 'antd/dist/antd.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import 'react-select/dist/react-select.css'
 import './newAnalysis.css'; 
 
@@ -17,23 +18,25 @@ class newAnalysis extends Component {
 	constructor (props) {
 		super (props);
 
-    var startDate = new Date();
-    var endDate = new Date();
-    var selectedOption = '';
- 
-  
+    var startDate = moment();
+    var endDate = moment();
+    var selectedOption = 0;
+    
+
 		this.state = {
 			current : 0, visible : false,
       startDate : startDate,
       endDate : endDate,
       selectedOption :selectedOption,
+  
 
     };
 
     this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
     this.handleChangeEndDate = this.handleChangeEndDate.bind(this);
     this.handleChangeCorrelation = this.handleChangeCorrelation.bind(this);
-
+    this.handleUpdateStartDate = this.handleUpdateStartDate.bind(this);
+    this.handleUpdateEndDate = this.handleUpdateEndDate.bind(this);
 	}
 
   next() {
@@ -64,16 +67,40 @@ class newAnalysis extends Component {
     });
   }  
 
+  handleUpdateStartDate ( date, selected) {
+    var newdate = new Date (date);
+    newdate.setMonth(newdate.getMonth() + selected);
+    document.getElementById('start_month').value = newdate.toLocaleDateString();
+  }
+
+  handleUpdateEndDate(date,selected) {
+    var newdate = new Date (date);
+    newdate.setMonth(newdate.getMonth() + selected);
+    document.getElementById('end_month').value = newdate.toLocaleDateString();
+  }
+
   handleChangeStartDate (date) {
+    this.handleUpdateStartDate(date, this.state.selectedOption);
     this.setState({ startDate : date});
   }
    
   handleChangeEndDate (date) {
+    this.handleUpdateEndDate (date,this.state.selectedOption);
     this.setState({ endDate : date});
   }
 
   handleChangeCorrelation (e) {
-    this.setState({selectedOption: parseInt (e.target.value,10)});  
+    let selected = parseInt (e.target.value,10) ;
+    this.handleUpdateStartDate(this.state.startDate, selected);
+    this.handleUpdateEndDate(this.state.endDate, selected);
+    this.setState({ selectedOption: selected});  
+  }
+
+  handleRequiredStartDate () {
+    let start = this.state.startDate;
+    let select = this.state.selectedOption;
+    start.add(parseInt (select), 'M');
+    this.setState({start_m : start})
   }
 
   render () {
@@ -83,30 +110,31 @@ class newAnalysis extends Component {
 
     const secondContent = 
     (
-      <div class = 'row'>
-        <form class = 'column'>
+      <div class = 'second_content'>
+        <div>
           <h5> Choose Start Date </h5>
-          <Calendar value = {this.state.startDate} 
+          <DatePicker selected = {this.state.startDate} 
                     onChange = {this.handleChangeStartDate}/>
           <p> Choose the start date to analyze </p>
 
           <h5> Choose End Date </h5>
-          <Calendar value = {this.state.endDate}
+        
+          <DatePicker selected = {this.state.endDate}
                       onChange = {this.handleChangeEndDate} />
 
-          <p> Choosing the end date to analyze </p>
-        </form>
 
-        <form class = 'column'>
+          <p> Choosing the end date to analyze </p>
+        </div>
+
+        <div>
           <h5> Choose Correlation Offsets </h5>
           <select
             style={{ width: 200 }}
-         
             value = {this.state.selectedOption}
             onChange= {this.handleChangeCorrelation}>
-              <option value = " 0" >---Select--- </option>
-              <option value = " 3" >3 Months  </option>
-              <option value = " 6" >6 Months  </option>
+              <option value = "0" >---Select--- </option>
+              <option value = "3" >3 Months  </option>
+              <option value = "6" >6 Months  </option>
               <option value = "12" >1 Year   </option>
               <option value = "18" >18 Months </option>
               <option value = "24" >2 Years   </option>          
@@ -114,9 +142,11 @@ class newAnalysis extends Component {
           
           <br />
           <h5>Required Start Date</h5>
-          {this.state.startDate.setMonth(this.state.selectedOption).toLocaleDateString()}
-
-        </form>
+          <input type="datetime" id="start_month" />
+          <br/>
+          <h5>Required End Date </h5>
+          <input type="datetime" id="end_month" />
+        </div>
       </div>
     )
 

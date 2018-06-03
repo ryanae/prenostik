@@ -3,9 +3,11 @@
   border: 1px dashed #e9e9e9;
   border-radius: 6px;
   background-color: #fafafa;
-  min-height: 550px;
+  min-height: 200px;
   text-align: left;
   padding-top: 20px;
+  margin-left: 40px;
+
 }
 
 .steps-action {
@@ -27,4 +29,10 @@
 .button1:hover {
   background: #20B2AA;
   text-decoration: none;
+}
+
+.second_content {
+	column-count: 2;
+	
+
 }
