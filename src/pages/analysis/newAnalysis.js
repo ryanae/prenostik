@@ -114,14 +114,16 @@ class newAnalysis extends Component {
         <div>
           <h5> Choose Start Date </h5>
           <DatePicker selected = {this.state.startDate} 
-                    onChange = {this.handleChangeStartDate}/>
+                    onChange = {this.handleChangeStartDate}
+                    maxDate = {this.state.endDate}/>
           <p> Choose the start date to analyze </p>
 
           <h5> Choose End Date </h5>
         
           <DatePicker selected = {this.state.endDate}
-                      onChange = {this.handleChangeEndDate} />
-
+                      onChange = {this.handleChangeEndDate} 
+                      minDate = {this.state.startDate}/>
+         
 
           <p> Choosing the end date to analyze </p>
         </div>
@@ -139,12 +141,11 @@ class newAnalysis extends Component {
               <option value = "18" >18 Months </option>
               <option value = "24" >2 Years   </option>          
           </select>
-          
           <br />
-          <h5>Required Start Date</h5>
+          <h6>Required Start Date</h6>
           <input type="datetime" id="start_month" />
           <br/>
-          <h5>Required End Date </h5>
+          <h6>Required End Date </h6>
           <input type="datetime" id="end_month" />
         </div>
       </div>
