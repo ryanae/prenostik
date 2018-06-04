@@ -6,13 +6,14 @@
   min-height: 200px;
   text-align: left;
   padding-top: 20px;
-  margin-left: 40px;
+
 
 }
 
 .steps-action {
   margin-top: 15px;  
 }
+
 
 .button1 {
 
@@ -23,16 +24,16 @@
   padding: 10px 20px 10px 20px;
   border: solid #000000 2px;
   text-decoration: none;
-  float:right;
-}
+  float : right;
+  margin-right:200px;
+ }
 
 .button1:hover {
   background: #20B2AA;
   text-decoration: none;
 }
 
-.second_content {
+.second_content1 {
 	column-count: 2;
-	
-
 }
+

@@ -18,7 +18,7 @@ class newAnalysis extends Component {
 	constructor (props) {
 		super (props);
 
-    var startDate = moment();
+    var startDate =moment();
     var endDate = moment();
     var selectedOption = 0;
     
@@ -107,29 +107,44 @@ class newAnalysis extends Component {
   	const {current} = this.state;
     const { selectedOption} = this.state;
    
+    const thirdContent =
+    (
+      <div class="third_content">
+        <h5> Selected Reference Datasets </h5>
 
+        <h6> Analysis Start Date </h6>
+        <p> {moment(this.state.startDate).format('LL')}</p>
+
+        <h6> Analysis End Date </h6>
+        <p> {moment(this.state.endDate).format('LL')}</p>
+
+        <h6> Correlation Offsets </h6>
+        <p> {this.state.selectedOption} months </p>
+
+
+      </div>)
     const secondContent = 
     (
-      <div class = 'second_content'>
+      <div class = 'second_content1'>
         <div>
           <h5> Choose Start Date </h5>
+          <p> Choose the start date to analyze </p>
           <DatePicker selected = {this.state.startDate} 
                     onChange = {this.handleChangeStartDate}
                     maxDate = {this.state.endDate}/>
-          <p> Choose the start date to analyze </p>
-
+          
+          <br />
           <h5> Choose End Date </h5>
-        
+          <p> Choosing the end date to analyze </p>
           <DatePicker selected = {this.state.endDate}
                       onChange = {this.handleChangeEndDate} 
                       minDate = {this.state.startDate}/>
-         
-
-          <p> Choosing the end date to analyze </p>
+          <br />
         </div>
 
         <div>
-          <h5> Choose Correlation Offsets </h5>
+          <h6> Choose Correlation Offsets </h6>
+          <p>The measure of difference between the selected start and end date and actual time frame in datasets </p>
           <select
             style={{ width: 200 }}
             value = {this.state.selectedOption}
@@ -141,7 +156,6 @@ class newAnalysis extends Component {
               <option value = "18" >18 Months </option>
               <option value = "24" >2 Years   </option>          
           </select>
-          <br />
           <h6>Required Start Date</h6>
           <input type="datetime" id="start_month" />
           <br/>
@@ -154,7 +168,7 @@ class newAnalysis extends Component {
   	const firstContent = (
       <div>     
         <div>
-          <h3> Reference Dataset </h3> 
+          <h3 > Reference Dataset </h3> 
           <button className ="button1" onClick={this.showModal}>
           	<strong>Select Reference Data </strong>
           </button>
@@ -170,7 +184,7 @@ class newAnalysis extends Component {
 
         <div>
           <br/>
-          <h3> Test Data </h3>
+          <h3 > Test Data </h3>
           <button className="button1" onClick={this.showModal}> 
             <strong> Select Test Data </strong>
           </button>
@@ -190,14 +204,14 @@ class newAnalysis extends Component {
 
 
     const steps = [{
-      title: 'First',
+      title: 'Step 1: Datasets',
       content: firstContent,
     }, {
-      title: 'Second',
+      title: 'Step 2: Time Frame',
       content: secondContent,
     }, {
-      title: 'Last',
-      content: 'Last-content',
+      title: 'Step 3: Confirmation',
+      content: thirdContent,
     }]; 
 
 
