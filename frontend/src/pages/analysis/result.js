@@ -1,6 +1,7 @@
 /* This is the results page that generates from create an analysis */
 
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './result.css';
 import sample from '../home/chart-example.png';
 import {Bar} from 'react-chartjs-2';
@@ -112,5 +113,5 @@ class result extends Component {
     }
 }
 
-ReactDOM.render(<result />, document.getElementById('root'));
+//ReactDOM.render(<result />, document.getElementById('root'));
 export default result;

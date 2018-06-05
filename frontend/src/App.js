@@ -4,9 +4,9 @@ import { NavLink, Switch, Route } from 'react-router-dom';
 
 import home from './pages/home/home.js';
 import datasets from './pages/datasets/datasets.js';
-import newAnalysis from './pages/analysis/newAnalysis.js';
 import savedResults from './pages/saved/savedResults.js';
-
+import newAnalysis from './pages/analysis/newAnalysis.js';
+import result from './pages/analysis/result.js';
 import homeIcon from './icons/home.svg';
 import userIcon from './img/user.jpg';
 
@@ -84,6 +84,7 @@ const Main = () => (
         <Switch>
             <Route exact path="/" component={home}></Route>
             <Route path="/analysis/new" component={newAnalysis}></Route>
+            <Route path="/analysis/result" component={result}></Route>
             <Route path="/my-datasets" component={datasets}></Route>
             <Route path="/saved-results" component={savedResults}></Route>
         </Switch>
