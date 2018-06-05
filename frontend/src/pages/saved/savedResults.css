@@ -1,0 +1,39 @@
+#recent-results {
+    border-right: 1px solid #ccc;
+}
+
+.recent-entries {
+    padding: 10px;
+    font-size: 12px;
+}
+
+#my-datasets {
+    font-size: 12px;
+}
+
+.entries {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#entry-labels {
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+}
+
+.entry-category {
+    margin-top: 5px;
+    padding: 3px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+}
+
+.entry-file {
+    padding-left: 3px;
+}
+
+.gray-bg {
+    background: #eee;
+    padding: 3px;
+}
