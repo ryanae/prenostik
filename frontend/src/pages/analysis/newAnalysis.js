@@ -9,8 +9,10 @@ import Select from 'react-select';
 import moment from 'moment';
 import 'antd/dist/antd.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import 'react-select/dist/react-select.css'
+import 'react-select/dist/react-select.css';
 import './newAnalysis.css'; 
+
+
 
 const Step = Steps.Step;
 
@@ -357,30 +359,32 @@ const firstContent = (
 
 
     return (
-    	<div>
-    		<Steps current={current}>
-	          {steps.map(item => <Step key={item.title} title={item.title} />)}
-	        </Steps>
-	        <div className="steps-content">{steps[this.state.current].content}</div>
-	        <div className="steps-action">
-	          {
-	            this.state.current < steps.length - 1
-	            &&
-	            <Button type="primary" onClick={() => this.next()}>Next</Button>
-	          }
-	          {
-	            this.state.current === steps.length - 1
-	            &&
-	            <Button type="primary" onClick={() => this.result_analysis()}>Done</Button>
-	          }
-	          {
-	            this.state.current > 0
-	            &&
-	            <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-	              Previous
-	            </Button>
-	          }
-	        </div>
+    	<div className="newAnalysis">
+            <div class="container-fluid" id="newAnalysisContainer">
+                <Steps current={current}>
+                  {steps.map(item => <Step key={item.title} title={item.title} />)}
+                </Steps>
+                <div className="steps-content">{steps[this.state.current].content}</div>
+                <div className="steps-action">
+                  {
+                    this.state.current < steps.length - 1
+                    &&
+                    <Button type="primary" onClick={() => this.next()}>Next</Button>
+                  }
+                  {
+                    this.state.current === steps.length - 1
+                    &&
+                    <Button type="primary" onClick={() => this.result_analysis()}>Done</Button>
+                  }
+                  {
+                    this.state.current > 0
+                    &&
+                    <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
+                      Previous
+                    </Button>
+                  }
+                </div>
+            </div>
     	</div>
     	);
     }

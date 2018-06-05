@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './result.css';
 import sample from '../home/chart-example.png';
+import forecastingGraph from './forecastingGraph.png';
 import {Bar} from 'react-chartjs-2';
 
 //install csvtojson 
@@ -44,7 +45,7 @@ class result extends Component {
         
         var Dates = []; 
         var Confidence_Index = [];
-        for (var i=0; i<JSON_obj.length; i++){
+        for (var i=0; i<(JSON_obj.length); i++){
             Dates.push(JSON_obj[i]["Date"]); 
             Confidence_Index.push(JSON_obj[i]["Consumer Confidence Index"])
         }
@@ -61,9 +62,9 @@ class result extends Component {
         return (
             <div className="result" onLoad={this.display_lines} >
                 <div class="row">
-                    <div class="col-7"><h2><b>Results For</b> Untitled Analysis</h2></div>
+                    <div class="col-8"><h2><b>Results For</b> Untitled Analysis</h2></div>
 
-                        <div class="col-4">
+                        <div class="col-4" id="results-buttons">
                             <button type="button" class="btn btn-link">View Info</button>
                             <button type="button" class="btn btn-link">Edit</button>
                             <button type="button" class="btn btn-link">Print</button>
@@ -102,7 +103,7 @@ class result extends Component {
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Forecasting</h5>
-                                <img class="m-1 embed-responsive" src={sample}></img>
+                                <img class="m-1 embed-responsive" src={forecastingGraph}></img>
                                 <p class="h6 m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. <button type="button" class="btn btn-light float-right">See More</button> </p>
                             </div>
                         </div>

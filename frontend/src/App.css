@@ -1,8 +1,14 @@
 /* This .css file will affect the overall style of the app. */
 
-body, html {
+body, html, main {
     background: #eee;
     font-family: 'Source Sans Pro', sans-serif;
+}
+
+h2 {
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
 }
 
 .btn a:hover, a:hover, .sidebar a:hover, .btn a:active, a:active, .sidebar a:active {
@@ -23,7 +29,7 @@ body, html {
 }
 
 .content {
-    padding-left: 25px;
+    padding: 40px;
 }
 
 .user-info {
@@ -34,10 +40,12 @@ body, html {
 
 .user-info h3 {
     font-weight: bold;
+    color: #fefefe;
 }
 
 .user-info h4 {
     font-size: 11px;
+    color: #fefefe;
 }
 
 .user-info img {
@@ -62,6 +70,7 @@ body, html {
     font-weight: bold;
     letter-spacing: -1px;
     font-size: 42px;
+    color: #fefefe;
 }
 
 .nav-header strong {
