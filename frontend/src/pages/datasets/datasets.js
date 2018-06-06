@@ -15,7 +15,7 @@ class datasets extends React.Component {
 		
 		// This contains the path of each dataset.
 		this.datasetPathList = [];
-		
+                        		
 		super(props);
 		this.getFiles();
 		this.state = { 
@@ -25,6 +25,10 @@ class datasets extends React.Component {
 		this.handleUploadImage = this.handleUploadImage.bind(this);
 		this.getFiles = this.getFiles.bind(this);
 	}
+    
+//    checkCSV(file) {
+//        return String(file).endsWith('.csv');
+//    }
 	
 	getFiles() {
 		fetch('http://localhost:8001/getFiles', {
@@ -32,7 +36,7 @@ class datasets extends React.Component {
 		}).then((response) => {
 			response.json().then((body) => {
 				this.datasetDetailsList = body.file;
-				
+				                
 				this.datasetPathList = [];
 				for (var i in this.datasetDetailsList) {
 					this.datasetPathList.push("http://localhost:8001/public/"+this.datasetDetailsList[i]);
@@ -69,6 +73,7 @@ class datasets extends React.Component {
 			});
 		});
 	}
+    
 
 	render() {
 		return (
@@ -87,7 +92,7 @@ class datasets extends React.Component {
 			<div>
 				<h3> Datasets </h3>
 				<div>
-					{this.datasetPathList.map((dataset) => {
+					{this.datasetDetailsList.map((dataset) => {
                         return (
                             <ul>
                                 <li>{dataset}</li>

@@ -6,6 +6,9 @@ import './result.css';
 import sample from '../home/chart-example.png';
 import forecastingGraph from './forecastingGraph.png';
 import {Bar} from 'react-chartjs-2';
+import Slider, { Range } from 'rc-slider';
+import 'rc-slider/assets/index.css';
+
 
 //install csvtojson 
 //npm install convert-csv-to-json --save
@@ -56,6 +59,36 @@ class result extends Component {
         return;
     }
     
+    displayForecastingModel() {
+        return (
+            <div>
+                <div class="row">
+                    <div class="col-2">
+                        <p>Reference Data</p>
+                    </div>
+                    <div class="col-8">
+                        <Slider defaultValue={50} /> 
+                    </div>
+                    <div class="col-2">
+                        <input type="text" name="reference" placeholder="803"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2">
+                        <p>Reference Data</p>
+                    </div>
+                    <div class="col-8">
+                        <Slider defaultValue={50} /> 
+                    </div>
+                    <div class="col-2">
+                        <input type="text" name="reference" placeholder="803"/>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    
 
     
     render() {
@@ -103,7 +136,9 @@ class result extends Component {
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Forecasting</h5>
-                                <img class="m-1 embed-responsive" src={forecastingGraph}></img>
+                                
+                                    {this.displayForecastingModel()}
+    
                                 <p class="h6 m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. <button type="button" class="btn btn-light float-right">See More</button> </p>
                             </div>
                         </div>
