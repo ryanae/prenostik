@@ -27,6 +27,7 @@
     padding: 3px;
     font-weight: bold;
     border: 1px solid #ccc;
+    cursor: pointer;
 }
 
 .entry-file {
