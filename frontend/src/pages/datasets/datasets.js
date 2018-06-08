@@ -54,13 +54,8 @@ class datasets extends React.Component {
 
 		const data2 = new FormData();
 		data2.append('file', this.uploadInput.files[0]);
-		data2.append('filename', this.fileName.value);
 	
         if (this.uploadInput.files[0] == null) {
-			return;
-		}
-		
-		if (this.fileName.value == '') {
 			return;
 		}
         
@@ -81,9 +76,6 @@ class datasets extends React.Component {
 			<br />
 			<div>
 				<input ref={(ref) => { this.uploadInput = ref; }} type="file" />
-			</div>
-			<div>
-				<input ref={(ref) => { this.fileName = ref; }} type="text" placeholder="Enter desired file name" />
 			</div>
 			<br />
 			<div>

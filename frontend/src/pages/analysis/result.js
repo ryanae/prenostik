@@ -6,6 +6,7 @@ import './result.css';
 import sample from '../home/chart-example.png';
 import forecastingGraph from './forecastingGraph.png';
 import {Bar} from 'react-chartjs-2';
+import {Line} from 'react-chartjs-2';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
@@ -28,7 +29,54 @@ class result extends Component {
                     }
                 ],
             },
-            lines: []
+            lines: [],
+			data: {
+				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+				datasets: [
+					{
+					  label: 'Relative Value',
+					  fill: false,
+					  lineTension: 0,
+					  backgroundColor: 'rgba(75,192,192,0.4)',
+					  borderColor: 'rgba(75,192,192,1)',
+					  borderCapStyle: 'butt',
+					  borderDash: [],
+					  borderDashOffset: 0.0,
+					  borderJoinStyle: 'miter',
+					  pointBorderColor: 'rgba(75,192,192,1)',
+					  pointBackgroundColor: '#fff',
+					  pointBorderWidth: 1,
+					  pointHoverRadius: 5,
+					  pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+					  pointHoverBorderColor: 'rgba(220,220,220,1)',
+					  pointHoverBorderWidth: 5,
+					  pointRadius: 5,
+					  pointHitRadius: 20,
+					  data: [65, 59, 80, 81, 56, 55, 40]
+					},
+					{
+					  label: 'Relative Value2',
+					  fill: false,
+					  lineTension: 0,
+					  backgroundColor: 'rgba(75,192,192,0.4)',
+					  borderColor: 'rgba(75,192,192,1)',
+					  borderCapStyle: 'butt',
+					  borderDash: [],
+					  borderDashOffset: 0.0,
+					  borderJoinStyle: 'miter',
+					  pointBorderColor: 'rgba(75,192,192,1)',
+					  pointBackgroundColor: '#fff',
+					  pointBorderWidth: 1,
+					  pointHoverRadius: 5,
+					  pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+					  pointHoverBorderColor: 'rgba(220,220,220,1)',
+					  pointHoverBorderWidth: 5,
+					  pointRadius: 5,
+					  pointHitRadius: 20,
+					  data: [33,45,82]
+					}
+				]
+			}
         }
         this.display_lines = this.display_lines.bind(this);
     }
@@ -124,8 +172,9 @@ class result extends Component {
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Correlation Graph</h5>
-                                <img class="m-1 embed-responsive" src={sample}></img>
-                                <p class="h6 m-3">Lorem ipsum <button type="button" class="btn btn-light float-right">See More</button> </p>
+								<Line data={this.state.data} />
+								
+                                <p class="h6 m-3">Correlation <button type="button" class="btn btn-light float-right">See More</button> </p>
                             </div>
                         </div>
                     </div>

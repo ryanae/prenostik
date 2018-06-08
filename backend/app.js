@@ -27,10 +27,9 @@ app.use('/public', express.static(__dirname + '/public'));
 
 
 app.post('/upload', (req, res, next) => {
-  console.log(req);
   let imageFile = req.files.file;
 
-  imageFile.mv(`${__dirname}/public/${req.body.filename}.csv`, function(err) {
+  imageFile.mv(`${__dirname}/public/${imageFile.name}.csv`, function(err) {
     if (err) {
       return res.status(500).send(err);
     }
