@@ -2,7 +2,7 @@
 
 
 import React, { Component } from 'react';
-import {Steps, Button, message, Modal, } from 'antd';
+import {Steps, Button, message, Modal, Input, Table } from 'antd';
 import DatePicker from 'react-datepicker';
 import ReactDOM from 'react-dom';
 import Select from 'react-select';
@@ -15,6 +15,20 @@ import './newAnalysis.css';
 
 
 const Step = Steps.Step;
+const Search = Input.Search; 
+const columns = [{
+  title: 'Name',
+  dataIndex: 'name',
+  key: 'name',
+}, {
+  title: 'Type',
+  dataIndex: 'type',
+  key: 'type',
+}, {
+  title: 'Date Created',
+  dataIndex: 'date_created',
+  key: 'date_created',
+}];
 
 class newAnalysis extends Component {
 	constructor (props) {
@@ -23,14 +37,14 @@ class newAnalysis extends Component {
     var startDate =moment();
     var endDate = moment();
     var selectedOption = 0;
-    
+
 
 		this.state = {
 			current : 0, visible : false,
-            startDate : startDate,
-            endDate : endDate,
-            selectedOption :selectedOption,
-            lines:[]
+      startDate : startDate,
+      endDate : endDate,
+      selectedOption :selectedOption,
+      lines:[]
     };
     
     //For handling parameters
@@ -45,7 +59,7 @@ class newAnalysis extends Component {
     this.fileReadingFinished = this.fileReadingFinished.bind(this); 
     this.show_list = this.show_list.bind(this); 
 	}
-
+  // Next and Previous Buttons 
   next() {
     const current = this.state.current + 1;
     this.setState({ current });
@@ -56,6 +70,7 @@ class newAnalysis extends Component {
     this.setState({ current });
   }
 
+  // First Content Buttons
   showModal = () => {
     this.setState({
       visible: true,
@@ -102,7 +117,7 @@ class newAnalysis extends Component {
     });
   }
   
-  
+  // Second Content
   handleUpdateStartDate ( date, selected) {
     var newdate = new Date (date);
     newdate.setMonth(newdate.getMonth() + selected);
@@ -237,35 +252,52 @@ class newAnalysis extends Component {
   render () {
   	const {current} = this.state;
     const { selectedOption} = this.state;
-   
-
-
 
 const firstContent = (
 	      <div>     
-	        <div>
+	        <div >
 	          <h3> Reference Dataset </h3> 
 
 	          <button className ="button1" onClick={this.showModal}>
 	          	<strong>Select Reference Data </strong>
 	          </button>
-              <div id="file_read"></div>
 
-            <Modal
+              
+
+            <Modal class="main col-lg-9 myHalfCol"
                 id="DataModal"
                 title="Manage Datasets"
                 visible = {this.state.visible}
                 onOk = {this.handleOk}
                 onCancel = {this.handleCancel}
             >
+              <div class="col-lg-6">
+                <div>
+                  <h6>My File</h6>
+                  <br/>
+                  < Search 
+                    placeholder = "Input search"
+                    onSearch = {value => console.log(value)}
+                    style = {{width: 300}}
+                  />
+                  <Table style = {{width: 300}} columns={columns} />
 
-            <strong>My File</strong>
-        
-        
-            <input type="file" onChange={ this.handleFiles }
-                accept=".csv"/>
-            <p id="output">Output Here</p>
-        
+
+                </div>
+
+                <div class ="container" id="file_read">
+                  <input type="file" onChange={ this.handleFiles }
+                    accept=".csv"/>
+
+                  <p id="output">Output Here</p>
+
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <h6>Selected Files </h6>
+              </div>
+
         
             </Modal>  
             <br />
@@ -286,7 +318,7 @@ const firstContent = (
 	      </div>
 	    )
 
-        const secondContent = 
+    const secondContent = 
     (
       <div class = 'second_content1'>
         <div>
@@ -294,7 +326,7 @@ const firstContent = (
           <p> Choose the start date to analyze </p>
           <DatePicker selected = {this.state.startDate} 
                     onChange = {this.handleChangeStartDate}
-                    maxDate = {this.state.endDate}/>
+                    />
           
           <br />
           <h5> Choose End Date </h5>
@@ -320,10 +352,10 @@ const firstContent = (
               <option value = "24" >2 Years   </option>          
           </select>
           <h6>Required Start Date</h6>
-          <input type="datetime" id="start_month" />
+          <input readOnly={true} type="datetime" id="start_month" />
           <br/>
           <h6>Required End Date </h6>
-          <input type="datetime" id="end_month" />
+          <input readOnly={true} type="datetime" id="end_month" />
         </div>
       </div>
     )
