@@ -262,32 +262,12 @@ const firstContent = (
 	          	<strong>Select Reference Data </strong>
 	          </button>
 
-              
-
             <Modal class="main col-lg-9 myHalfCol"
                 id="DataModal"
                 title="Manage Datasets"
                 visible = {this.state.visible}
                 onOk = {this.handleOk}
-                onCancel = {this.handleCancel}
-            >
-              <div class="col-lg-6">
-                <div>
-                  <h6>My File</h6>
-                  <br/>
-                  < Search 
-                    placeholder = "Input search"
-                    onSearch = {value => console.log(value)}
-                    style = {{width: 300}}
-                  />
-                  <Table style = {{width: 300}} columns={columns} />
-
-
-                </div>
-
-                
-
-        
+                onCancel = {this.handleCancel}>
             </Modal>  
             <br />
 	        </div>
