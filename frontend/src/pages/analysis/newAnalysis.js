@@ -285,18 +285,7 @@ const firstContent = (
 
                 </div>
 
-                <div class ="container" id="file_read">
-                  <input type="file" onChange={ this.handleFiles }
-                    accept=".csv"/>
-
-                  <p id="output">Output Here</p>
-
-                </div>
-              </div>
-
-              <div class="col-lg-6">
-                <h6>Selected Files </h6>
-              </div>
+                
 
         
             </Modal>  
