@@ -267,8 +267,35 @@ const firstContent = (
                 title="Manage Datasets"
                 visible = {this.state.visible}
                 onOk = {this.handleOk}
-                onCancel = {this.handleCancel}>
-            </Modal>  
+                onCancel = {this.handleCancel}
+            >
+              <div class="col-lg-6">
+                <div>
+                  <h6>My File</h6>
+                  <br/>
+                  < Search 
+                    placeholder = "Input search"
+                    onSearch = {value => console.log(value)}
+                    style = {{width: 300}}
+                  />
+                  <Table style = {{width: 300}} columns={columns} />
+
+
+                </div>
+
+                <div class ="container" id="file_read">
+                  <input type="file" onChange={ this.handleFiles }
+                    accept=".csv"/>
+
+                  <p id="output">Output Here</p>
+
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <h6>Selected Files </h6>
+              </div>
+            </Modal>
             <br />
 	        </div>
 
