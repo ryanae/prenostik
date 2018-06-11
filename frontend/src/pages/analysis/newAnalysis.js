@@ -46,23 +46,28 @@ class newAnalysis extends Component {
     this.show_list = this.show_list.bind(this); 
 	}
 
+
   next() {
+    //Goes to the next page
     const current = this.state.current + 1;
     this.setState({ current });
   }
 
   prev() {
+    //Goes to the previous page
     const current = this.state.current - 1;
     this.setState({ current });
   }
 
   showModal = () => {
+    //Opens modal for fileupload
     this.setState({
       visible: true,
     });
   }
 
   handleOk = (e) => {
+    //Handles OK click on modal and closes the modal
     this.setState({
       visible: false,
     });
@@ -73,12 +78,14 @@ class newAnalysis extends Component {
   }
 
   handleCancel = (e) => {
+    //Handles Cancel on modal and closes the modal
     this.setState({ 
       visible: false,
     });
   }  
 
   showModal_test = () => {
+    //Opens modal for fileupload for Test Data
     this.setState({
       visible: true,
     });
@@ -86,6 +93,8 @@ class newAnalysis extends Component {
   }
 
   handleOk_test = (e) => {
+    //Handles OK on modal  for Test Data and closes the modal
+
     this.setState({
       visible: false,
     });
@@ -97,7 +106,9 @@ class newAnalysis extends Component {
   }
 
   handleCancel_test = (e) => {
-    this.setState({ 
+     //Handles Cancel on modal for Test Data and closes the modal
+
+      this.setState({ 
       visible: false,
     });
   }
@@ -139,7 +150,7 @@ class newAnalysis extends Component {
     this.setState({start_m : start})
   }
 
-//Handles setting data
+//Handles Setting data
   handleData = data => { 
         this.setState({data})
     };
@@ -179,8 +190,6 @@ class newAnalysis extends Component {
         document.getElementById("output").innerHTML=text; 
 
         var CSV = require('csv-string'); 
-        //var arr = CSV.parse(lines); 
-
 
         var s_line = csv.split("\n"); 
         document.getElementById("output").innerHTML=s_line[0]; 
@@ -201,7 +210,7 @@ class newAnalysis extends Component {
 
         document.getElementById("output").innerHTML=JSON.stringify(result);
 
-        //stores the lines into local storage 'lines' so the results page can retrieve it
+        //Stores the lines into local storage 'lines' so the results page can retrieve it
         
         localStorage.setItem('lines', JSON.stringify(result)); 
         console.log(localStorage.getItem('lines')); 
@@ -218,11 +227,12 @@ class newAnalysis extends Component {
     //Go to Result page when completed
     result_analysis(event){ 
         message.success('Processing complete!');
-        //event.preventDefault(); 
         window.location = 'result';
     }
 
+
     show_list (){ 
+        //Shows the list of current available files
         var path_list = JSON.parse(localStorage.getItem("pathlist")); 
         console.log("path", path_list); 
         var table = ""; 
@@ -240,8 +250,11 @@ class newAnalysis extends Component {
    
 
 
-
-const firstContent = (
+    /*
+    First page of New Analysis
+    Upload and select Test and Reference Data
+    */
+    const firstContent = (
 	      <div>     
 	        <div>
 	          <h3> Reference Dataset </h3> 
@@ -286,7 +299,11 @@ const firstContent = (
 	      </div>
 	    )
 
-        const secondContent = 
+    /*
+    Second page of New Analysis 
+    Select parameters for generating the graph
+    */
+    const secondContent = 
     (
       <div class = 'second_content1'>
         <div>
@@ -328,6 +345,10 @@ const firstContent = (
       </div>
     )
         
+    
+    /*
+    Confirm the Reference and Test Datasets as well as the Parameters
+    */
     const thirdContent =
     (
       <div class="third_content">
@@ -358,6 +379,11 @@ const firstContent = (
     }]; 
 
 
+
+    /* 
+    Clicks and shows each content based on step
+    On click of the Done button, the result window will be displayed
+    */
     return (
     	<div className="newAnalysis">
             <div class="container-fluid" id="newAnalysisContainer">

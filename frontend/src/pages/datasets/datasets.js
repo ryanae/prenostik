@@ -25,12 +25,9 @@ class datasets extends React.Component {
 		this.handleUploadImage = this.handleUploadImage.bind(this);
 		this.getFiles = this.getFiles.bind(this);
 	}
-    
-//    checkCSV(file) {
-//        return String(file).endsWith('.csv');
-//    }
 	
 	getFiles() {
+        //Retrieves files stored in the backend public folder
 		fetch('http://localhost:8001/getFiles', {
 			method: 'POST',
 		}).then((response) => {
@@ -71,6 +68,11 @@ class datasets extends React.Component {
     
 
 	render() {
+        /*
+            On file upload, the file is stored in the backend server
+            All file names in the backend server is stored in datasetDetailsList and each are displayed
+            in a table format.
+        */
 		return (
 			<form onSubmit={this.handleUploadImage}>
 			<br />
@@ -89,7 +91,6 @@ class datasets extends React.Component {
                             <ul>
                                 <li>{dataset}</li>
                             </ul>
-                            //<div class="row">{dataset}</div>
                         )					
                     })}
 				</div>
