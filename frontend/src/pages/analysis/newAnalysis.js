@@ -219,7 +219,7 @@ class newAnalysis extends Component {
     result_analysis(event){ 
         message.success('Processing complete!');
         //event.preventDefault(); 
-        //window.location = 'frontend/src/pages/result';
+        window.location = 'result';
     }
 
     show_list (){ 
