@@ -30,6 +30,20 @@ const columns = [{
   key: 'date_created',
 }];
 
+const columns1 = [{
+  title: 'Uncategorized',
+  dataIndex: 'uncategorized',
+  key: '1',
+}, {
+  title: 'Category',
+  dataIndex: 'category',
+  key: '2',
+}, {
+  title: 'Date Created',
+  dataIndex: 'date_created',
+  key: 'date_created',
+}];
+
 class newAnalysis extends Component {
 	constructor (props) {
 		super (props);
@@ -262,14 +276,14 @@ const firstContent = (
 	          	<strong>Select Reference Data </strong>
 	          </button>
 
-            <Modal class="main col-lg-9 myHalfCol"
+            <Modal 
                 id="DataModal"
                 title="Manage Datasets"
                 visible = {this.state.visible}
                 onOk = {this.handleOk}
                 onCancel = {this.handleCancel}
             >
-              <div class="col-lg-6">
+              <div >
                 <div>
                   <h6>My File</h6>
                   <br/>
@@ -292,8 +306,9 @@ const firstContent = (
                 </div>
               </div>
 
-              <div class="col-lg-6">
+              <div >
                 <h6>Selected Files </h6>
+                <Table style = {{width: 400}} columns={columns1} />
               </div>
             </Modal>
             <br />
