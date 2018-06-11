@@ -6,6 +6,10 @@ import savedResults from './pages/saved/savedResults.js';
 import newAnalysis from './pages/analysis/newAnalysis.js';
 import result from './pages/analysis/result.js';
 import homeIcon from './icons/home.svg';
+import newIcon from './icons/add.svg';
+import resultsIcon from './icons/save.svg';
+import datasetsIcon from './icons/folder.svg';
+import collapseIcon from './icons/left-arrow.svg';
 import userIcon from './img/user.jpg';
 import './App.css';
 
@@ -46,7 +50,7 @@ const Navigation = () => (
 
                 <NavLink to ="/analysis/new">
                     <button type="button" class="nav-btn btn btn-block">
-                        <div class="nav-icon"> <img src={homeIcon} alt={'homeIcon'}/> </div> 
+                        <div class="nav-icon"> <img src={newIcon} alt={'newIcon'}/> </div> 
 
                         <div class="nav-label">Start New Analysis</div>
                     </button>
@@ -54,7 +58,7 @@ const Navigation = () => (
 
                 <NavLink to ="/saved-results">
                     <button type="button" class="nav-btn btn btn-block">
-                        <div class="nav-icon"> <img src={homeIcon} alt={'homeIcon'}/> </div> 
+                        <div class="nav-icon"> <img src={resultsIcon} alt={'resultsIcon'}/> </div> 
 
                         <div class="nav-label">Saved Results</div>
                     </button>
@@ -62,7 +66,7 @@ const Navigation = () => (
 
                 <NavLink to ="/my-datasets">
                     <button type="button" class="nav-btn btn btn-block">
-                        <div class="nav-icon"> <img src={homeIcon} alt={'homeIcon'}/> </div> 
+                        <div class="nav-icon"> <img src={datasetsIcon} alt={'datasetsIcon'}/> </div> 
 
                         <div class="nav-label">My Datasets</div>                
                 </button>
@@ -70,7 +74,7 @@ const Navigation = () => (
 
                 <div class="collapse-button">
                     <button type="button" class="nav-btn btn btn-outline-light btn-block">
-                        <img src={homeIcon} alt={'homeIcon'}/>
+                        <img src={collapseIcon} alt={'collapseIcon'}/>
                     </button>
                 </div>
             </div>
