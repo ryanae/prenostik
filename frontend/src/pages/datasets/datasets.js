@@ -75,24 +75,30 @@ class datasets extends React.Component {
         */
 		return (
 			<form onSubmit={this.handleUploadImage}>
-			<br />
 			<div>
+                <h3> Datasets </h3>
 				<input ref={(ref) => { this.uploadInput = ref; }} type="file" />
-			</div>
-			<br />
-			<div>
 				<button>Upload</button>
 			</div>
+            <br />
 			<div>
-				<h3> Datasets </h3>
 				<div>
-					{this.datasetDetailsList.map((dataset) => {
+					<table class="table table-light table-hover">
+                        <thead>
+                            <tr>
+                            <th> File Name </th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                    {this.datasetDetailsList.map((dataset) => {
                         return (
-                            <ul>
-                                <li>{dataset}</li>
-                            </ul>
+                            <tr>
+                                <td>{dataset}</td>
+                            </tr>
                         )					
                     })}
+                    </tbody>
+                    </table>
 				</div>
 			</div>
 		</form>

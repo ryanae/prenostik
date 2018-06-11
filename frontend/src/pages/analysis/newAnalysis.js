@@ -213,8 +213,8 @@ class newAnalysis extends Component {
         //Stores the lines into local storage 'lines' so the results page can retrieve it
         
         localStorage.setItem('lines', JSON.stringify(result)); 
-        console.log(localStorage.getItem('lines')); 
-
+        console.log("GET LINES", localStorage.getItem('lines')); 
+        
         this.setState({lines: lines})
     };
 

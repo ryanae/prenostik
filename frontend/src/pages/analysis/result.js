@@ -111,7 +111,8 @@ class result extends Component {
     }
     
     
-    display_lines(){ 
+    display_lines(){
+        console.log('HERE!!'); 
         //Gets lines stored in localStorage from the newAnalysis page
         const cached_lines = localStorage.getItem('lines'); 
         if (cached_lines){ 
@@ -126,11 +127,13 @@ class result extends Component {
         var Confidence_Index = [];
         for (var i=0; i<(JSON_obj.length); i++){
             Dates.push(JSON_obj[i]["Date"]); 
-            Confidence_Index.push(JSON_obj[i]["Consumer Confidence Index"])
+            Confidence_Index.push(JSON_obj[i]["Consumer Confidence Index"]);
         }
         
         this.state.chartData.labels = Dates; 
         this.state.chartData.datasets[0].data = Confidence_Index;
+        console.log("CHART DATA", this.state.chartData); 
+        
         
         return;
     }
@@ -190,7 +193,7 @@ class result extends Component {
 
 displayForecastingModel() {
     /*
-    id: slider11 -> slider for the reference data
+    id: T1Sales11 -> slider for the reference data
         minimumValue = 0
         maximumValue = 1000
         step = 1
@@ -211,7 +214,7 @@ displayForecastingModel() {
             <div>
                     <div class="row"> 
                         <div class="col-2">
-                            <p>T1 Sales1</p>
+                            <p>T1 Sales</p>
                         </div>
                         <div class="col-8" id="slider11">
                             <SliderWithTooltip id="T1Sales11" minimumValue={0} maximumValue={1000} step={1} tipFormatter={this.percentFormatter} tipProps={{overlayClassName: 'foo"'}} value={this.state.forecast} onChange={val=>this.updateSlide(val,this.forecast_data[0])}  />
@@ -247,9 +250,21 @@ displayForecastingModel() {
     }
 
     
+    
+    /* 
+    Displays the Best Predictor, Correlation, and Forecasting graphs
+    
+    Bugs: 
+    The Best Predictor graph should refresh onLoad, however, it does not do this all the time because the window
+    loads too quickly and onLoad is unable to fire in time. The current solution to this is having a refresh
+    button to update the data in the graph. 
+    
+    
+    Note: the See More buttons are not functional
+    */ 
     render() {
         return (
-            <div className="result" onLoad={this.display_lines} >
+            <div className="result" onLoad={this.display_lines}>
                 <div class="row">
                     <div class="col-8"><h2><b>Results For</b> Untitled Analysis</h2></div>
 
@@ -269,8 +284,8 @@ displayForecastingModel() {
             
                                 <Bar data={this.state.chartData} />
             
-                                <p class="h6 m-3" id="output"> Best Predictors 
-                                    <button type="button" class="btn btn-light float-right">See More</button> 
+                                <p class="h6 m-3" id="output"> Most Influential 
+                                    <button type="button" class="btn btn-light float-right"  onClick={this.display_lines}>Refresh</button> 
                                 </p>
                             </div>
                         </div>
@@ -296,7 +311,7 @@ displayForecastingModel() {
                                 
                                     {this.displayForecastingModel()}
     
-                                <p class="h6 m-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. <button type="button" class="btn btn-light float-right">See More</button> </p>
+                                <p class="h6 m-3"><button type="button" class="btn btn-light float-right">See More</button> </p>
                             </div>
                         </div>
                     </div>
