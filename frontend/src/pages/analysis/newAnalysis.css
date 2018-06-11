@@ -11,6 +11,8 @@
   background-color: #fafafa;
   text-align: left;
   padding: 30px;
+    min-height: 250px;
+
 }
 
 .steps-action {
