@@ -9,6 +9,7 @@ import {Bar} from 'react-chartjs-2';
 import {Line} from 'react-chartjs-2';
 import Slider, { Range, createSliderWithTooltip } from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import datasets from './data.json';
 
 
 const SliderWithTooltip = createSliderWithTooltip(Slider); 
@@ -17,6 +18,60 @@ function log(value){
     this.setState({
         forecast:value
     })
+}
+
+function formatData(sampleData) {
+	var avg = 0;
+	for (var point in sampleData.points) {
+		avg += sampleData.points[point].y;
+	}
+	avg = avg / sampleData.points.length;
+	
+	var stdDev = 0;
+	
+	for (var point in sampleData.points) {
+		stdDev += Math.pow((sampleData.points[point].y - avg), 2);
+	}
+	stdDev = Math.pow(stdDev, 0.5);
+	
+	for (var point in sampleData.points) {
+		var deviation = sampleData.points[point].y;
+		deviation -= avg;
+		deviation = deviation/stdDev
+		sampleData.points[point].y = deviation;
+	}
+	
+	return sampleData;
+}
+
+function makeDataset(sampleData) {
+	var colors = [
+		'rgba(75,192,192,1)',
+		'rgba(192,75,192,1)',
+		'rgba(192,192,75,1)',
+		'rgba(75,75,192,1)',
+		'rgba(75,192,75,1)',
+		'rgba(192,75,75,1)'
+	];
+	var dataset = {
+		label: sampleData.label,
+		fill: false,
+		lineTension: 0,
+		backgroundColor: colors[sampleData.color],
+		borderColor: colors[sampleData.color],
+		borderJoinStyle: 'miter',
+		pointBorderColor: colors[sampleData.color],
+		pointBackgroundColor: '#fff',
+		pointBorderWidth: 1,
+		pointHoverRadius: 5,
+		pointHoverBackgroundColor: colors[sampleData.color],
+		pointHoverBorderColor: colors[sampleData.color],
+		pointHoverBorderWidth: 5,
+		pointRadius: 4,
+		pointHitRadius: 10,
+		data: sampleData.points
+	};
+	return dataset;
 }
 
 
@@ -43,54 +98,34 @@ class result extends Component {
             },
             
             //Data for generating Correlation Graph
-			data: {
-				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-				datasets: [
-					{
-					  label: 'Relative Value',
-					  fill: false,
-					  lineTension: 0,
-					  backgroundColor: 'rgba(75,192,192,0.4)',
-					  borderColor: 'rgba(75,192,192,1)',
-					  borderCapStyle: 'butt',
-					  borderDash: [],
-					  borderDashOffset: 0.0,
-					  borderJoinStyle: 'miter',
-					  pointBorderColor: 'rgba(75,192,192,1)',
-					  pointBackgroundColor: '#fff',
-					  pointBorderWidth: 1,
-					  pointHoverRadius: 5,
-					  pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-					  pointHoverBorderColor: 'rgba(220,220,220,1)',
-					  pointHoverBorderWidth: 5,
-					  pointRadius: 5,
-					  pointHitRadius: 20,
-					  data: [65, 59, 80, 81, 56, 55, 40]
-					},
-					{
-					  label: 'Relative Value2',
-					  fill: false,
-					  lineTension: 0,
-					  backgroundColor: 'rgba(75,192,192,0.4)',
-					  borderColor: 'rgba(75,192,192,1)',
-					  borderCapStyle: 'butt',
-					  borderDash: [],
-					  borderDashOffset: 0.0,
-					  borderJoinStyle: 'miter',
-					  pointBorderColor: 'rgba(75,192,192,1)',
-					  pointBackgroundColor: '#fff',
-					  pointBorderWidth: 1,
-					  pointHoverRadius: 5,
-					  pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-					  pointHoverBorderColor: 'rgba(220,220,220,1)',
-					  pointHoverBorderWidth: 5,
-					  pointRadius: 5,
-					  pointHitRadius: 20,
-					  data: [33,45,82]
-					}
-				]
+			lineData: {
+				//labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+				datasets: []
+			},
+			options: {
+				title: {text: "This is a test"},
+				scales: {
+					xAxes: [{
+						title: "time",
+						type: 'time',
+						gridLines: {
+							lineWidth: 2
+						},
+						time: {
+							unit: "month",
+							unitStepSize: 1,
+							displayFormats: {
+								month: "MMM YYYY"
+							}
+						}
+					}]
+				}
 			}
         }
+		
+		for (var i in datasets) {
+			this.state.lineData.datasets.push(makeDataset(formatData(datasets[i])));
+		}
         
         //Data for generating forecast sliders
         this.forecast_data= [
@@ -295,7 +330,7 @@ displayForecastingModel() {
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Correlation Graph</h5>
-								<Line data={this.state.data} />
+								<Line data={this.state.lineData} options={this.state.options} />
 								
                                 <p class="h6 m-3">Correlation <button type="button" class="btn btn-light float-right">See More</button> </p>
                             </div>
