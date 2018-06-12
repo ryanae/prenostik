@@ -4,6 +4,7 @@
 import React from 'react';
 
 var datasetList = [];
+var selectedList = [];
 
 
 class datasets extends React.Component {
@@ -25,10 +26,6 @@ class datasets extends React.Component {
 		this.handleUploadImage = this.handleUploadImage.bind(this);
 		this.getFiles = this.getFiles.bind(this);
 	}
-    
-//    checkCSV(file) {
-//        return String(file).endsWith('.csv');
-//    }
 	
 	getFiles() {
 		fetch('http://localhost:8001/getFiles', {
@@ -54,8 +51,13 @@ class datasets extends React.Component {
 
 		const data2 = new FormData();
 		data2.append('file', this.uploadInput.files[0]);
+		data2.append('filename', this.fileName.value);
 	
         if (this.uploadInput.files[0] == null) {
+			return;
+		}
+		
+		if (this.fileName.value == '') {
 			return;
 		}
         
@@ -68,34 +70,58 @@ class datasets extends React.Component {
 			});
 		});
 	}
-    
 
 	render() {
 		return (
-			<form onSubmit={this.handleUploadImage}>
-			<br />
-			<div>
-				<input ref={(ref) => { this.uploadInput = ref; }} type="file" />
-			</div>
-			<br />
-			<div>
-				<button>Upload</button>
-			</div>
-			<div>
-				<h3> Datasets </h3>
-				<div>
-					{this.datasetDetailsList.map((dataset) => {
-                        return (
-                            <ul>
-                                <li>{dataset}</li>
-                            </ul>
-                            //<div class="row">{dataset}</div>
-                        )					
-                    })}
-				</div>
-			</div>
-		</form>
-		);
+            <div class="card bg-light mb-3 text-center">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h3> Datasets </h3>
+                            <div class="input-group mb-3">
+                                <input ref={(ref) => { this.fileName = ref; }} type="text" class="form-control w-75" placeholder="Search through my datasets" aria-label="Search through my datasets" aria-describedby="basic-addon2"/>
+                                <div class="input-group-append">
+                                    <button class="btn btn-success" type="button">Search</button>
+                                </div>
+                            </div>
+                            <div>
+                                {this.datasetDetailsList.map((dataset) => {return (
+                                 
+                                <div class="list-group">
+                                    <a class="list-group-item list-group-item-action">
+                                        {dataset}
+                                    </a>
+                                </div>)})}
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <h3>Selected Files</h3>
+                                    
+                        </div>
+                    </div>
+                <div class="row">
+                    <div class="col-6">
+                        <form onSubmit={this.handleUploadImage}>
+                            <div class="card bg-light text-center my-3 pt-3">
+                                <div class="card-body">
+                                    <div>
+                                        <input ref={(ref) => { this.uploadInput = ref; }} type="file"/>
+
+                                        <div>
+                                            <button class="btn btn-success">Upload</button>
+                                            <h5> or Drag and Drop!</h5>
+                                            <p> .csv files only </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+    );
 	}
 }
 
